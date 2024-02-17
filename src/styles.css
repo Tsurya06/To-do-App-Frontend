@@ -1,0 +1,39 @@
+.dark-mode .card {
+    background-color: #3d3652;
+    color: #ffff;
+  }
+  
+  .dark-mode .task-list {
+    color: #fff;
+  }
+  
+  .dark-mode .ant-btn {
+    background-color: #3d3652;
+    border-color: #3d3652;
+    color: #fff;
+  }
+  
+  .dark-mode .ant-btn:hover {
+    background-color: #3d3652;
+    border-color: #3d3652;
+    color: #fff;
+  }
+  
+  .dark-mode .ant-input {
+    background-color: #3d3652;
+    color: #fff;
+  }
+  
+  .dark-mode .ant-input:hover, .dark-mode .ant-input:focus {
+    background-color: #3d3652;
+    color: #fff;
+  }
+  
+  .dark-mode .anticon svg {
+    fill: #fff;
+  }
+  
+  .dark-mode .ant-input::placeholder {
+    color: #fff;
+  }
+  
