@@ -5,7 +5,6 @@ import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 import "./styles.css"; // Import the CSS file for dark mode
 import Cookies from "js-cookie";
 
-
 interface TodoList {
   id: number;
   text: string;
@@ -102,8 +101,6 @@ export const ToDo: React.FC = () => {
     setDarkMode(!darkMode);
   };
 
- 
-
   const handleTitleOnChange = (title: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(title.target.value);
   };
@@ -112,7 +109,7 @@ export const ToDo: React.FC = () => {
     console.log("Setting todos in cookies:", todos);
     Cookies.set("todos", JSON.stringify(todos));
   }, [todos]);
-  
+
   useEffect(() => {
     const storedTodos = Cookies.get("todos");
     console.log("Retrieved todos from cookies:", storedTodos);
@@ -120,17 +117,15 @@ export const ToDo: React.FC = () => {
       setTodos(JSON.parse(storedTodos));
     }
   }, []);
-  
-  
+
   return (
     <div className={`container mt-5 ${darkMode ? "dark-mode" : "light-mode"}`}>
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <div className="card">
-            <div className="card-body" style={{height:'50%'}}>
-              <h1 className="card-title text-center">To Do App</h1>
-              <div className="task-list">
-                <div className="table-responsive mt-4" style={{ height: "10%" }}>
+          <div className="card-body">
+            <h1 className="card-title text-center">To Do App</h1>
+            <div className="task-list">
+              <div className="table-responsive mt-4">
                 <form className="form-control mt-3">
                   <Input
                     value={title}
@@ -141,7 +136,7 @@ export const ToDo: React.FC = () => {
                     style={{
                       width: "20%",
                       margin: "5px",
-                      float: "left"
+                      float: "left",
                     }}
                     required
                   />
@@ -162,7 +157,8 @@ export const ToDo: React.FC = () => {
                       onClick={handleClick}
                       icon={<CheckOutlined />}
                       name="Add"
-                    ></Button>&nbsp;
+                    ></Button>
+                    &nbsp;
                     <Button
                       type="primary"
                       className="mt-3"
@@ -170,7 +166,8 @@ export const ToDo: React.FC = () => {
                       icon={<DeleteOutlined />}
                     >
                       All
-                    </Button>&nbsp;
+                    </Button>
+                    &nbsp;
                     <Button
                       type="primary"
                       className="mt-2"
@@ -180,72 +177,76 @@ export const ToDo: React.FC = () => {
                     </Button>
                   </div>
                 </form>
-                </div>
+              </div>
 
-                
-                <div className="table-responsive mt-4" style={{ maxHeight: "300px", overflowY: "auto" }}>
-                  <table className="table" style={{height:'90%'}}>
-                    <thead>
-                      <tr>
-                        <th>Task No.</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {todos.map((todo, index) => (
-                        <tr key={todo.id}>
-                          <td>{index + 1}.</td>
-                          <td>
-                            {/* this part will edit the task */}
-                            {todo.isEditable === true ? (
-                              <div>
-                                <Input.TextArea
-                                  value={todo.text}
-                                  onChange={(e) =>
-                                    updateTodo(
-                                      todo.id,
-                                      e.target.value,
-                                      todo.title
-                                    )
-                                  }
-                                  style={{ width: "100%", margin: "5px", height: "100%" }}
-                                />
+              <div
+                className="table-responsive mt-4"
+                style={{ maxHeight: "300px", overflowY: "auto" }}
+              >
+                <table className="table" style={{ height: "90%" }}>
+                  <thead>
+                    <tr>
+                      <th>Task No.</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {todos.map((todo, index) => (
+                      <tr key={todo.id}>
+                        <td>{index + 1}.</td>
+                        <td>
+                          {/* this part will edit the task */}
+                          {todo.isEditable === true ? (
+                            <div>
+                              <Input.TextArea
+                                value={todo.text}
+                                onChange={(e) =>
+                                  updateTodo(
+                                    todo.id,
+                                    e.target.value,
+                                    todo.title
+                                  )
+                                }
+                                style={{
+                                  width: "100%",
+                                  margin: "5px",
+                                  height: "100%",
+                                }}
+                              />
+                              <Button
+                                type="primary"
+                                onClick={saveEdited(todo.id, todo.title)}
+                                style={{ float: "right" }}
+                                icon={<CheckOutlined />}
+                                name="Save-Edited"
+                              />
+                            </div>
+                          ) : (
+                            <div style={{ overflow: "auto" }}>
+                              <div style={{ float: "left", margin: "5px" }}>
+                                {/* {todo.text} */}
+                                {todo.title}
+                              </div>
+                              <div style={{ float: "right" }}>
                                 <Button
                                   type="primary"
-                                  onClick={saveEdited(todo.id, todo.title)}
-                                  style={{ float: "right" }}
-                                  icon={<CheckOutlined />}
-                                  name="Save-Edited"
+                                  onClick={() => editTodo(todo.id)}
+                                  icon={<EditOutlined />}
+                                />
+                                &nbsp;
+                                <Button
+                                  type="primary"
+                                  onClick={deleteTodo(todo.id)}
+                                  icon={<DeleteOutlined />}
                                 />
                               </div>
-                            ) : (
-                              <div style={{ overflow: "auto" }}>
-                                <div style={{ float: "left", margin: "5px" }}>
-                                  {/* {todo.text} */}
-                                  {todo.title}
-                                </div>
-                                <div style={{ float: "right" }}>
-                                  <Button
-                                    type="primary"
-                                    onClick={() => editTodo(todo.id)}
-                                    icon={<EditOutlined />}
-                                  />&nbsp;
-                                  <Button
-                                    type="primary"
-                                    onClick={deleteTodo(todo.id)}
-                                    icon={<DeleteOutlined />}
-                                  />
-                                </div>
-                              </div>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  </div>      
-                
-                
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
