@@ -1,39 +1,39 @@
 .dark-mode .card {
     background-color: #3d3652;
-    color: #ffff;
+    color: #bfbdbd;
   }
   
   .dark-mode .task-list {
-    color: #fff;
+    color: #bfbdbd;
   }
   
   .dark-mode .ant-btn {
     background-color: #3d3652;
     border-color: #3d3652;
-    color: #fff;
+    color: #bfbdbd;
   }
   
   .dark-mode .ant-btn:hover {
     background-color: #3d3652;
     border-color: #3d3652;
-    color: #fff;
+    color: #bfbdbd;
   }
   
   .dark-mode .ant-input {
     background-color: #3d3652;
-    color: #fff;
+    color: #bfbdbd;
   }
   
   .dark-mode .ant-input:hover, .dark-mode .ant-input:focus {
     background-color: #3d3652;
-    color: #fff;
+    color: #bfbdbd;
   }
   
   .dark-mode .anticon svg {
-    fill: #fff;
+    fill: #bfbdbd;
   }
   
   .dark-mode .ant-input::placeholder {
-    color: #fff;
+    color: #999898;
   }
   
