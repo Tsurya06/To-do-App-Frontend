@@ -5,7 +5,6 @@ import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 import "./styles.css"; // Import the CSS file for dark mode
 import Cookies from "js-cookie";
 
-
 interface TodoList {
   id: number;
   text: string;
@@ -102,8 +101,6 @@ export const ToDo: React.FC = () => {
     setDarkMode(!darkMode);
   };
 
- 
-
   const handleTitleOnChange = (title: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(title.target.value);
   };
@@ -112,7 +109,7 @@ export const ToDo: React.FC = () => {
     console.log("Setting todos in cookies:", todos);
     Cookies.set("todos", JSON.stringify(todos));
   }, [todos]);
-  
+
   useEffect(() => {
     const storedTodos = Cookies.get("todos");
     console.log("Retrieved todos from cookies:", storedTodos);
@@ -120,71 +117,78 @@ export const ToDo: React.FC = () => {
       setTodos(JSON.parse(storedTodos));
     }
   }, []);
-  
-  
+
   return (
     <div className={`container mt-5 ${darkMode ? "dark-mode" : "light-mode"}`}>
       <div className="row justify-content-center">
         <div className="col-md-6">
           <div className="card">
-            <div className="card-body" >
-              <h1 className="card-title text-center" >To Do App</h1>
+            <div className="card-body">
+              <h1 className="card-title text-center">To Do App</h1>
               <div className="task-list">
-                <div className="table-responsive mt-4"  >
-                <form className="form-control mt-3"  >
-                  <Input
-                    value={title}
-                    placeholder="Title"
-                    className="mt-3"
-                    name="title"
-                    onChange={handleTitleOnChange}
-                    style={{
-                      width: "20%",
-                      margin: "5px",
-                      float: "left"
-                    }}
-                    required
-                  />
-                  <Input
-                    value={text}
-                    placeholder="Enter your task"
-                    name="tasks"
-                    onChange={onChangeInput}
-                    style={{
-                      width: "100%",
-                      margin: "5px",
-                    }}
-                  />
-                  <div style={{ float: "right" }}>
-                    <Button
-                      type="primary"
+                <div className="table-responsive mt-4">
+                  <form className="form-control mt-3">
+                    <Input
+                      value={title}
+                      placeholder="Title"
                       className="mt-3"
-                      onClick={handleClick}
-                      icon={<CheckOutlined />}
-                      name="Add"
-                    ></Button>&nbsp;
-                    <Button
-                      type="primary"
-                      className="mt-3"
-                      onClick={clearHandleClick}
-                      icon={<DeleteOutlined />}
-                    >
-                      All
-                    </Button>&nbsp;
-                    <Button
-                      type="primary"
-                      className="mt-2"
-                      onClick={toggleDarkMode}
-                    >
-                      {darkMode ? <i>Light Mode</i> : <i>Dark Mode</i>}
-                    </Button>
-                  </div>
-                </form>
+                      name="title"
+                      onChange={handleTitleOnChange}
+                      style={{
+                        width: "20%",
+                        margin: "5px",
+                        float: "left",
+                      }}
+                      required
+                    />
+                    <Input
+                      value={text}
+                      placeholder="Enter your task"
+                      name="tasks"
+                      onChange={onChangeInput}
+                      style={{
+                        width: "100%",
+                        margin: "5px",
+                      }}
+                    />
+                    <div style={{ float: "right" }}>
+                      <Button
+                        type="primary"
+                        className="mt-3"
+                        onClick={handleClick}
+                        icon={<CheckOutlined />}
+                        name="Add"
+                      ></Button>
+                      &nbsp;
+                      <Button
+                        type="primary"
+                        className="mt-3"
+                        onClick={clearHandleClick}
+                        icon={<DeleteOutlined />}
+                      >
+                        All
+                      </Button>
+                      &nbsp;
+                      <Button
+                        type="primary"
+                        className="mt-2"
+                        onClick={toggleDarkMode}
+                      >
+                        {darkMode ? <i>Light Mode</i> : <i>Dark Mode</i>}
+                      </Button>
+                    </div>
+                  </form>
                 </div>
 
-                
-                <div className="table-responsive mt-4" style={{ maxHeight: "300px", overflowY: "auto" ,borderRadius: '3px'}}>
-                  <table className="table" style={{height:'90%'}}>
+                <div
+                  className="table-responsive mt-4"
+                  style={{
+                    maxHeight: "300px",
+                    overflowY: "auto",
+                    borderRadius: "3px",
+                  }}
+                >
+                  <table className="table" style={{ height: "90%" }}>
                     <thead>
                       <tr>
                         <th>Task No.</th>
@@ -208,7 +212,11 @@ export const ToDo: React.FC = () => {
                                       todo.title
                                     )
                                   }
-                                  style={{ width: "100%", margin: "5px", height: "100%" }}
+                                  style={{
+                                    width: "100%",
+                                    margin: "5px",
+                                    height: "100%",
+                                  }}
                                 />
                                 <Button
                                   type="primary"
@@ -229,7 +237,8 @@ export const ToDo: React.FC = () => {
                                     type="primary"
                                     onClick={() => editTodo(todo.id)}
                                     icon={<EditOutlined />}
-                                  />&nbsp;
+                                  />
+                                  &nbsp;
                                   <Button
                                     type="primary"
                                     onClick={deleteTodo(todo.id)}
@@ -243,9 +252,7 @@ export const ToDo: React.FC = () => {
                       ))}
                     </tbody>
                   </table>
-                  </div>      
-                
-                
+                </div>
               </div>
             </div>
           </div>
