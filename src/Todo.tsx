@@ -106,15 +106,17 @@ export const ToDo: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("Setting todos in cookies:", todos);
+    // console.log("Setting todos in cookies:", todos);
+    if(todos.length!==0)
     Cookies.set("todos", JSON.stringify(todos));
   }, [todos]);
 
   useEffect(() => {
     const storedTodos = Cookies.get("todos");
-    console.log("Retrieved todos from cookies:", storedTodos);
+    // console.log("Retrieved todos from cookies:", storedTodos);
     if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
+      const storedTodo= JSON.parse(storedTodos);
+      setTodos(storedTodo);
     }
   }, []);
 
