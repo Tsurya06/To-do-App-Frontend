@@ -1,6 +1,7 @@
 .dark-mode .card {
-    background-color: #3d3652;
+    background-color: #2b2a39;
     color: #bfbdbd;
+    border: 1px solid black;
   }
   
   .dark-mode .task-list {
@@ -8,24 +9,25 @@
   }
   
   .dark-mode .ant-btn {
-    background-color: #3d3652;
-    border-color: #3d3652;
+    background-color: #212529;
+    border-color: black;
+    border: 1px solid black;
     color: #bfbdbd;
   }
   
   .dark-mode .ant-btn:hover {
-    background-color: #3d3652;
-    border-color: #3d3652;
+    background-color: #212529;
+    border-color: black;
     color: #bfbdbd;
   }
   
   .dark-mode .ant-input {
-    background-color: #3d3652;
+    background-color: #212529;
     color: #bfbdbd;
   }
   
   .dark-mode .ant-input:hover, .dark-mode .ant-input:focus {
-    background-color: #3d3652;
+    background-color: #212529;
     color: #bfbdbd;
   }
   
