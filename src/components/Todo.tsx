@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Input } from "antd";
 import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
-// import "./styles.css"; // Import the CSS file for dark mode
+import "./styles.css"; // Import the CSS file for dark mode
 // import Cookies from "js-cookie";
 import { useDispatch, useSelector,  } from "react-redux";
 import { addTodo, deleteTodoById, toggleTodo, updateTodo } from "../reducers/todoReducer";
@@ -94,7 +94,7 @@ export const TodoApp: React.FC = () => {
                         margin: "5px",
                       }}
                     />
-                    <div style={{ float: "right" }}>
+                    <div style={{ float: "right" }}>   
                       <Button
                         type="primary"
                         className="mt-3"
@@ -103,7 +103,7 @@ export const TodoApp: React.FC = () => {
                         name="Add"
                       ></Button>
                       &nbsp;
-                      <Button
+                      {/* <Button
                         type="primary"
                         className="mt-3"
                         // onClick={clearHandleClick}
@@ -111,7 +111,7 @@ export const TodoApp: React.FC = () => {
                       >
                         All
                       </Button>
-                      &nbsp;
+                      &nbsp; */}
                       <Button
                         type="primary"
                         className="mt-2"
@@ -146,9 +146,22 @@ export const TodoApp: React.FC = () => {
                             {/* this part will edit the task */}
                             {todo.completed === true ? (
                               <div>
+                                <Input
+                                  value={todo.title}
+                                  placeholder="Title"
+                                  className="mt-3"
+                                  name="title"
+                                  onChange={e => handleUpdateTodo(todo.id, e.target.value!,todo.text!)}
+                                  style={{
+                                    width: "20%",
+                                    margin: "5px",
+                                    float: "left",
+                                  }}
+                                  required
+                                />
                                 <Input.TextArea
                                   value={todo.text}
-                                  onChange={e=> setText(e.target.value)}
+                                  onChange={e => handleUpdateTodo(todo.id, todo.title!,e.target.value!)}
                                   style={{
                                     width: "100%",
                                     margin: "5px",
@@ -157,11 +170,15 @@ export const TodoApp: React.FC = () => {
                                 />
                                 <Button
                                   type="primary"
-                                  // onClick={saveEdited(todo.id, todo.title)}
+                                  onClick={()=> {
+                                    handleUpdateTodo(todo.id, todo.title!, todo.text!);
+                                    handleToggleTodo(todo.id); 
+                                  }}
                                   style={{ float: "right" }}
                                   icon={<CheckOutlined />}
                                   name="Save-Edited"
                                 />
+                                
                               </div>
                             ) : (
                               <div style={{ overflow: "auto" }}>
@@ -172,13 +189,13 @@ export const TodoApp: React.FC = () => {
                                 <div style={{ float: "right" }}>
                                   <Button
                                     type="primary"
-                                    onClick={() => handleToggleTodo (todo.id!)}
+                                    onClick={() => handleToggleTodo (todo.id)}
                                     icon={<EditOutlined />}
                                   />
                                   &nbsp;
                                   <Button
                                     type="primary"
-                                    onClick={()=>handleDeleteTodo(todo.id!)}
+                                    onClick={()=>handleDeleteTodo(todo.id)}
                                     icon={<DeleteOutlined />}
                                   />
                                 </div>
