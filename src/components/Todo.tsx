@@ -2,123 +2,64 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Input } from "antd";
 import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
-import "./styles.css"; // Import the CSS file for dark mode
-import Cookies from "js-cookie";
+// import "./styles.css"; // Import the CSS file for dark mode
+// import Cookies from "js-cookie";
+import { useDispatch, useSelector,  } from "react-redux";
+import { addTodo, deleteTodoById, toggleTodo, updateTodo } from "../reducers/todoReducer";
+import { Todo } from "../modals/type";
+import { RootState } from "../store";
 
-interface TodoList {
-  id: number;
-  text: string;
-  isEditable?: boolean;
-  taskNo: number;
-  title: string;
-}
 
-export const ToDo: React.FC = () => {
-  const [todos, setTodos] = useState<TodoList[]>([]);
+
+export const TodoApp: React.FC = () => {
   const [text, setText] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  const todos = useSelector((state: RootState) => state.todosReducer);
+  const dispatch= useDispatch();
 
-  const handleClick = () => {
-    text.trim();
-    title.trim();
-    if (text !== "" && title !== "") {
-      setTodos([
-        ...todos,
-        {
-          id: Date.now(),
-          text: text,
-          isEditable: false,
-          taskNo: todos.length + 1,
-          title: title,
-        },
-      ]);
+  const handleAddTodo = () => {
+    if (title.trim() !== '' && text.trim() !== '') {
+      dispatch(addTodo({title,text}));
+      setText('');
+      setTitle('');
     }
-    setText("");
-    setTitle("");
   };
 
-  const clearHandleClick = () => {
-    setTodos([]);
+  const handleToggleTodo = (id: number) => {
+    dispatch(toggleTodo(id));
   };
 
-  const onChangeInput = (str: React.ChangeEvent<HTMLInputElement>) => {
-    setText(str.target.value);
+  const handleDeleteTodo = (id: number) => {
+    dispatch(deleteTodoById(id));
   };
 
-  const editTodo = (id: number) => {
-    setTodos(
-      todos.map((prev) => {
-        if (prev.id === id) {
-          return { ...prev, isEditable: true };
-        }
-        return prev;
-      })
-    );
-  };
-
-  const updateTodo = (id: number, newText: string, newTitle: string) => {
-    setTodos(
-      todos.map((prev) => {
-        if (prev.id === id) {
-          return {
-            ...prev,
-            text: newText,
-            title: newTitle,
-          };
-        }
-        return prev;
-      })
-    );
-  };
-
-  const saveEdited = (id: number, updatedTitle: string) => () => {
-    setTodos(
-      todos.map((prev) => {
-        if (prev.id === id) {
-          return {
-            ...prev,
-            isEditable: false,
-            title: updatedTitle,
-          };
-        }
-        return prev;
-      })
-    );
-  };
-
-  const deleteTodo = (id: number) => () => {
-    console.log(
-      "Task with id : ",
-      id,
-      " is deleted",
-      todos.filter((todo) => todo.id === id)
-    );
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const handleUpdateTodo = (id: number, newTitle: string, newText: string) => {
+    dispatch(updateTodo({ id, title: newTitle, text: newText }));
   };
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
 
-  const handleTitleOnChange = (title: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(title.target.value);
-  };
+  // const handleTitleOnChange = (title: React.ChangeEvent<HTMLInputElement>) => {
+  //   setTitle(title.target.value);
+  // };
 
-  useEffect(() => {
-    // console.log("Setting todos in cookies:", todos);
-    if(todos.length!==0)
-    Cookies.set("todos", JSON.stringify(todos));
-  }, [todos]);
+  // useEffect(() => {
+  //   // console.log("Setting todos in cookies:", todos);
+  //   if(todos.length!==0)
+  //   Cookies.set("todos", JSON.stringify(todos));
+  // }, [todos]);
 
-  useEffect(() => {
-    const storedTodos = Cookies.get("todos");
-    // console.log("Retrieved todos from cookies:", storedTodos);
-    if (storedTodos) {
-      const storedTodo= JSON.parse(storedTodos);
-      setTodos(storedTodo);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedTodos = Cookies.get("todos");
+  //   // console.log("Retrieved todos from cookies:", storedTodos);
+  //   if (storedTodos) {
+  //     const storedTodo= JSON.parse(storedTodos);
+  //     setTodo(storedTodo);
+  //   }
+  // }, []);
 
   return (
     <div className={`container mt-5 ${darkMode ? "dark-mode" : "light-mode"}`}>
@@ -135,7 +76,7 @@ export const ToDo: React.FC = () => {
                       placeholder="Title"
                       className="mt-3"
                       name="title"
-                      onChange={handleTitleOnChange}
+                      onChange={e => setTitle(e.target.value)}
                       style={{
                         width: "20%",
                         margin: "5px",
@@ -147,7 +88,7 @@ export const ToDo: React.FC = () => {
                       value={text}
                       placeholder="Enter your task"
                       name="tasks"
-                      onChange={onChangeInput}
+                      onChange={e=> setText(e.target.value)}
                       style={{
                         width: "100%",
                         margin: "5px",
@@ -157,7 +98,7 @@ export const ToDo: React.FC = () => {
                       <Button
                         type="primary"
                         className="mt-3"
-                        onClick={handleClick}
+                        onClick={handleAddTodo}
                         icon={<CheckOutlined />}
                         name="Add"
                       ></Button>
@@ -165,7 +106,7 @@ export const ToDo: React.FC = () => {
                       <Button
                         type="primary"
                         className="mt-3"
-                        onClick={clearHandleClick}
+                        // onClick={clearHandleClick}
                         icon={<DeleteOutlined />}
                       >
                         All
@@ -193,7 +134,7 @@ export const ToDo: React.FC = () => {
                   <table className="table" style={{ height: "90%" }}>
                     <thead>
                       <tr>
-                        <th>Task No.</th>
+                        <th style={{width: '20%'}}>Task No.</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -203,17 +144,11 @@ export const ToDo: React.FC = () => {
                           <td>{index + 1}.</td>
                           <td>
                             {/* this part will edit the task */}
-                            {todo.isEditable === true ? (
+                            {todo.completed === true ? (
                               <div>
                                 <Input.TextArea
                                   value={todo.text}
-                                  onChange={(e) =>
-                                    updateTodo(
-                                      todo.id,
-                                      e.target.value,
-                                      todo.title
-                                    )
-                                  }
+                                  onChange={e=> setText(e.target.value)}
                                   style={{
                                     width: "100%",
                                     margin: "5px",
@@ -222,7 +157,7 @@ export const ToDo: React.FC = () => {
                                 />
                                 <Button
                                   type="primary"
-                                  onClick={saveEdited(todo.id, todo.title)}
+                                  // onClick={saveEdited(todo.id, todo.title)}
                                   style={{ float: "right" }}
                                   icon={<CheckOutlined />}
                                   name="Save-Edited"
@@ -237,13 +172,13 @@ export const ToDo: React.FC = () => {
                                 <div style={{ float: "right" }}>
                                   <Button
                                     type="primary"
-                                    onClick={() => editTodo(todo.id)}
+                                    onClick={() => handleToggleTodo (todo.id!)}
                                     icon={<EditOutlined />}
                                   />
                                   &nbsp;
                                   <Button
                                     type="primary"
-                                    onClick={deleteTodo(todo.id)}
+                                    onClick={()=>handleDeleteTodo(todo.id!)}
                                     icon={<DeleteOutlined />}
                                   />
                                 </div>
