@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Col, Form, Input, Row, Table } from "antd";
 import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
@@ -37,8 +37,7 @@ export const TodoApp: React.FC = () => {
 
 
 
-  const columns = useMemo(
-    () => [
+  const columns = [
       {
         title: "Task No.",
         dataIndex: "id",
@@ -104,9 +103,7 @@ export const TodoApp: React.FC = () => {
           </div>
         ),
       },
-    ],
-    [handleDeleteTodo, handleToggleTodo, handleUpdateTodo]
-  );
+    ]
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
