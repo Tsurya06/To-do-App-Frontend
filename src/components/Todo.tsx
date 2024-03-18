@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Input } from "antd";
+import { Button, Col, Form, Input, Row, Table } from "antd";
 import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 import "./styles.css"; // Import the CSS file for dark mode
-// import Cookies from "js-cookie";
-import { useDispatch, useSelector,  } from "react-redux";
-import { addTodo, deleteTodoById, toggleTodo, updateTodo } from "../reducers/todoReducer";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addTodo,
+  deleteTodoById,
+  toggleTodo,
+  updateTodo,
+} from "../reducers/todoReducer";
 import { Todo } from "../modals/type";
 import { RootState } from "../store";
 
-
-
 export const TodoApp: React.FC = () => {
-  const [text, setText] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const todos = useSelector((state: RootState) => state.todosReducer);
-  const dispatch= useDispatch();
-
-  const handleAddTodo = () => {
-    if (title.trim() !== '' && text.trim() !== '') {
-      dispatch(addTodo({title,text}));
-      setText('');
-      setTitle('');
+  const dispatch = useDispatch();
+  const handleAddTodo = (values: { title: string; text: string }) => {
+    if (values.title.trim() !== "" && values.text.trim() !== "") {
+      dispatch(addTodo({ title: values.title, text: values.text }));
     }
   };
 
@@ -38,28 +35,82 @@ export const TodoApp: React.FC = () => {
     dispatch(updateTodo({ id, title: newTitle, text: newText }));
   };
 
+
+
+  const columns = useMemo(
+    () => [
+      {
+        title: "Task No.",
+        dataIndex: "id",
+        key: "id",
+        render: (text: any, record: Todo, index: number) => `${index + 1}.`,
+      },
+      {
+        title: "Action",
+        key: "action",
+        render: (_: any, record: Todo) => (
+          <div>
+            <div>
+              {record.completed ? (
+                <div>
+                  <Input
+                    value={record.title}
+                    placeholder="Title"
+                    onChange={(e) =>
+                      handleUpdateTodo(record.id, e.target.value, record.text!)
+                    }
+                    style={{ width: "20%", margin: "5px", float: "left" }}
+                    required
+                  />
+                  <Input.TextArea
+                    value={record.text}
+                    onChange={(e) =>
+                      handleUpdateTodo(record.id, record.title!, e.target.value)
+                    }
+                    style={{ width: "100%", margin: "5px", height: "100%" }}
+                  />
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      handleUpdateTodo(record.id, record.title!, record.text!);
+                      handleToggleTodo(record.id);
+                    }}
+                    style={{ float: "right" }}
+                    icon={<CheckOutlined />}
+                    name="Save-Edited"
+                  />
+                </div>
+              ) : (
+                <div style={{ overflow: "auto" }}>
+                  <div style={{ float: "left", margin: "5px" }}>
+                    {record.title}
+                  </div>
+                  <div style={{ float: "right" }}>
+                    <Button
+                      type="primary"
+                      onClick={() => handleToggleTodo(record.id)}
+                      icon={<EditOutlined />}
+                    />
+                    &nbsp;
+                    <Button
+                      type="primary"
+                      onClick={() => handleDeleteTodo(record.id)}
+                      icon={<DeleteOutlined />}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ),
+      },
+    ],
+    [handleDeleteTodo, handleToggleTodo, handleUpdateTodo]
+  );
+
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
-
-  // const handleTitleOnChange = (title: React.ChangeEvent<HTMLInputElement>) => {
-  //   setTitle(title.target.value);
-  // };
-
-  // useEffect(() => {
-  //   // console.log("Setting todos in cookies:", todos);
-  //   if(todos.length!==0)
-  //   Cookies.set("todos", JSON.stringify(todos));
-  // }, [todos]);
-
-  // useEffect(() => {
-  //   const storedTodos = Cookies.get("todos");
-  //   // console.log("Retrieved todos from cookies:", storedTodos);
-  //   if (storedTodos) {
-  //     const storedTodo= JSON.parse(storedTodos);
-  //     setTodo(storedTodo);
-  //   }
-  // }, []);
 
   return (
     <div className={`container mt-5 ${darkMode ? "dark-mode" : "light-mode"}`}>
@@ -70,59 +121,54 @@ export const TodoApp: React.FC = () => {
               <h1 className="card-title text-center">To Do App</h1>
               <div className="task-list">
                 <div className="table-responsive mt-4">
-                  <form className="form-control mt-3">
-                    <Input
-                      value={title}
-                      placeholder="Title"
-                      className="mt-3"
-                      name="title"
-                      onChange={e => setTitle(e.target.value)}
-                      style={{
-                        width: "20%",
-                        margin: "5px",
-                        float: "left",
-                      }}
-                      required
-                    />
-                    <Input
-                      value={text}
-                      placeholder="Enter your task"
-                      name="tasks"
-                      onChange={e=> setText(e.target.value)}
-                      style={{
-                        width: "100%",
-                        margin: "5px",
-                      }}
-                    />
-                    <div style={{ float: "right" }}>   
-                      <Button
-                        type="primary"
-                        className="mt-3"
-                        onClick={handleAddTodo}
-                        icon={<CheckOutlined />}
-                        name="Add"
-                      ></Button>
-                      &nbsp;
-                      {/* <Button
-                        type="primary"
-                        className="mt-3"
-                        // onClick={clearHandleClick}
-                        icon={<DeleteOutlined />}
-                      >
-                        All
-                      </Button>
-                      &nbsp; */}
-                      <Button
-                        type="primary"
-                        className="mt-2"
-                        onClick={toggleDarkMode}
-                      >
-                        {darkMode ? <i>Light Mode</i> : <i>Dark Mode</i>}
-                      </Button>
-                    </div>
-                  </form>
+                  <Form
+                    onFinish={handleAddTodo}
+                    layout="inline"
+                    style={{ marginBottom: "1rem"}}
+                  >
+                    <Row gutter={34}>
+                      <Col span={6}>
+                        <Form.Item
+                          name="title"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please input the title!",
+                            },
+                          ]}
+                        >
+                          <Input placeholder="Title" />
+                        </Form.Item>
+                      </Col>
+                      <Col span={15}>
+                        <Form.Item
+                          name="text"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please input the task!",
+                            },
+                          ]}
+                        >
+                          <Input
+                            placeholder="Enter your task"
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={3}>
+                        <Form.Item>
+                          <Button
+                            type="primary"
+                            htmlType="submit"
+                            icon={<CheckOutlined />}
+                          >
+                            Add
+                          </Button>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Form>
                 </div>
-
                 <div
                   className="table-responsive mt-4"
                   style={{
@@ -131,86 +177,23 @@ export const TodoApp: React.FC = () => {
                     borderRadius: "3px",
                   }}
                 >
-                  <table className="table" style={{ height: "90%" }}>
-                    <thead>
-                      <tr>
-                        <th style={{width: '20%'}}>Task No.</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {todos.map((todo, index) => (
-                        <tr key={todo.id}>
-                          <td>{index + 1}.</td>
-                          <td>
-                            {/* this part will edit the task */}
-                            {todo.completed === true ? (
-                              <div>
-                                <Input
-                                  value={todo.title}
-                                  placeholder="Title"
-                                  className="mt-3"
-                                  name="title"
-                                  onChange={e => handleUpdateTodo(todo.id, e.target.value!,todo.text!)}
-                                  style={{
-                                    width: "20%",
-                                    margin: "5px",
-                                    float: "left",
-                                  }}
-                                  required
-                                />
-                                <Input.TextArea
-                                  value={todo.text}
-                                  onChange={e => handleUpdateTodo(todo.id, todo.title!,e.target.value!)}
-                                  style={{
-                                    width: "100%",
-                                    margin: "5px",
-                                    height: "100%",
-                                  }}
-                                />
-                                <Button
-                                  type="primary"
-                                  onClick={()=> {
-                                    handleUpdateTodo(todo.id, todo.title!, todo.text!);
-                                    handleToggleTodo(todo.id); 
-                                  }}
-                                  style={{ float: "right" }}
-                                  icon={<CheckOutlined />}
-                                  name="Save-Edited"
-                                />
-                                
-                              </div>
-                            ) : (
-                              <div style={{ overflow: "auto" }}>
-                                <div style={{ float: "left", margin: "5px" }}>
-                                  {/* {todo.text} */}
-                                  {todo.title}
-                                </div>
-                                <div style={{ float: "right" }}>
-                                  <Button
-                                    type="primary"
-                                    onClick={() => handleToggleTodo (todo.id)}
-                                    icon={<EditOutlined />}
-                                  />
-                                  &nbsp;
-                                  <Button
-                                    type="primary"
-                                    onClick={()=>handleDeleteTodo(todo.id)}
-                                    icon={<DeleteOutlined />}
-                                  />
-                                </div>
-                              </div>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <Table
+                    dataSource={todos}
+                    columns={columns}
+                    rowKey="id"
+                    pagination={false}
+                    size="middle"
+                  ></Table>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div className="text-center mt-4">
+        <Button onClick={toggleDarkMode}>
+          {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        </Button>
       </div>
     </div>
   );
