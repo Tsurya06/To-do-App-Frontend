@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Col, Form, Input, Row, Table } from "antd";
+import { Button, Col, Form, Image, Input, Row, Table } from "antd";
 import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 import "./styles.css";
-
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,12 +11,14 @@ import {
   toggleTodo,
   updateTodo,
 } from "../reducers/todoReducer";
-import { Todo } from "../modals/type";
+import { TodoType } from "../modals/type";
 import { RootState } from "../store";
 import ReactSignatureCanvas from "react-signature-canvas";
+import Modal from "antd/es/modal/Modal";
 
 export const TodoApp: React.FC = () => {
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [signatureUrl, setSignatureUrl] = useState<string | null>(null);
   const todos = useSelector((state: RootState) => state.todosReducer);
   const dispatch = useDispatch();
   const [sigCanvas, setSigCanvas] = useState<ReactSignatureCanvas | null>(null);
@@ -27,7 +28,11 @@ export const TodoApp: React.FC = () => {
       sigCanvas.clear();
     }
   };
-  const handleAddTodo = (values: { title: string; text: string }) => {
+  const handleAddTodo = (values: {
+    title: string;
+    text: string;
+    image_url: string;
+  }) => {
     if (values.title.trim() !== "" && values.text.trim() !== "") {
       dispatch(addTodo({ title: values.title, text: values.text }));
     }
@@ -51,12 +56,48 @@ export const TodoApp: React.FC = () => {
       dataIndex: "id",
       key: "id",
       width: "5rem",
-      render: (text: any, record: Todo, index: number) => `${index + 1}.`,
+      render: (text: any, record: TodoType, index: number) => `${index + 1}.`,
+    },
+    {
+      title: "Todos",
+      key: "todos",
+      render: (record: TodoType) => {
+        return (
+          <div>
+            <Input
+              value={record.title}
+              placeholder="Title"
+              onChange={(e) =>
+                handleUpdateTodo(record.id, e.target.value, record.text!)
+              }
+              style={{ width: "20%", margin: "5px", float: "left" }}
+              required
+            />
+            <Input.TextArea
+              value={record.text}
+              onChange={(e) =>
+                handleUpdateTodo(record.id, record.title!, e.target.value)
+              }
+              style={{ width: "100%", margin: "5px", height: "100%" }}
+            />
+            <Button
+              type="primary"
+              onClick={() => {
+                handleUpdateTodo(record.id, record.title!, record.text!);
+                handleToggleTodo(record.id);
+              }}
+              style={{ float: "right" }}
+              icon={<CheckOutlined />}
+              name="Save-Edited"
+            />
+          </div>
+        );
+      },
     },
     {
       title: "Action",
       key: "action",
-      render: (_: any, record: Todo) => (
+      render: (_: any, record: TodoType) => (
         <div>
           <div>
             {record.completed ? (
@@ -118,8 +159,6 @@ export const TodoApp: React.FC = () => {
     setDarkMode(!darkMode);
   };
 
-  const [signatureUrl, setSignatureUrl] = useState<string | null>(null);
-
   const saveSignature = () => {
     if (sigCanvas) {
       const signatureData = sigCanvas.toDataURL();
@@ -128,12 +167,17 @@ export const TodoApp: React.FC = () => {
   };
   const renderSignaturePreview = () => {
     if (signatureUrl) {
-      return <img src={signatureUrl} alt="Signature Preview" />;
+      return (
+        <Image
+          src={signatureUrl}
+          width={200}
+          height={50}
+          alt="Signature Preview"
+        />
+      );
     }
     return null;
   };
-
-
 
   return (
     <div className={`container mt-5 ${darkMode ? "dark-mode" : "light-mode"}`}>
@@ -192,19 +236,21 @@ export const TodoApp: React.FC = () => {
                       </Col>
                     </Row>
                   </Form>
-                  <div className="signature-pad" style={{border: '1px  gray'}}>
+                  <div
+                    className="signature-pad"
+                    style={{ border: "1px  gray" }}
+                  >
                     <ReactSignatureCanvas
                       ref={(ref) => setSigCanvas(ref)}
                       penColor="black"
                       canvasProps={{
                         width: 600,
-                        height: '150%',
+                        height: "150%",
                         className: "sigCanvas",
                       }}
-                      
                     />
                   </div>
-                  <Row style={{marginTop: '0.5rem'}}>
+                  <Row style={{ marginTop: "0.5rem" }}>
                     <Col span={12}>
                       <Button onClick={clearCanvas}>Clear</Button>
                     </Col>

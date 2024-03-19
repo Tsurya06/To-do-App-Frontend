@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Todo } from "../modals/type";
+import { TodoType } from "../modals/type";
 
-const initialState: Todo[] = [];
+const initialState: TodoType[] = [];
 
 const todoReducer = createSlice({
   name: "todosSlice",
