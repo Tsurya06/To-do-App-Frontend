@@ -1,8 +1,14 @@
-.App {
+/* .App {
   text-align: center;
   height: 100vh;
-  border: 2px solid black;
+  width: 100vh;
   background-color: #212529;
+} */
+.App{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: calc(100vh - 3.5rem - 2rem - 2rem);
 }
 
 

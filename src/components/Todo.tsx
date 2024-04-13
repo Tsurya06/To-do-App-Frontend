@@ -1,26 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Col, Form, Image, Input, Row, Table } from "antd";
+import { Button, Col, Form, Image, Input, Row, Table, message } from "antd";
 import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 import "./styles.css";
-
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addTodo,
-  deleteTodoById,
-  toggleTodo,
-  updateTodo,
-} from "../reducers/todoReducer";
 import { TodoType } from "../modals/type";
-import { RootState } from "../store";
+import { AppDispatch, RootState } from "../store";
 import ReactSignatureCanvas from "react-signature-canvas";
 import Modal from "antd/es/modal/Modal";
-
+import { CreateTodo, DeleteTodoById, GetTodoList } from "../todoThunks/TodoThunk";
+import { ColumnsType } from "antd/es/table";
 export const TodoApp: React.FC = () => {
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [todoAdded, setTodoAdded] = useState(false);
   const [signatureUrl, setSignatureUrl] = useState<string | null>(null);
+  const [editedTodos,setEditedTodo] = useState<TodoType[]>([])
   const todos = useSelector((state: RootState) => state.todosReducer);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [sigCanvas, setSigCanvas] = useState<ReactSignatureCanvas | null>(null);
 
   const clearCanvas = () => {
@@ -28,129 +26,123 @@ export const TodoApp: React.FC = () => {
       sigCanvas.clear();
     }
   };
-  const handleAddTodo = (values: {
-    title: string;
-    text: string;
-    image_url: string;
-  }) => {
-    if (values.title.trim() !== "" && values.text.trim() !== "") {
-      dispatch(addTodo({ title: values.title, text: values.text }));
-    }
-  };
 
-  const handleToggleTodo = (id: number) => {
-    dispatch(toggleTodo(id));
-  };
+  // const handleToggleTodo = (id: number) => {
+  //   dispatch(toggleTodo(id));
+  // };
 
-  const handleDeleteTodo = (id: number) => {
-    dispatch(deleteTodoById(id));
-  };
+  // const handleUpdateTodo = (id: number, newTitle: string, newdescription: string) => {
+  //   dispatch(updateTodo({ id, title: newTitle, description: newdescription }));
+  // };
 
-  const handleUpdateTodo = (id: number, newTitle: string, newText: string) => {
-    dispatch(updateTodo({ id, title: newTitle, text: newText }));
-  };
-
-  const columns = [
+  const columns: ColumnsType<TodoType> = [
     {
       title: "Task No.",
-      dataIndex: "id",
       key: "id",
       width: "5rem",
-      render: (text: any, record: TodoType, index: number) => `${index + 1}.`,
+      render: (_, __, index: number) => `${index + 1}.`,
     },
     {
-      title: "Todos",
-      key: "todos",
-      render: (record: TodoType) => {
-        return (
-          <div>
-            <Input
-              value={record.title}
-              placeholder="Title"
-              onChange={(e) =>
-                handleUpdateTodo(record.id, e.target.value, record.text!)
-              }
-              style={{ width: "20%", margin: "5px", float: "left" }}
-              required
-            />
-            <Input.TextArea
-              value={record.text}
-              onChange={(e) =>
-                handleUpdateTodo(record.id, record.title!, e.target.value)
-              }
-              style={{ width: "100%", margin: "5px", height: "100%" }}
-            />
-            <Button
-              type="primary"
-              onClick={() => {
-                handleUpdateTodo(record.id, record.title!, record.text!);
-                handleToggleTodo(record.id);
-              }}
-              style={{ float: "right" }}
-              icon={<CheckOutlined />}
-              name="Save-Edited"
-            />
-          </div>
-        );
+      title: <div style={{ textAlign: "center" }}>Title</div>,
+      dataIndex: "title",
+      key: "title",
+      width:'10rem',
+      render: (text) => {
+        return <>{text}</>;
       },
     },
     {
-      title: "Action",
-      key: "action",
-      render: (_: any, record: TodoType) => (
-        <div>
-          <div>
-            {record.completed ? (
-              <div>
-                <Input
-                  value={record.title}
-                  placeholder="Title"
-                  onChange={(e) =>
-                    handleUpdateTodo(record.id, e.target.value, record.text!)
-                  }
-                  style={{ width: "20%", margin: "5px", float: "left" }}
-                  required
-                />
-                <Input.TextArea
-                  value={record.text}
+      title: <div style={{ textAlign: "center" }}>Description</div>,
+      // dataIndex: "description",
+      key: "description",
+      render: (record: TodoType) => {
+        return (
+          <>
+            {/* {record.completed ? (
+              <Row justify={"start"} gutter={16} style={{ boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)'}}>
+                <Col>
+                  <Input
+                    value={record.title}
+                    placeholder="Title"
+                    onChange={(e) =>
+                      handleUpdateTodo(record.id, e.target.value, record.description!)
+                    }
+                    required
+                  />
+                </Col>
+                <Input.descriptionArea
+                  value={record.description}
                   onChange={(e) =>
                     handleUpdateTodo(record.id, record.title!, e.target.value)
                   }
                   style={{ width: "100%", margin: "5px", height: "100%" }}
                 />
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    handleUpdateTodo(record.id, record.title!, record.text!);
-                    handleToggleTodo(record.id);
-                  }}
-                  style={{ float: "right" }}
-                  icon={<CheckOutlined />}
-                  name="Save-Edited"
-                />
-              </div>
+              </Row>
             ) : (
-              <div style={{ overflow: "auto" }}>
-                <div style={{ float: "left", margin: "5px" }}>
-                  {record.title}
-                </div>
-                <div style={{ float: "right" }}>
-                  <Button
-                    type="primary"
-                    onClick={() => handleToggleTodo(record.id)}
-                    icon={<EditOutlined />}
-                  />
-                  &nbsp;
-                  <Button
-                    type="primary"
-                    onClick={() => handleDeleteTodo(record.id)}
-                    icon={<DeleteOutlined />}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+              <Row justify={"start"} style={{borderRadius: '2px'}}>{record.title}</Row>
+            )} */}
+            <>{record.description}</>
+          </>
+        );
+      },
+    },
+    {
+      title: <div style={{ textAlign: "center" }}>Action</div>,
+      key: "action",
+      width: "7rem",
+      render: (record: TodoType) => (
+        <Row justify={"center"} gutter={[16, 16]}>
+          <Col>
+            <Button
+              type="primary"
+              // onClick={() => handleToggleTodo(record.id)}
+              icon={<EditOutlined />}
+            />
+          </Col>
+          <Col>
+            <Button
+              type="primary"
+              onClick={()=>handleDeleteRow(record)}
+              icon={<DeleteOutlined />}
+            />
+          </Col>
+        </Row>
+
+        //     <Row>
+        //       {!record.completed ? (
+        //         <Row justify={"center"} gutter={[16,16]}>
+        //           <Col>
+        //             <Button
+        //               type="primary"
+        //               onClick={() => handleToggleTodo(record.id)}
+        //               icon={<EditOutlined />}
+        //             />
+        //           </Col>
+        //           <Col>
+        //             <Button
+        //               type="primary"
+        //               onClick={() => handleDeleteTodo(record.id)}
+        //               icon={<DeleteOutlined />}
+        //             />
+        //           </Col>
+        //         </Row>
+        //       ) : (
+        //         <Row gutter={[16, 16]}>
+        //           <Col span={16}>
+        //             <Button
+        //               type="primary"
+        //               onClick={() => {
+        //                 handleUpdateTodo(record.id, record.title!, record.description!);
+        //                 handleToggleTodo(record.id);
+        //               }}
+        //               style={{ float: "right" }}
+        //               icon={<CheckOutlined />}
+        //               name="Save-Edited"
+        //             />
+        //           </Col>
+        //         </Row>
+        //       )}
+        //     </Row>
       ),
     },
   ];
@@ -159,135 +151,161 @@ export const TodoApp: React.FC = () => {
     setDarkMode(!darkMode);
   };
 
-  const saveSignature = () => {
-    if (sigCanvas) {
-      const signatureData = sigCanvas.toDataURL();
-      setSignatureUrl(signatureData);
+  // const saveSignature = () => {
+  //   if (sigCanvas) {
+  //     const signatureData = sigCanvas.toDataURL();
+  //     setSignatureUrl(signatureData);
+  //   }
+  // };
+  // const renderSignaturePreview = () => {
+  //   if (signatureUrl) {
+  //     return (
+  //       <Image
+  //         src={signatureUrl}
+  //         width={200}
+  //         height={50}
+  //         alt="Signature Preview"
+  //       />
+  //     );
+  //   }
+  //   return null;
+  // };
+
+  const handleAddTodo = () => {
+    if (title.trim() !== "" && description.trim() !== "") {
+      dispatch(CreateTodo({ body: { title, description } }))
+        .then(() => {          
+            setTitle("");
+            setDescription("");
+            setTodoAdded(!todoAdded);
+        })
+        .catch(() => {
+          message.error("Add karte time kuchh to fata hai!")
+        });
     }
   };
-  const renderSignaturePreview = () => {
-    if (signatureUrl) {
-      return (
-        <Image
-          src={signatureUrl}
-          width={200}
-          height={50}
-          alt="Signature Preview"
-        />
-      );
-    }
-    return null;
-  };
+  const handleDeleteRow = (record: any) => {
+    dispatch(DeleteTodoById({id: record.id}))
+       .then((data) => {
+         if (data.payload) {
+           // Filter out the deleted todo item
+           const updatedData = editedTodos.filter(
+             (todo) => todo.id !== record.id
+           );
+           // Update the state with the filtered array
+           setEditedTodo(updatedData);
+         }
+       })
+       .catch((error) => {
+         console.error("Failed to delete todo:", error);
+       });
+   };
+
+useEffect(() => {
+  dispatch(GetTodoList({ body: {} }))
+     .then((data) => {
+       if (data.payload) {
+         setEditedTodo(data.payload.data);
+       }
+     })
+     .catch((error) => {
+       console.error("Failed to fetch todo list:", error);
+     });
+ }, [todoAdded]);
 
   return (
     <div className={`container mt-5 ${darkMode ? "dark-mode" : "light-mode"}`}>
       <div className="row justify-content-center">
-        <div className="col-md-6">
+        <div>
           <div className="card">
-            <div className="card-body">
-              <h1 className="card-title text-center">To Do App</h1>
-              <div className="task-list">
-                <div
-                  className="table-responsive mt-4"
-                  style={{ height: "30vh" }}
-                >
-                  <Form
-                    onFinish={handleAddTodo}
-                    layout="inline"
-                    style={{ marginBottom: "1rem" }}
-                  >
-                    <Row gutter={34}>
-                      <Col span={6}>
-                        <Form.Item
-                          name="title"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please input the title!",
-                            },
-                          ]}
-                        >
-                          <Input placeholder="Title" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={15}>
-                        <Form.Item
-                          name="text"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please input the task!",
-                            },
-                          ]}
-                        >
-                          <Input placeholder="Enter your task" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={3}>
-                        <Form.Item>
-                          <Button
-                            type="primary"
-                            htmlType="submit"
-                            icon={<CheckOutlined />}
-                          >
-                            Add
-                          </Button>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Form>
-                  <div
-                    className="signature-pad"
-                    style={{ border: "1px  gray" }}
-                  >
-                    <ReactSignatureCanvas
-                      ref={(ref) => setSigCanvas(ref)}
-                      penColor="black"
-                      canvasProps={{
-                        width: 600,
-                        height: "150%",
-                        className: "sigCanvas",
+            <div className="card-body" style={{ width: "100%" }}>
+              <div style={{textAlign:'center'}}><h1>To Do App</h1></div>
+
+              <Row gutter={[8, 8]}>
+                <Col span={24}>
+                  <Col span={6}>
+                    <Input
+                      placeholder="Title"
+                      value={title}
+                      onChange={(e) => {
+                        setTitle(e.target.value)
                       }}
                     />
-                  </div>
-                  <Row style={{ marginTop: "0.5rem" }}>
-                    <Col span={12}>
-                      <Button onClick={clearCanvas}>Clear</Button>
-                    </Col>
-                    <Col span={12}>
-                      <Button onClick={saveSignature}>Save</Button>
-                    </Col>
-                  </Row>
-                  {renderSignaturePreview()}
-                </div>
-                <div
-                  className="table-responsive mt-4"
-                  style={{
-                    height: "300px",
-                    overflowY: "auto",
-                    borderRadius: "3px",
+                  </Col>
+                </Col>
+                  <Col span={24}>
+                    <Input.TextArea
+                      style={{ height: "200px", width: "100%" }}
+                      placeholder="Enter your task"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </Col>
+              </Row>
+              <Row justify={"center"} style={{marginTop:'1rem'}} gutter={[8, 8]}>
+                <Col>
+                  <Button
+                    type="primary"
+                    onClick={handleAddTodo}
+                    icon={<CheckOutlined />}
+                  >
+                    Add
+                  </Button>
+                </Col>
+              </Row>
+              {/* <div
+                className="signature-pad"
+                style={{ border: "1px  gray" }}
+              >
+                <ReactSignatureCanvas
+                  ref={(ref) => setSigCanvas(ref)}
+                  penColor="black"
+                  canvasProps={{
+                    width: 600,
+                    height: "150%",
+                    className: "sigCanvas",
                   }}
-                >
-                  <Table
-                    dataSource={todos}
-                    scroll={{ y: "70%" }}
-                    columns={columns}
-                    rowKey="id"
-                    pagination={false}
-                    size="middle"
-                    sticky
-                  />
-                </div>
-              </div>
+                />
+              </div> */}
+              {/* <Row style={{ marginTop: "0.5rem" }}>
+                <Col span={12}>
+                  <Button onClick={clearCanvas}>Clear</Button>
+                </Col>
+                <Col span={12}>
+                  <Button onClick={saveSignature}>Save</Button>
+                </Col>
+              </Row>
+              {renderSignaturePreview()} */}
+            </div>
+            <div
+              className="table-responsive mt-4"
+              style={{
+                height: "40vh",
+                overflowY: "auto",
+                width: '100%',
+                borderRadius: "5px",
+              }}
+            >
+              <Table
+                loading={todos.isLoading}
+                columns={columns}
+                dataSource={editedTodos}
+                scroll={{ x: "100%" }}
+                rowKey="id"
+                bordered={true}
+                pagination={false}
+                size="middle"
+                sticky
+              />
             </div>
           </div>
         </div>
       </div>
-      <div className="text-center mt-4">
+      <Row justify={'center'} className="description-center mt-4">
         <Button onClick={toggleDarkMode}>
           {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         </Button>
-      </div>
+      </Row>
     </div>
   );
 };

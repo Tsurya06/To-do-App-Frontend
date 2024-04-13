@@ -1,7 +1,7 @@
 export type TodoType ={
-  id: number;
+  id?: string;
   title?: string;
-  text?: string;
+  description?: string;
   completed?: boolean;
   image_url?: string 
 }
