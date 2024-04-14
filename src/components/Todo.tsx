@@ -1,39 +1,106 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  useEffect,
+  //  useMemo,
+  useState,
+} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Col, Form, Image, Input, Row, Table, message } from "antd";
+import {
+  Button,
+  Col,
+  //  Form, Image,
+  Input,
+  Row,
+  Table,
+  message,
+} from "antd";
 import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 import "./styles.css";
 import { useDispatch, useSelector } from "react-redux";
-import { TodoType } from "../modals/type";
+import { TodoType } from "../models/type";
 import { AppDispatch, RootState } from "../store";
-import ReactSignatureCanvas from "react-signature-canvas";
-import Modal from "antd/es/modal/Modal";
-import { CreateTodo, DeleteTodoById, GetTodoList } from "../todoThunks/TodoThunk";
+// import ReactSignatureCanvas from "react-signature-canvas";
+// import Modal from "antd/es/modal/Modal";
+import {
+  CreateTodoThunk,
+  DeleteTodoByIdThunk,
+  EditTodoThunk,
+  GetTodoList,
+} from "../todoThunks/TodoThunk";
 import { ColumnsType } from "antd/es/table";
 export const TodoApp: React.FC = () => {
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [toggleTodo, setToggleTodo] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [todoAdded, setTodoAdded] = useState(false);
-  const [signatureUrl, setSignatureUrl] = useState<string | null>(null);
-  const [editedTodos,setEditedTodo] = useState<TodoType[]>([])
+  const [toggleTodoId, setToggleTodoId] = useState<string>();
+  // const [signatureUrl, setSignatureUrl] = useState<string | null>(null);
+  const [editedTodos, setEditedTodo] = useState<TodoType[]>([]);
   const todos = useSelector((state: RootState) => state.todosReducer);
   const dispatch = useDispatch<AppDispatch>();
-  const [sigCanvas, setSigCanvas] = useState<ReactSignatureCanvas | null>(null);
+  // const [sigCanvas, setSigCanvas] = useState<ReactSignatureCanvas | null>(null);
 
-  const clearCanvas = () => {
-    if (sigCanvas) {
-      sigCanvas.clear();
-    }
-  };
-
-  // const handleToggleTodo = (id: number) => {
-  //   dispatch(toggleTodo(id));
+  // const clearCanvas = () => {
+  //   if (sigCanvas) {
+  //     sigCanvas.clear();
+  //   }
   // };
 
   // const handleUpdateTodo = (id: number, newTitle: string, newdescription: string) => {
   //   dispatch(updateTodo({ id, title: newTitle, description: newdescription }));
   // };
+
+  
+  const handleAddTodo = () => {
+    if (title.trim() !== "" && description.trim() !== "") {
+      const body= { title, description };
+      dispatch(CreateTodoThunk({ body:body }))
+        .then(() => {
+          setTitle("");
+          setDescription("");
+          setTodoAdded(!todoAdded);
+        })
+        .catch(() => {
+          message.error("Add karte time kuchh to fata hai!");
+        });
+    }
+  };
+
+  const handleDeleteRow = (record: TodoType) => {
+    dispatch(DeleteTodoByIdThunk({ id: record.id }))
+      .then((data) => {
+        if (data.payload) {
+          // Filter out the deleted todo item
+          const updatedData = editedTodos.filter(
+            (todo) => todo.id !== record.id
+          );
+          // Update the state with the filtered array
+          setEditedTodo(updatedData);
+        }
+      })
+      .catch((error) => {
+        message.error("Failed to delete todo:", error);
+      });
+  };
+  const handleEditTodo = (editedTodos: TodoType[],id:string) => {
+    const payloadBody = editedTodos.map((todo) => {
+      return {
+        ...todo,
+        id: todo.id,
+        title: todo.title,
+        description: todo.description,
+      };
+    }).filter(itr=>itr.id===id);
+
+    dispatch(EditTodoThunk({body: {payloadBody},id:id})).then(data=>{
+      if(data.payload){
+        setToggleTodo(false);
+        setToggleTodoId(undefined);
+      }
+    }).catch((error) => {
+      message.error("Failed to edit todo:", error);
+    });
+  };
 
   const columns: ColumnsType<TodoType> = [
     {
@@ -44,44 +111,57 @@ export const TodoApp: React.FC = () => {
     },
     {
       title: <div style={{ textAlign: "center" }}>Title</div>,
-      dataIndex: "title",
       key: "title",
-      width:'10rem',
-      render: (text) => {
-        return <>{text}</>;
+      width: "10rem",
+      render: (record: TodoType) => {
+        return (
+          <>
+            {toggleTodo && toggleTodoId === record.id ? (
+              <>
+                <Input
+                  value={record.title}
+                  onChange={(e) => {
+                    setEditedTodo((prevObj) =>
+                      prevObj.map((todo) =>
+                        todo.id === toggleTodoId
+                          ? { ...todo, title: e.target.value }
+                          : todo
+                      )
+                    );
+                  }}
+                />
+              </>
+            ) : (
+              <>{record.title}</>
+            )}
+          </>
+        );
       },
     },
     {
       title: <div style={{ textAlign: "center" }}>Description</div>,
-      // dataIndex: "description",
       key: "description",
       render: (record: TodoType) => {
         return (
           <>
-            {/* {record.completed ? (
-              <Row justify={"start"} gutter={16} style={{ boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)'}}>
-                <Col>
-                  <Input
-                    value={record.title}
-                    placeholder="Title"
-                    onChange={(e) =>
-                      handleUpdateTodo(record.id, e.target.value, record.description!)
-                    }
-                    required
-                  />
-                </Col>
-                <Input.descriptionArea
+            {toggleTodo && toggleTodoId === record.id ? (
+              <>
+                <Input
                   value={record.description}
-                  onChange={(e) =>
-                    handleUpdateTodo(record.id, record.title!, e.target.value)
-                  }
-                  style={{ width: "100%", margin: "5px", height: "100%" }}
+                  onChange={(e) => {
+                    setEditedTodo((prevObj) =>
+                      prevObj.map((todo) =>
+                        todo.id === toggleTodoId
+                          ? { ...todo, description: e.target.value }
+                          : todo
+                      )
+                    );
+                  }}
                 />
-              </Row>
+              </>
             ) : (
-              <Row justify={"start"} style={{borderRadius: '2px'}}>{record.title}</Row>
-            )} */}
-            <>{record.description}</>
+              <>{record.description}</>
+            )}
           </>
         );
       },
@@ -95,54 +175,33 @@ export const TodoApp: React.FC = () => {
           <Col>
             <Button
               type="primary"
-              // onClick={() => handleToggleTodo(record.id)}
-              icon={<EditOutlined />}
+              onClick={() => {
+                if (toggleTodo && toggleTodoId === record.id) {
+                  // Save changes
+                  handleEditTodo(editedTodos,record.id || '');
+                } else {
+                  // Toggle edit mode
+                  setToggleTodo(true);
+                  setToggleTodoId(record.id);
+                }
+              }}
+              icon={
+                toggleTodo && record.id === toggleTodoId ? (
+                  <CheckOutlined />
+                ) : (
+                  <EditOutlined />
+                )
+              }
             />
           </Col>
           <Col>
             <Button
               type="primary"
-              onClick={()=>handleDeleteRow(record)}
+              onClick={() => handleDeleteRow(record)}
               icon={<DeleteOutlined />}
             />
           </Col>
         </Row>
-
-        //     <Row>
-        //       {!record.completed ? (
-        //         <Row justify={"center"} gutter={[16,16]}>
-        //           <Col>
-        //             <Button
-        //               type="primary"
-        //               onClick={() => handleToggleTodo(record.id)}
-        //               icon={<EditOutlined />}
-        //             />
-        //           </Col>
-        //           <Col>
-        //             <Button
-        //               type="primary"
-        //               onClick={() => handleDeleteTodo(record.id)}
-        //               icon={<DeleteOutlined />}
-        //             />
-        //           </Col>
-        //         </Row>
-        //       ) : (
-        //         <Row gutter={[16, 16]}>
-        //           <Col span={16}>
-        //             <Button
-        //               type="primary"
-        //               onClick={() => {
-        //                 handleUpdateTodo(record.id, record.title!, record.description!);
-        //                 handleToggleTodo(record.id);
-        //               }}
-        //               style={{ float: "right" }}
-        //               icon={<CheckOutlined />}
-        //               name="Save-Edited"
-        //             />
-        //           </Col>
-        //         </Row>
-        //       )}
-        //     </Row>
       ),
     },
   ];
@@ -171,47 +230,18 @@ export const TodoApp: React.FC = () => {
   //   return null;
   // };
 
-  const handleAddTodo = () => {
-    if (title.trim() !== "" && description.trim() !== "") {
-      dispatch(CreateTodo({ body: { title, description } }))
-        .then(() => {          
-            setTitle("");
-            setDescription("");
-            setTodoAdded(!todoAdded);
-        })
-        .catch(() => {
-          message.error("Add karte time kuchh to fata hai!")
-        });
-    }
-  };
-  const handleDeleteRow = (record: any) => {
-    dispatch(DeleteTodoById({id: record.id}))
-       .then((data) => {
-         if (data.payload) {
-           // Filter out the deleted todo item
-           const updatedData = editedTodos.filter(
-             (todo) => todo.id !== record.id
-           );
-           // Update the state with the filtered array
-           setEditedTodo(updatedData);
-         }
-       })
-       .catch((error) => {
-         console.error("Failed to delete todo:", error);
-       });
-   };
-
-useEffect(() => {
-  dispatch(GetTodoList({ body: {} }))
-     .then((data) => {
-       if (data.payload) {
-         setEditedTodo(data.payload.data);
-       }
-     })
-     .catch((error) => {
-       console.error("Failed to fetch todo list:", error);
-     });
- }, [todoAdded]);
+  useEffect(() => {
+    dispatch(GetTodoList({ body: {} }))
+      .then((data) => {
+        if (data.payload) {
+          setEditedTodo(data.payload.data);
+        }
+      })
+      .catch((error) => {
+        message.error("Failed to fetch todo list:", error);
+      });
+      
+  }, [todoAdded,dispatch]);
 
   return (
     <div className={`container mt-5 ${darkMode ? "dark-mode" : "light-mode"}`}>
@@ -219,7 +249,9 @@ useEffect(() => {
         <div>
           <div className="card">
             <div className="card-body" style={{ width: "100%" }}>
-              <div style={{textAlign:'center'}}><h1>To Do App</h1></div>
+              <div style={{ textAlign: "center" }}>
+                <h1>To Do App</h1>
+              </div>
 
               <Row gutter={[8, 8]}>
                 <Col span={24}>
@@ -228,21 +260,25 @@ useEffect(() => {
                       placeholder="Title"
                       value={title}
                       onChange={(e) => {
-                        setTitle(e.target.value)
+                        setTitle(e.target.value);
                       }}
                     />
                   </Col>
                 </Col>
-                  <Col span={24}>
-                    <Input.TextArea
-                      style={{ height: "200px", width: "100%" }}
-                      placeholder="Enter your task"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
-                  </Col>
+                <Col span={24}>
+                  <Input.TextArea
+                    style={{ height: "200px", width: "100%" }}
+                    placeholder="Enter your task"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </Col>
               </Row>
-              <Row justify={"center"} style={{marginTop:'1rem'}} gutter={[8, 8]}>
+              <Row
+                justify={"center"}
+                style={{ marginTop: "1rem" }}
+                gutter={[8, 8]}
+              >
                 <Col>
                   <Button
                     type="primary"
@@ -282,14 +318,14 @@ useEffect(() => {
               style={{
                 height: "40vh",
                 overflowY: "auto",
-                width: '100%',
+                width: "100%",
                 borderRadius: "5px",
               }}
             >
               <Table
                 loading={todos.isLoading}
                 columns={columns}
-                dataSource={editedTodos}
+                dataSource={editedTodos ? editedTodos : []}
                 scroll={{ x: "100%" }}
                 rowKey="id"
                 bordered={true}
@@ -301,7 +337,7 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      <Row justify={'center'} className="description-center mt-4">
+      <Row justify={"center"} className="description-center mt-4">
         <Button onClick={toggleDarkMode}>
           {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         </Button>

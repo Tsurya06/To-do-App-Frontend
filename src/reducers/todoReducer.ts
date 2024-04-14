@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { TodoType } from "../modals/type";
+import { TodoType } from "../models/type";
 import { message } from "antd";
 
 
@@ -25,11 +25,11 @@ const todoReducer = createSlice({
       state.isLoading = true;
       state.error = null;
     },
-    createTodoSuccess: (state,action: PayloadAction<{todos:TodoType[], total_count: number}>) => {
+    fetchTodoSuccess: (state,action: PayloadAction<{todos:TodoType[], total_count: number}>) => {
       state.isLoading=false;
       state.error=null;
       state.todos= action.payload.todos
-      message.success("Record created!")
+      state.total_count=action.payload.total_count
     },
     todoSuccess: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
@@ -65,5 +65,5 @@ const todoReducer = createSlice({
   },
 });
 
-export const { createTodoSuccess, todoLoadingStart, todoFailure,todoSuccess } = todoReducer.actions;
+export const { fetchTodoSuccess, todoLoadingStart, todoFailure,todoSuccess } = todoReducer.actions;
 export default todoReducer.reducer;

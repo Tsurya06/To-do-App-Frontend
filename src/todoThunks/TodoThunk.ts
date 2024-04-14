@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { todoSuccess,createTodoSuccess, todoFailure, todoLoadingStart } from "../reducers/todoReducer";
-import {createTodo, deleteTodoById, getTodoList} from "../services/api/todoApi"
-import { TodoType } from "../modals/type";
+import { todoSuccess, todoFailure, todoLoadingStart, fetchTodoSuccess } from "../reducers/todoReducer";
+import {createTodo, deleteTodoById, editTodo, getTodoList} from "../services/api/todoApi"
+import { TodoType } from "../models/type";
 
 export type ReqType = {
     body?: object;
@@ -10,15 +10,33 @@ export type ReqType = {
     id?: string;
 };
 
-export const CreateTodo = createAsyncThunk(
+export const CreateTodoThunk = createAsyncThunk(
     "todo/AddTodo",
     async(req: ReqType ,{ dispatch, rejectWithValue } )=>{
     try{
         dispatch(todoLoadingStart())
         const response = await createTodo(req);
         const todos: any= response.data;
-        const total_count: number= response.data.total_count;
-        dispatch(createTodoSuccess({todos:todos,total_count:total_count}))
+        dispatch(todoSuccess(todos.message))
+        return response.data;
+    }catch (error: any) {
+        const errorMessage = error.response.data.message || 'Failed to add todo';
+        if (error.response.status !== 401) {
+          dispatch(todoFailure(errorMessage));
+        }
+        return rejectWithValue(errorMessage);
+      }
+  }  
+);
+
+export const EditTodoThunk = createAsyncThunk(
+    "todo/EditTodo",
+    async(req: ReqType ,{ dispatch, rejectWithValue } )=>{
+    try{
+        dispatch(todoLoadingStart())
+        const response = await editTodo(req);
+        const todos: any= response.data;
+        dispatch(todoSuccess(todos.message))
         return response.data;
     }catch (error: any) {
         const errorMessage = error.response.data.message || 'Failed to add todo';
@@ -38,8 +56,7 @@ export const GetTodoList = createAsyncThunk(
         const response = await getTodoList(req);
         const todos: TodoType[]= response.data;
         const total_count: number= response.data.total_count;
-        dispatch(createTodoSuccess({todos:todos,total_count:total_count}))
-        console.log("sdkjf",response)
+        dispatch(fetchTodoSuccess({todos:todos,total_count:total_count}))
         return response;
     }catch (error: any) {
         const errorMessage = error.response.data.message || 'Failed to fetch todo list';
@@ -50,7 +67,7 @@ export const GetTodoList = createAsyncThunk(
       }
   }  
 );
-export const DeleteTodoById = createAsyncThunk(
+export const DeleteTodoByIdThunk = createAsyncThunk(
     "todo/DeleteTodoById",
     async(req: ReqType ,{ dispatch, rejectWithValue } )=>{
     try{
