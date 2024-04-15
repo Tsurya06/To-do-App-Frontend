@@ -82,24 +82,32 @@ export const TodoApp: React.FC = () => {
         message.error("Failed to delete todo:", error);
       });
   };
-  const handleEditTodo = (editedTodos: TodoType[],id:string) => {
-    const payloadBody = editedTodos.map((todo) => {
-      return {
-        ...todo,
-        id: todo.id,
-        title: todo.title,
-        description: todo.description,
-      };
-    }).filter(itr=>itr.id===id);
-
-    dispatch(EditTodoThunk({body: {payloadBody},id:id})).then(data=>{
-      if(data.payload){
-        setToggleTodo(false);
-        setToggleTodoId(undefined);
-      }
-    }).catch((error) => {
-      message.error("Failed to edit todo:", error);
-    });
+  const handleEditTodo = (editedTodos: TodoType[], id: string) => {
+    // Find the todo item with the matching id
+    const todoItem = editedTodos.find((todo) => todo.id === id);
+  
+    // If no matching todo item is found, return early
+    if (!todoItem) {
+      return message.error("Todo not found in the database!");
+    }
+  
+    // Create the payload body with the single todo item
+    const payloadBody = {
+      id: todoItem.id,
+      title: todoItem.title,
+      description: todoItem.description,
+    };
+  
+    dispatch(EditTodoThunk({ body: payloadBody, id: id }))
+      .then((data) => {
+        if (data.payload) {
+          setToggleTodo(false);
+          setToggleTodoId(undefined);
+        }
+      })
+      .catch((error) => {
+        message.error("Failed to edit todo:", error);
+      });
   };
 
   const columns: ColumnsType<TodoType> = [
