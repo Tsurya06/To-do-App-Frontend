@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { TodoType } from "../models/type";
+import { TodoType } from "../../../types/apiResponseType";
 import { message } from "antd";
 
 
@@ -17,7 +17,7 @@ const initialState: Todos={
   error: null,
 }
 
-const todoReducer = createSlice({
+export const todoSlice = createSlice({
   name: "todosSlice",
   initialState,
   reducers: {
@@ -65,5 +65,4 @@ const todoReducer = createSlice({
   },
 });
 
-export const { fetchTodoSuccess, todoLoadingStart, todoFailure,todoSuccess } = todoReducer.actions;
-export default todoReducer.reducer;
+export const { fetchTodoSuccess, todoLoadingStart, todoFailure,todoSuccess } = todoSlice.actions;

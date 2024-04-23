@@ -15,9 +15,7 @@ import {
 } from "antd";
 import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 import "./styles.css";
-import { useDispatch, useSelector } from "react-redux";
-import { TodoType } from "../models/type";
-import { AppDispatch, RootState } from "../store";
+import { TodoType } from "../../types/apiResponseType";
 // import ReactSignatureCanvas from "react-signature-canvas";
 // import Modal from "antd/es/modal/Modal";
 import {
@@ -25,8 +23,9 @@ import {
   DeleteTodoByIdThunk,
   EditTodoThunk,
   GetTodoList,
-} from "../todoThunks/TodoThunk";
+} from "../../store/features/todo/TodoThunk";
 import { ColumnsType } from "antd/es/table";
+import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
 export const TodoApp: React.FC = () => {
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [toggleTodo, setToggleTodo] = useState<boolean>(false);
@@ -36,8 +35,8 @@ export const TodoApp: React.FC = () => {
   const [toggleTodoId, setToggleTodoId] = useState<string>();
   // const [signatureUrl, setSignatureUrl] = useState<string | null>(null);
   const [editedTodos, setEditedTodo] = useState<TodoType[]>([]);
-  const todos = useSelector((state: RootState) => state.todosReducer);
-  const dispatch = useDispatch<AppDispatch>();
+  const todos = useAppSelector((state: RootState) => state.todosReducer);
+  const dispatch = useAppDispatch();
   // const [sigCanvas, setSigCanvas] = useState<ReactSignatureCanvas | null>(null);
 
   // const clearCanvas = () => {
@@ -50,11 +49,10 @@ export const TodoApp: React.FC = () => {
   //   dispatch(updateTodo({ id, title: newTitle, description: newdescription }));
   // };
 
-  
   const handleAddTodo = () => {
     if (title.trim() !== "" && description.trim() !== "") {
-      const body= { title, description };
-      dispatch(CreateTodoThunk({ body:body }))
+      const body = { title, description };
+      dispatch(CreateTodoThunk({ body: body }))
         .then(() => {
           setTitle("");
           setDescription("");
@@ -85,19 +83,19 @@ export const TodoApp: React.FC = () => {
   const handleEditTodo = (editedTodos: TodoType[], id: string) => {
     // Find the todo item with the matching id
     const todoItem = editedTodos.find((todo) => todo.id === id);
-  
+
     // If no matching todo item is found, return early
     if (!todoItem) {
       return message.error("Todo not found in the database!");
     }
-  
+
     // Create the payload body with the single todo item
     const payloadBody = {
       id: todoItem.id,
       title: todoItem.title,
       description: todoItem.description,
     };
-  
+
     dispatch(EditTodoThunk({ body: payloadBody, id: id }))
       .then((data) => {
         if (data.payload) {
@@ -186,7 +184,7 @@ export const TodoApp: React.FC = () => {
               onClick={() => {
                 if (toggleTodo && toggleTodoId === record.id) {
                   // Save changes
-                  handleEditTodo(editedTodos,record.id || '');
+                  handleEditTodo(editedTodos, record.id || "");
                 } else {
                   // Toggle edit mode
                   setToggleTodo(true);
@@ -248,8 +246,7 @@ export const TodoApp: React.FC = () => {
       .catch((error) => {
         message.error("Failed to fetch todo list:", error);
       });
-      
-  }, [todoAdded,dispatch]);
+  }, [todoAdded, dispatch]);
 
   return (
     <div className={`container mt-5 ${darkMode ? "dark-mode" : "light-mode"}`}>
@@ -257,6 +254,11 @@ export const TodoApp: React.FC = () => {
         <div>
           <div className="card">
             <div className="card-body" style={{ width: "100%" }}>
+              <Row justify={"center"} className="description-center mt-4">
+                <Button onClick={toggleDarkMode}>
+                  {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                </Button>
+              </Row>
               <div style={{ textAlign: "center" }}>
                 <h1>To Do App</h1>
               </div>
@@ -345,11 +347,6 @@ export const TodoApp: React.FC = () => {
           </div>
         </div>
       </div>
-      <Row justify={"center"} className="description-center mt-4">
-        <Button onClick={toggleDarkMode}>
-          {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-        </Button>
-      </Row>
     </div>
   );
 };

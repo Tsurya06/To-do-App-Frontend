@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { ReqType } from "../../todoThunks/TodoThunk";
+import { ReqType } from "../../store/features/todo/TodoThunk";
 import axios from "axios";
 
 const devURL = import.meta.env.VITE_BASE_URL;
