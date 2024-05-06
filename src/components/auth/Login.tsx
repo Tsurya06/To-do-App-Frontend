@@ -31,9 +31,9 @@ export default function Login() {
 
   return (
     <>
-    <Row style={{ padding: '3rem 1rem' ,border:'2px solid black'}} >
+    <Row style={{ padding: '3rem 1rem', width:'100%',border:'2px solid red'}} >
     <Row gutter={[16, 16]} style={{ padding: '0 1rem' }}>
-      <Col xs={24} md={12}>
+      <Col span={10}>
         <Title level={3} style={{ marginBottom: '1rem' }}>
           Stay on top of your tasks with our Todo List app
         </Title>
@@ -43,7 +43,8 @@ export default function Login() {
         </Text>
         
       </Col>
-      <Col xs={24} md={12}>
+      <Col  span={6}></Col>
+      <Col span={8}>
         <Card title={<Title level={2}>Sign in to your account</Title>} style={{ width: '100%', maxWidth: '480px', margin: 'auto' }}>
           <Card.Meta title={<Text>Enter your email and password to access your Todo List.</Text>} />
           <Form layout="vertical" >
