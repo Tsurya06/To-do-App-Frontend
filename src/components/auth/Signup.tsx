@@ -1,19 +1,21 @@
 // src/Signup.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { auth } from '../../firebase-config/firebase';
 import { message } from 'antd';
 
 const Signup: React.FC = () => {
  const [email, setEmail] = useState('');
  const [password, setPassword] = useState('');
+ const [isLoading,setIsLoading]= useState(false);
 
 
  const handleSignup = async (e: React.FormEvent) => {
+    setIsLoading(true);
     e.preventDefault();
     try {
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       // Send verification email
-      await userCredential.user?.sendEmailVerification();
+      const awaited= await userCredential.user?.sendEmailVerification();
       message.success('Verification email sent. Please check your inbox.');
     } catch (error:any) {
         message.error(error.message);    

@@ -65,12 +65,6 @@
   color: #bfbdbd; 
 }
 
-.dark-mode .ant-table-wrapper table:hover {
-  background-color:rgb(24, 26, 27);
+.dark-mode .ant-table-wrapper .ant-table-tbody .ant-table-row>.ant-table-cell-row-hover {
+  background-color: rgb(37, 38, 39);
 }
-
-/* .dark-mode .ant-table-wrapper .ant-table-tbody .ant-table-row>.ant-table-cell> .ant-table-cell-row-hover {
-  background-color: rgb(24, 26, 27);
-  color: #bfbdbd;
-  border: 1px solid #36353f;
-} */
