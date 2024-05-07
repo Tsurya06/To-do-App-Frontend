@@ -7,15 +7,15 @@ export default function Auth() {
       
         <div className="login-container">
           <Row>
-            {/* <ConfigProvider
+            <ConfigProvider
               theme={{
                 token: {
                   colorPrimary: '#095C42',
                 },
               }}
-            > */}
+            >
               <AuthRouter />
-            {/* </ConfigProvider> */}
+            </ConfigProvider>
           </Row>
         </div>
     );
