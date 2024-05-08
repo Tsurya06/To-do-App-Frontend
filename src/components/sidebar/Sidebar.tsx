@@ -99,7 +99,7 @@ export const Sidebar: React.FC = () => {
                 background: colorBgContainer,
               }}
             >
-              {/* <TodoApp/> */}
+              <TodoApp/>
             </div>
           </Content>
         </div>

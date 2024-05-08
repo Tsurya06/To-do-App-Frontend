@@ -17,8 +17,10 @@ const Signup: React.FC = () => {
     try {
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       // Send verification email
-      const awaited= await userCredential.user?.sendEmailVerification();
-      message.success('Verification email sent. Please check your inbox.');
+      await userCredential.user?.sendEmailVerification().then(()=>{
+        setIsLoading(false)
+        message.success('Verification email sent. Please check your inbox.');
+      });
     } catch (error:any) {
         setIsLoading(false)
         message.error(error.message);    
