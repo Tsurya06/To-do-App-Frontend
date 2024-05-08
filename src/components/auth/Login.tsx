@@ -13,22 +13,16 @@ import {
   Typography,
   message,
 } from "antd";
-
+import './Login.css'
 const { Title, Text } = Typography;
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [form] = Form.useForm();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    form.validateFields().then((values) => {
-      setEmail(values.email);
-      setPassword(values.password);
-    });
-    console.log(email, password)
     try {
       const userCred = await auth.signInWithEmailAndPassword(email, password);
       if (userCred.user?.emailVerified) {
@@ -41,87 +35,130 @@ export default function Login() {
     }
   };
 
-  const navigateToSignup = () => {
-    navigate("/Signup");
-  };
-
   return (
     <>
-      <Row justify={"center"} >
+      <Row justify={"center"} style={{ width: "100%" }}>
         <Row
           justify={"center"}
-          align={"bottom"}
-          style={{ margin: "2rem", }}
+          align={"middle"}
+          style={{ margin: "2rem", width: "100%" }}
           gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
         >
-          <Col span={8} className="gutter-row login-left-content" xs={24} sm={24} md={18} lg={12} xl={12}>
-            <h1>
-              <p className="sedan-sc-regular">
-                Stay on top of your tasks with our Todo List app
-              </p>
-            </h1>
-            <p
-              style={{
-                maxWidth: "720px",
-                color: "#999",
-                fontFamily: "cursive",
-              }}
+          <Col
+            span={8}
+            className="gutter-row login-left-content"
+            xs={24}
+            sm={20}
+            md={18}
+            lg={12}
+            xl={12}
+          >
+            <Col
+              className="login-left-content-box"
+              style={{ alignContent: "center", margin: "2rem" }}
             >
-              Organize your life, boost your productivity, and never forget a
-              task again with our intuitive and feature-rich Todo List app.
-            </p>
-            <Row justify={"start"}>
-              <Col span={4} xs={24} sm={24}>
-                <Button type="text">Get Started</Button>
-              </Col>
-              <Col span={3} xs={24} sm={24}>
-                <Button type="text" style={{ borderColor: "gray" }}>
-                  Learn More
-                </Button>
-              </Col>
-            </Row>
-          </Col>
-          
-          <Col xs={24} sm={24} md={18} lg={12} xl={12} style={{height:'80%'}}>
-            <Card style={{borderRadius:'2rem', width:'80%',height:'75%',marginLeft:'2rem' }}>
-              <Row  justify={"start"}>
-                <Space>
-                  <h2>Sign in to your account</h2>
-                </Space>
-              </Row>
-              <Row>
-                <p>Enter your email and password to access your Todo List.</p>
-              </Row>
-              <Form layout="vertical">
-                <Form.Item
-                  name="email"
-                  label={<Text>Email</Text>}
-                  rules={[
-                    { required: true, message: "Please input your email!" },
-                  ]}
-                >
-                  <Input placeholder="m@example.com" />
-                </Form.Item>
-                <Form.Item
-                  label={<Text>Password</Text>}
-                  rules={[
-                    { required: true, message: "Please input your password!" },
-                  ]}
-                >
-                  <Input.Password />
-                </Form.Item>
-                <Form.Item>
-                  <Button 
-                  style={{ backgroundColor: "black", color: "white" }}
-                  onClick={()=>{
-                    handleLogin
-                  }}
-                  >
-                    Sign In
+              <h1>
+                <p className="sedan-sc-regular">
+                  Stay on top of your tasks with our Todo List app
+                </p>
+              </h1>
+              <p
+                style={{
+                  maxWidth: "720px",
+                  color: "#999",
+                  fontFamily: "cursive",
+                }}
+              >
+                Organize your life, boost your productivity, and never forget a
+                task again with our intuitive and feature-rich Todo List app.
+              </p>
+              <Row justify={"start"}>
+                <Col span={4} xs={24} sm={24} md={18} lg={6} xl={4}>
+                  <Button type="text" style={{boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)'}}>Get Started</Button>
+                </Col>
+                <Col span={1}></Col>
+                <Col span={3} xs={24} sm={24} md={18} lg={3} xl={3}>
+                  <Button type="text" style={{boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)'}}>
+                    Learn More
                   </Button>
-                </Form.Item>
-              </Form>
-            </Card>
+                </Col>
+              </Row>
+            </Col>
+          </Col>
+
+          <Col
+            xs={24}
+            sm={20}
+            md={18}
+            lg={12}
+            xl={12}
+            style={{ height: "80%" }}
+          >
+            <Row justify={"center"} align={"middle"} style={{ height: "100%" }}>
+              <Card
+                className="login-card"
+                style={{ borderRadius: "2rem", width: "60%", height: "70%" }}
+              >
+                <Row justify={"start"}>
+                  <Space>
+                    <h2>Sign in to your account</h2>
+                  </Space>
+                </Row>
+                <Row>
+                  <p>Enter your email and password to access your Todo List.</p>
+                </Row>
+                <Form layout="vertical">
+                  <Form.Item
+                    name="email"
+                    label={<Text>Email</Text>}
+                    rules={[
+                      { required: true, message: "Please input your email!" },
+                    ]}
+                  >
+                    <Input 
+                    placeholder="m@example.com" 
+                    onChange={(e)=>{
+                      setEmail(e.target.value);
+                    }}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name="password"
+                    label={<Text>Password</Text>}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your password!",
+                      },
+                    ]}
+                  >
+                    <Input.Password 
+                      placeholder="*******"
+                      onChange={(e)=>{
+                        setPassword(e.target.value);
+                      }}
+                    />
+                  </Form.Item>
+                  <Form.Item >
+                      <Button
+                        style={{ backgroundColor: "black", color: "white" }}
+                        onClick={(e) => handleLogin(e)}
+                      >
+                        Sign In
+                      </Button>
+                    <Row justify={'center'} style={{marginTop:'1rem'}}>
+                    <Col span={1}></Col>
+                    <Col style={{alignContent:'center'}}>
+                      <Space>New user? <a type="text" onClick={(e)=>{
+                        e.preventDefault()
+                        navigate("/Signup");
+                      }}>Signup now</a></Space>
+                    </Col>
+                  </Row>
+                  </Form.Item>
+                </Form>
+              </Card>
+            </Row>
           </Col>
         </Row>
       </Row>
