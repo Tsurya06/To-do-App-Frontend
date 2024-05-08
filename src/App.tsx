@@ -23,13 +23,14 @@ function App() {
   return (
     
   <div className="App">
-    {userState.user &&
+    {/* {userState.user &&
       userState.user.user &&
       userState.user.user.id !== '' ? (
         <Layout/>
-      ) : (
+      ) : ( */}
         <Auth />
-      )}
+      {/* )} */}
+      
   </div>
   )
 }

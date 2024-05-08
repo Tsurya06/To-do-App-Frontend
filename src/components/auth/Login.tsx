@@ -19,10 +19,16 @@ const { Title, Text } = Typography;
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [form] = Form.useForm();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    form.validateFields().then((values) => {
+      setEmail(values.email);
+      setPassword(values.password);
+    });
+    console.log(email, password)
     try {
       const userCred = await auth.signInWithEmailAndPassword(email, password);
       if (userCred.user?.emailVerified) {
@@ -41,13 +47,14 @@ export default function Login() {
 
   return (
     <>
-      <Row justify={"center"} style={{ padding: "3rem 1rem", width: "100%" }}>
+      <Row justify={"center"} >
         <Row
           justify={"center"}
-          align={"middle"}
-          style={{ margin: "5rem", width: "100%" }}
+          align={"bottom"}
+          style={{ margin: "2rem", }}
+          gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
         >
-          <Col span={12} className="login-left-content">
+          <Col span={8} className="gutter-row login-left-content" xs={24} sm={24} md={18} lg={12} xl={12}>
             <h1>
               <p className="sedan-sc-regular">
                 Stay on top of your tasks with our Todo List app
@@ -55,7 +62,7 @@ export default function Login() {
             </h1>
             <p
               style={{
-                maxWidth: "600px",
+                maxWidth: "720px",
                 color: "#999",
                 fontFamily: "cursive",
               }}
@@ -64,19 +71,19 @@ export default function Login() {
               task again with our intuitive and feature-rich Todo List app.
             </p>
             <Row justify={"start"}>
-              <Col span={4}>
+              <Col span={4} xs={24} sm={24}>
                 <Button type="text">Get Started</Button>
               </Col>
-              <Col span={3}>
+              <Col span={3} xs={24} sm={24}>
                 <Button type="text" style={{ borderColor: "gray" }}>
                   Learn More
                 </Button>
               </Col>
             </Row>
           </Col>
-          <Col span={4}></Col>
-          <Col span={8}>
-            <Card style={{ width: "100%", maxWidth: "480px", borderRadius:'2rem', border:'1px solid gray' }}>
+          
+          <Col xs={24} sm={24} md={18} lg={12} xl={12} style={{height:'80%'}}>
+            <Card style={{borderRadius:'2rem', width:'80%',height:'75%',marginLeft:'2rem' }}>
               <Row  justify={"start"}>
                 <Space>
                   <h2>Sign in to your account</h2>

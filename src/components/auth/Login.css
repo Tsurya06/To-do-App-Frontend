@@ -14,10 +14,21 @@
     font-size: 3rem;
     font-weight: bold;
 }
-
+#card{
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8e8e8;
+  border-radius: 3rem;
+  max-width: fit-content;
+}
   .login-left-content{
     background-color: lightgray;
     height: 100%;
-    align-content: center;
+    align-content: start;
     border-radius: 2rem;
    }  
+
+   @media (min-width: 800px) {
+    .gutter-row:nth-child(2) {
+      margin-top: 0;
+    }
+  }   
