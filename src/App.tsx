@@ -27,10 +27,11 @@ function App() {
       userState.user.user &&
       userState.user.user.id !== '' ? (
         <Layout/>
-      ) : ( */}
+      ) : (
         <Auth />
-      {/* )} */}
-      
+      )} */}
+
+<Layout/>
   </div>
   )
 }
