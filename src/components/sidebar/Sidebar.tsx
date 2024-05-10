@@ -6,6 +6,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   CarryOutOutlined,
+  OrderedListOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
 import './Sidebar.css';
@@ -25,19 +26,23 @@ function getItem(
 }
 
 export default function Sidebar (){
-  const [currentKey, setCurrentKey] = useState<string>('dashboard');
+  const [currentKey, setCurrentKey] = useState<string>('');
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const items: MenuItem[] = [
-    getItem('dashboard', 'dashboard', <CarryOutOutlined />),
+    getItem('dashboard', 'dashboard', <CarryOutOutlined />,),
+    getItem('todos', 'todos', <OrderedListOutlined />),
   ];
   const handleMenuClick = (e: any) => {
     switch (e.key) {
       case 'dashboard':
         navigate('/dashboard');
+        break;
+      case 'todos':
+        navigate('/todos');
         break;
       default:
         navigate('/notfound');
@@ -48,7 +53,7 @@ export default function Sidebar (){
     <ConfigProvider
     theme={{
       token: {
-        colorPrimary: 'rgb(223,223,223)',
+        colorPrimary: 'white',
       },
       components: {
         Layout: {},
@@ -66,16 +71,17 @@ export default function Sidebar (){
           width="15vw"
           collapsed={collapsed}
           trigger={null}
-          style={{ backgroundColor: 'white' }}
+          style={{ backgroundColor: 'white'}}
         >
           <Menu
             theme="light"
-            className="custome-side-menu"
+            // className="custome-side-menu"
             onClick={handleMenuClick}
             selectedKeys={[currentKey]}
             mode="inline"
             items={items}
-          />
+            style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black', border:'1 px solid red'}}
+            />
           <div
             className="custom-trigger"
             onClick={() => setCollapsed(!collapsed)}
@@ -103,9 +109,9 @@ export default function Sidebar (){
                 background: colorBgContainer,
               }}
             >
-              {/* <Main>
+              <Main>
                 <Router/>
-              </Main> */}
+              </Main>
             </div>
           </Content>
         </div>

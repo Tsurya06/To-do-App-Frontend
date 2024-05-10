@@ -3,7 +3,6 @@ import React, {
   //  useMemo,
   useState,
 } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import {
   Button,
   Col,
@@ -14,7 +13,7 @@ import {
   message,
 } from "antd";
 import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
-import "./styles.css";
+// import "./styles.css";
 import { TodoType } from "../../types/apiResponseType";
 // import ReactSignatureCanvas from "react-signature-canvas";
 // import Modal from "antd/es/modal/Modal";
@@ -180,7 +179,6 @@ export const TodoApp: React.FC = () => {
         <Row justify={"center"} gutter={[16, 16]}>
           <Col>
             <Button
-              type="primary"
               onClick={() => {
                 if (toggleTodo && toggleTodoId === record.id) {
                   // Save changes
@@ -198,13 +196,14 @@ export const TodoApp: React.FC = () => {
                   <EditOutlined />
                 )
               }
+              style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black'}}
             />
           </Col>
           <Col>
             <Button
-              type="primary"
               onClick={() => handleDeleteRow(record)}
               icon={<DeleteOutlined />}
+              style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black'}}
             />
           </Col>
         </Row>
@@ -249,57 +248,45 @@ export const TodoApp: React.FC = () => {
   }, [todoAdded, dispatch]);
 
   return (
-    <div className={`container mt-5 ${darkMode ? "dark-mode" : "light-mode"}`}>
-      <div className="row justify-content-center">
-        <div>
-          <div className="card">
-            <div className="card-body" style={{ width: "100%" }}>
-              <Row justify={"center"} className="description-center mt-4">
-                <Button onClick={toggleDarkMode}>
-                  {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-                </Button>
-              </Row>
-              <div style={{ textAlign: "center" }}>
-                <h1>To Do App</h1>
-              </div>
-
-              <Row gutter={[8, 8]}>
-                <Col span={24}>
-                  <Col span={6}>
-                    <Input
-                      placeholder="Title"
-                      value={title}
-                      onChange={(e) => {
-                        setTitle(e.target.value);
-                      }}
-                    />
-                  </Col>
-                </Col>
-                <Col span={24}>
-                  <Input.TextArea
-                    style={{ height: "200px", width: "100%" }}
-                    placeholder="Enter your task"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </Col>
-              </Row>
-              <Row
-                justify={"center"}
-                style={{ marginTop: "1rem" }}
-                gutter={[8, 8]}
-              >
-                <Col>
-                  <Button
-                    type="primary"
-                    onClick={handleAddTodo}
-                    icon={<CheckOutlined />}
-                  >
-                    Add
-                  </Button>
-                </Col>
-              </Row>
-              {/* <div
+    <>
+      <Row justify={"center"}>
+        <Button onClick={toggleDarkMode} style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black'}}>
+          {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        </Button>
+      </Row>
+      <Row gutter={[8, 8]}>
+        <Col span={24}>
+          <Col span={6}>
+            <Input
+              placeholder="Title"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+          </Col>
+        </Col>
+        <Col span={24}>
+          <Input.TextArea
+            style={{ height: "200px", width: "100%" }}
+            placeholder="Enter your task"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </Col>
+      </Row>
+      <Row justify={"center"} style={{ marginTop: "1rem" }} gutter={[8, 8]}>
+        <Col>
+          <Button
+            onClick={handleAddTodo}
+            icon={<CheckOutlined />}
+            style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black'}}
+          >
+            Add
+          </Button>
+        </Col>
+      </Row>
+      {/* <div
                 className="signature-pad"
                 style={{ border: "1px  gray" }}
               >
@@ -313,7 +300,7 @@ export const TodoApp: React.FC = () => {
                   }}
                 />
               </div> */}
-              {/* <Row style={{ marginTop: "0.5rem" }}>
+      {/* <Row style={{ marginTop: "0.5rem" }}>
                 <Col span={12}>
                   <Button onClick={clearCanvas}>Clear</Button>
                 </Col>
@@ -322,31 +309,19 @@ export const TodoApp: React.FC = () => {
                 </Col>
               </Row>
               {renderSignaturePreview()} */}
-            </div>
-            <div
-              className="table-responsive mt-4"
-              style={{
-                height: "40vh",
-                overflowY: "auto",
-                width: "100%",
-                borderRadius: "5px",
-              }}
-            >
-              <Table
-                loading={todos.isLoading}
-                columns={columns}
-                dataSource={editedTodos ? editedTodos : []}
-                scroll={{ x: "100%" }}
-                rowKey="id"
-                bordered={true}
-                pagination={false}
-                size="middle"
-                sticky
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <Row style={{marginTop:'2rem'}}>        
+      <Table
+        loading={todos.isLoading}
+        columns={columns}
+        dataSource={editedTodos ? editedTodos : []}
+        scroll={{ x: "100%" }}
+        rowKey="id"
+        bordered={true}
+        pagination={false}
+        size="middle"
+        sticky
+      />
+      </Row>
+    </>
   );
 };

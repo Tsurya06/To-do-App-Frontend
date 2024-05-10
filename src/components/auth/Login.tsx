@@ -78,7 +78,7 @@ export default function Login() {
                 task again with our intuitive and feature-rich Todo List app.
               </p>
               <Row justify={"start"}>
-                <Col span={4} xs={24} sm={24} md={18} lg={6} xl={3}>
+                <Col span={4} xs={24} sm={24} md={18} lg={6} xl={4}>
                   <Button type="text" style={{boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)'}}>Get Started</Button>
                 </Col>
                 <Col span={1}></Col>
@@ -108,7 +108,7 @@ export default function Login() {
                   <Space>
                     <h2>Sign in to your account</h2>
                   </Space>
-                  <p style={{color:'lightgray'}}>Enter your email and password to access your Todo List.</p>
+                  <p style={{color:'gray'}}>Enter your email and password to access your Todo List.</p>
                 </Row>
                 <Form layout="vertical">
                   <Form.Item
