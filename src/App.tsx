@@ -1,9 +1,6 @@
-import React, { useEffect } from "react";
-import {TodoApp} from "./pages/todo/Todo"
-import {Sidebar} from "./components/sidebar/Sidebar"
+import { useEffect } from "react";
 import "./App.css";
-import { Provider } from "react-redux";
-import {store, useAppSelector} from "./store/store";
+import { useAppSelector} from "./store/store";
 import Layout from "./components/layout/Layout";
 import Auth from "./components/layout/Auth";
 
@@ -23,15 +20,13 @@ function App() {
   return (
     
   <div className="App">
-    {/* {userState.user &&
+    {userState.user &&
       userState.user.user &&
       userState.user.user.id !== '' ? (
         <Layout/>
       ) : (
         <Auth />
-      )} */}
-
-<Layout/>
+      )}
   </div>
   )
 }

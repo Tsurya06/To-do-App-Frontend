@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { auth } from "../../firebase-config/firebase";
 import { useNavigate } from "react-router-dom";
+import { ExportOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
@@ -19,19 +20,23 @@ const { Title, Text } = Typography;
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading,setIsLoading]= useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
+    setIsLoading(true);
     e.preventDefault();
     try {
       const userCred = await auth.signInWithEmailAndPassword(email, password);
       if (userCred.user?.emailVerified) {
         message.success("Login Success!!");
+        setIsLoading(false);
       } else {
-        message.error("Email is not verified");
+        message.error("Invalid email or password. Please try again.");
       }
-    } catch (error: any) {
-      message.error(error.message);
+    } catch (e) {
+      message.error("Invalid email or password. Please try again.");
+      setIsLoading(false);
     }
   };
 
@@ -73,13 +78,13 @@ export default function Login() {
                 task again with our intuitive and feature-rich Todo List app.
               </p>
               <Row justify={"start"}>
-                <Col span={4} xs={24} sm={24} md={18} lg={6} xl={4}>
+                <Col span={4} xs={24} sm={24} md={18} lg={6} xl={3}>
                   <Button type="text" style={{boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)'}}>Get Started</Button>
                 </Col>
                 <Col span={1}></Col>
                 <Col span={3} xs={24} sm={24} md={18} lg={3} xl={3}>
-                  <Button type="text" style={{boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)'}}>
-                    Learn More
+                  <Button type="text">
+                    Learn More <ExportOutlined />
                   </Button>
                 </Col>
               </Row>
@@ -103,9 +108,7 @@ export default function Login() {
                   <Space>
                     <h2>Sign in to your account</h2>
                   </Space>
-                </Row>
-                <Row>
-                  <p>Enter your email and password to access your Todo List.</p>
+                  <p style={{color:'lightgray'}}>Enter your email and password to access your Todo List.</p>
                 </Row>
                 <Form layout="vertical">
                   <Form.Item
@@ -116,7 +119,7 @@ export default function Login() {
                     ]}
                   >
                     <Input 
-                    placeholder="m@example.com" 
+                    placeholder="mf@example.com" 
                     onChange={(e)=>{
                       setEmail(e.target.value);
                     }}
@@ -141,6 +144,7 @@ export default function Login() {
                   </Form.Item>
                   <Form.Item >
                       <Button
+                        loading={isLoading}
                         style={{ backgroundColor: "black", color: "white" }}
                         onClick={(e) => handleLogin(e)}
                       >
@@ -149,8 +153,7 @@ export default function Login() {
                     <Row justify={'center'} style={{marginTop:'1rem'}}>
                     <Col span={1}></Col>
                     <Col style={{alignContent:'center'}}>
-                      <Space>New user? <a type="text" onClick={(e)=>{
-                        e.preventDefault()
+                      <Space>New user? <a type="text" onClick={()=>{
                         navigate("/Signup");
                       }}>Signup now</a></Space>
                     </Col>

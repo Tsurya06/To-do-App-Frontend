@@ -1,82 +1,86 @@
-import { Layout, Menu, Row, theme } from "antd";
+import { ConfigProvider, Layout, Menu, MenuProps, Row, theme } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import React, { useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  CarryOutOutlined,
 } from '@ant-design/icons';
-import { Router } from "react-router-dom";
-import { TodoApp } from "../../pages/todo/Todo";
+import { useNavigate } from "react-router-dom";
+import './Sidebar.css';
+import Main from "../layout/Main";
+import Router from "../../routes/Router";
 
-interface FormData {
-  username: string;
-  email: string;
-  message: string;
+type MenuItem = Required<MenuProps>['items'][number];
+
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  additionalProps?: React.HTMLAttributes<HTMLElement>
+): MenuItem {
+  return {key,icon,children,label,...additionalProps} as MenuItem;
 }
 
-export const Sidebar: React.FC = () => {
-  const [currentKey, setCurrentKey] = useState<string>();
-
+export default function Sidebar (){
+  const [currentKey, setCurrentKey] = useState<string>('dashboard');
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
-  const [inputData, setInputData] = useState<FormData>({
-    username: "",
-    email: "",
-    message: "",
-  });
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const [submittedData, setSubmittedData] = useState<FormData[]>([]); 
-  
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    console.log(submittedData.map((data)=>data.username));
-    console.log(submittedData.map((data)=>data.email));
-    console.log(submittedData.map((data)=>data.message));
-    setSubmittedData([...submittedData, inputData]); 
-
-    setInputData({
-      username: "",
-      email: "",
-      message: "",
-    });
-  }
-
-  function handleInputChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    const { name, value } = event.target;
-    setInputData({
-      ...inputData,
-      [name]: value,
-    });
-  }
+  const items: MenuItem[] = [
+    getItem('dashboard', 'dashboard', <CarryOutOutlined />),
+  ];
+  const handleMenuClick = (e: any) => {
+    switch (e.key) {
+      case 'dashboard':
+        navigate('/dashboard');
+        break;
+      default:
+        navigate('/notfound');
+    }
+  };
 
   return (
-    <>
+    <ConfigProvider
+    theme={{
+      token: {
+        colorPrimary: 'rgb(223,223,223)',
+      },
+      components: {
+        Layout: {},
+        Menu: {
+          colorPrimary: 'black',
+          // itemBorderRadius: 2,
+        },
+      },
+    }}
+  >
      <Layout hasSider>
         <Sider
           className="custom-sider"
           collapsible
-          
           width="15vw"
           collapsed={collapsed}
           trigger={null}
+          style={{ backgroundColor: 'white' }}
         >
           <Menu
-            theme="dark"
+            theme="light"
             className="custome-side-menu"
-            // onClick={handleMenuClick}
-            selectedKeys={[currentKey || 'dashboard']}
+            onClick={handleMenuClick}
+            selectedKeys={[currentKey]}
             mode="inline"
-            items={[]}
-            style={{border:'2px solid red', height:'96vh'}}
+            items={items}
           />
           <div
             className="custom-trigger"
             onClick={() => setCollapsed(!collapsed)}
           >
-            <Row justify={'center'} align={'bottom'} style={{backgroundColor:'wheat'}}>
+            <Row justify={'center'} align={'bottom'} style={{backgroundColor:'White'}}>
               {collapsed ? (
                 <MenuFoldOutlined style={{ fontSize: '20px' }} />
               ) : (
@@ -99,11 +103,13 @@ export const Sidebar: React.FC = () => {
                 background: colorBgContainer,
               }}
             >
-              <TodoApp/>
+              {/* <Main>
+                <Router/>
+              </Main> */}
             </div>
           </Content>
         </div>
       </Layout>
-    </>
+    </ConfigProvider>
   );
 };

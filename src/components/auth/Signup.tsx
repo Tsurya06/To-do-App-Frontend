@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { auth } from '../../firebase-config/firebase';
 import { Button, Card, Col, Form, Input, Row, Space, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { ExportOutlined } from '@ant-design/icons';
+import './Login.css';
 
 const Signup: React.FC = () => {
  const navigate=useNavigate();
@@ -23,7 +25,7 @@ const Signup: React.FC = () => {
       });
     } catch (error:any) {
         setIsLoading(false)
-        message.error(error.message);    
+        message.error("Invalid email or password. Please try again.");   
     }
  };
 
@@ -65,13 +67,13 @@ const Signup: React.FC = () => {
                 task again with our intuitive and feature-rich Todo List app.
               </p>
               <Row justify={"start"}>
-                <Col span={4} xs={24} sm={24} md={18} lg={6} xl={4}>
+                <Col span={4} xs={24} sm={24} md={18} lg={6} xl={3}>
                   <Button type="text" style={{boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)'}}>Get Started</Button>
                 </Col>
                 <Col span={1}></Col>
                 <Col span={3} xs={24} sm={24} md={18} lg={3} xl={3}>
-                  <Button type="text" style={{boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)'}}>
-                    Learn More
+                  <Button type="text" style={{}}>
+                    Learn More <ExportOutlined />
                   </Button>
                 </Col>
               </Row>

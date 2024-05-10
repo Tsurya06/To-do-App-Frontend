@@ -16,8 +16,6 @@
     font-weight: bold;
 }
 #card{
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e8e8e8; */
   border-radius: 3rem;
   max-width: fit-content;
 }
@@ -29,7 +27,6 @@
   .login-left-content-box{
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     border: 1px solid #e8e8e8;
-    /* background-color: lightgray; */
     align-content: center;
     border-radius: 2rem;
     height: 90%;
