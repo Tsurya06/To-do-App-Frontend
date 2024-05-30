@@ -1,69 +1,54 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
-import { message } from "antd";
-const user_data = Cookies.get("user");
-export type LoginResponseType = {
-  success: boolean;
-  message: string;
-  access: string;
-  refresh: string;
-  user: {
-    id: string;
-    username: string;
-    password: string;
-    email: string;
-  };
-};
+// src/redux/auth/authSlice.ts
+import { createSlice } from '@reduxjs/toolkit';
+import Cookies from 'js-cookie';
+import { loginThunk, signupThunk } from './authThunk';
 
-export type UserAuthState = {
-  user: LoginResponseType | null;
-  isLoading: boolean;
-  error: null | string | undefined;
-  isAuthenticated: boolean;
-};
-const initialState: UserAuthState = {
-  user: user_data ? JSON.parse(user_data) : null,
-  isLoading: false,
+interface AuthState {
+  user: any | null;
+  loading: boolean;
+  error: string | null;
+}
+
+const initialState: AuthState = {
+  user: null,
+  loading: false,
   error: null,
-  isAuthenticated: false,
 };
 
 export const authSlice = createSlice({
-  name: "auth",
-  initialState: initialState,
+  name: 'auth',
+  initialState,
   reducers: {
-    loginStart: (state) => {
-      state.isLoading = true;
-      state.error = null;
-    },
-    loginSuccess: (state, action: PayloadAction<LoginResponseType>) => {
-      state.isLoading = false;
+    authSuccess(state, action) {
       state.user = action.payload;
-      state.isAuthenticated = true;
+      state.loading = false;
       state.error = null;
-      message.success("Successfully logged in!");
     },
-    sendVerificationLinkSuccess: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
-      message.success(action.payload);
-    },
-    loginFailure: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
+    authFailure(state, action) {
       state.error = action.payload;
-      message.error(state.error);
+      state.loading = false;
     },
-    logOut: (state) => {
+    authLoadingStart(state) {
+      state.loading = true;
+    },
+    logout(state) {
       state.user = null;
-      state.isAuthenticated = false;
-      state.isLoading = false;
-      state.error = null;
-      message.success("Successfully logout!");
-    },
-    resetPasswordSuccess: (state) => {
-      state.isLoading = false;
-      state.isAuthenticated = false;
-      state.error = null;
-      message.success("Password Updated Successfully!");
+      Cookies.remove('user');
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(loginThunk.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(signupThunk.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = null;
+    });
+  },
 });
+
+export const { authSuccess, authFailure, authLoadingStart, logout } = authSlice.actions;
+

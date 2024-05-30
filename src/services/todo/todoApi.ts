@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
-import { ReqType } from "../../store/features/todo/TodoThunk";
 import axios from "axios";
+import { ReqType } from "../../types/apiResponseType";
 
 const devURL = import.meta.env.VITE_BASE_URL;
 const ADD_TODOS_END_POINT='api/v1/todo'

@@ -5,29 +5,45 @@ import { Button, Card, Col, Form, Input, Row, Space, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { ExportOutlined } from '@ant-design/icons';
 import './Login.css';
+import { signupThunk } from '../../store/features/auth/authThunk';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 
 const Signup: React.FC = () => {
  const navigate=useNavigate();
  const [email, setEmail] = useState('');
  const [password, setPassword] = useState('');
  const [isLoading,setIsLoading]= useState(false);
+ const { loading, error } = useAppSelector((state) => state.authReducer);
 
+ const dispatch= useAppDispatch();
 
- const handleSignup = async (e: React.FormEvent) => {
-    setIsLoading(true);
+ const handleSignup = (e: React.FormEvent) => {
+    // setIsLoading(true);
     e.preventDefault();
-    try {
-      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-      // Send verification email
-      await userCredential.user?.sendEmailVerification().then(()=>{
-        setIsLoading(false)
-        message.success('Verification email sent. Please check your inbox.');
-      });
-    } catch (error:any) {
-        setIsLoading(false)
-        message.error("Invalid email or password. Please try again.");   
-    }
+    const body = {
+      username: email.split('@')[0], 
+      email: email,
+      password: password,
+    };
+    dispatch(signupThunk({body:body}));
+     
  };
+ //for Firebase
+//  const handleSignup = async (e: React.FormEvent) => {
+//     setIsLoading(true);
+//     e.preventDefault();
+//     try {
+//       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+//       // Send verification email
+//       await userCredential.user?.sendEmailVerification().then(()=>{
+//         setIsLoading(false)
+//         message.success('Verification email sent. Please check your inbox.');
+//       });
+//     } catch (error:any) {
+//         setIsLoading(false)
+//         message.error("Invalid email or password. Please try again.");   
+//     }
+//  };
 
  return (
     <>
