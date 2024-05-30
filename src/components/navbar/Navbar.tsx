@@ -1,12 +1,17 @@
-import { Col, Row, Space } from "antd";
+import { Button, Col, Row, Space } from "antd";
 import React from "react";
 import "./Navbar.css";
+import { useAppDispatch } from "../../store/store";
+import { logoutUser } from "../../store/features/auth/authThunk";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
+  const dispatch=useAppDispatch();
+  const navigate=useNavigate();
   return (
     <>
       <Row className="navbar-laybout" justify={"center"} align={"top"}>
-        <Col>
+        <Col span={12}>
           <svg
             textAnchor="Todo Icon"
             xmlns="http://www.w3.org/2000/svg"
@@ -82,6 +87,19 @@ export default function Navbar() {
               d="M178.75 299.49C189.42 297.2 200.57 294.82 211.44 297.24 210.89 296.52 210.34 295.79 209.79 295.07 209.44 303.09 209.55 311.2 210.12 319.2 210.32 322.07 214.83 322.09 214.62 319.2 214.05 311.2 213.94 303.09 214.29 295.07 214.33 294.13 213.57 293.11 212.64 292.9 200.94 290.29 189.06 292.68 177.56 295.15 174.73 295.76 175.92 300.1 178.75 299.49zM241.85 311.121C261.04 310.721 280.24 311.181 299.39 312.521 304.84 312.901 310.28 313.361 315.71 313.881 316.92 314.001 317.96 312.761 317.96 311.631 317.96 310.321 316.92 309.501 315.71 309.381 296.61 307.551 277.42 306.581 258.23 306.491 252.77 306.461 247.31 306.511 241.85 306.631 238.96 306.681 238.95 311.181 241.85 311.121z"
             ></path>
           </svg>
+        </Col>
+        <Col>
+          <Button
+          onClick={()=>{
+            dispatch(logoutUser()).then((data)=>{
+              if(data.payload.success){
+                navigate('/signup');
+              }
+            })
+          }}
+          >
+            logOut
+          </Button>
         </Col>
       </Row>
     </>

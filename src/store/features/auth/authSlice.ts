@@ -1,52 +1,55 @@
 // src/redux/auth/authSlice.ts
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import { loginThunk, signupThunk } from './authThunk';
+const user_data=Cookies.get('user');
 
-interface AuthState {
-  user: any | null;
+export type LoginResponseType = {
+  success: boolean;
+  message: string;
+  access: string;
+  refresh: string;
+  user: {
+    id: string;
+    username: string;
+    email:string; 
+  };
+};
+
+export type AuthState= {
+  user: LoginResponseType | null;
   loading: boolean;
   error: string | null;
+  authenticated: boolean;
 }
 
 const initialState: AuthState = {
-  user: null,
+  user: user_data?JSON.parse(user_data):null,
   loading: false,
   error: null,
+  authenticated:false,
 };
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    authSuccess(state, action) {
+    authSuccess:(state, action: PayloadAction<LoginResponseType>)=> {
       state.user = action.payload;
       state.loading = false;
       state.error = null;
     },
-    authFailure(state, action) {
+    authFailure:(state, action: PayloadAction<string>)=> {
       state.error = action.payload;
       state.loading = false;
     },
-    authLoadingStart(state) {
+    authLoadingStart:(state)=> {
       state.loading = true;
     },
-    logout(state) {
+    logout:(state)=> {
       state.user = null;
       Cookies.remove('user');
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(loginThunk.fulfilled, (state, action) => {
-      state.user = action.payload;
-      state.loading = false;
-      state.error = null;
-    });
-    builder.addCase(signupThunk.fulfilled, (state, action) => {
-      state.user = action.payload;
-      state.loading = false;
-      state.error = null;
-    });
   },
 });
 

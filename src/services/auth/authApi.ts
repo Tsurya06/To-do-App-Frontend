@@ -37,3 +37,22 @@ export const signup = async (req: ReqType) => {
     throw error;
   }
 };
+
+export const logoutUser = async () => {
+    try {
+      const token = Cookies.get('user');
+  
+      const resp = await axios.post(
+        'auth/logout/',
+        {},
+        {
+          headers:{
+            Authorization: `Bearer ${token ? JSON.parse(token).access : ''}`,
+          }
+        }
+      );
+      return resp;
+    } catch (error) {
+      throw error;
+    }
+};
