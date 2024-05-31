@@ -11,8 +11,9 @@ export default function Navbar() {
   const navigate=useNavigate();
   return (
     <>
-      <Row className="navbar-laybout" justify={"center"} align={"top"}>
-        <Col span={12}>
+      <Row className="navbar-laybout" justify={"center"}>
+        <Row justify={"start"} style={{width:'100%'}}>
+        <Col span={2}>
           <svg
             textAnchor="Todo Icon"
             xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +22,6 @@ export default function Navbar() {
             fill="none"
             viewBox="0 0 50 500"
             id="to-do-list"
-            style={{position:'absolute'}}
           >
             <path
               fill="#fff"
@@ -89,7 +89,7 @@ export default function Navbar() {
             ></path>
           </svg>
         </Col>
-        <Col>
+        <Col span={22} style={{textAlign:'end'}}>
           <Button
           onClick={()=>{
             dispatch(logoutUserThunk()).then((data)=>{
@@ -103,6 +103,7 @@ export default function Navbar() {
             logOut
           </Button>
         </Col>
+        </Row>
       </Row>
     </>
   );
