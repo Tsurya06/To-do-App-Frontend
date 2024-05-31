@@ -50,6 +50,7 @@ export const GetTodoList = createAsyncThunk(
         dispatch(todoLoadingStart())
         const response = await getTodoList(req);
         const todos: any= response.data;
+        console.log("response",response)
         const total_count: number= response.data.total_count;
         dispatch(fetchTodoSuccess({todos:todos,total_count:total_count}))
         return response;
@@ -69,7 +70,6 @@ export const DeleteTodoByIdThunk = createAsyncThunk(
         dispatch(todoLoadingStart())
         const response = await deleteTodoById(req);
         const todos: any= response.data;
-        console.log("resp data",todos)
         dispatch(todoSuccess(todos.message))
         return response.data;
     }catch (error: any) {

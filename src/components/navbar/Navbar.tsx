@@ -1,5 +1,4 @@
 import { Button, Col, Row, Space } from "antd";
-import React from "react";
 import "./Navbar.css";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../store/store";
@@ -100,7 +99,7 @@ export default function Navbar() {
               }
             })
           }}
-          style={{backgroundColor:'white', color:'black'}}
+          style={{backgroundColor:'white', color:'black',border:'1px solid black'}}
           icon={<LogoutOutlined />} type="primary"
           />
         </Col>

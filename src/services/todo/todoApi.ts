@@ -45,6 +45,8 @@ export const getTodoList = async (req: ReqType) => {
         });
         return resp.data;
     } catch (error) {
+        Cookies.remove('user');
+        window.location.reload();
         throw error;
     }
 }

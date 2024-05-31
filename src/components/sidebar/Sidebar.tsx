@@ -77,12 +77,11 @@ export default function Sidebar (){
         >
           <Menu
             theme="light"
-            // className="custome-side-menu"
             onClick={handleMenuClick}
             selectedKeys={[currentKey]}
             mode="inline"
             items={items}
-            style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black',}}
+            style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black'}}
             />
           <div
             className="custom-trigger"

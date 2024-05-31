@@ -67,11 +67,9 @@ export const TodoApp: React.FC = () => {
     dispatch(DeleteTodoByIdThunk({ id: record.id }))
       .then((data) => {
         if (data.payload) {
-          // Filter out the deleted todo item
           const updatedData = editedTodos.filter(
             (todo) => todo.id !== record.id
           );
-          // Update the state with the filtered array
           setEditedTodo(updatedData);
         }
       })
@@ -80,15 +78,12 @@ export const TodoApp: React.FC = () => {
       });
   };
   const handleEditTodo = (editedTodos: TodoType[], id: string) => {
-    // Find the todo item with the matching id
     const todoItem = editedTodos.find((todo) => todo.id === id);
 
-    // If no matching todo item is found, return early
     if (!todoItem) {
       return message.error("Todo not found in the database!");
     }
 
-    // Create the payload body with the single todo item
     const payloadBody = {
       id: todoItem.id,
       title: todoItem.title,
@@ -245,7 +240,7 @@ export const TodoApp: React.FC = () => {
       .catch((error) => {
         message.error("Failed to fetch todo list:", error);
       });
-  }, [todoAdded, dispatch]);
+  }, [todoAdded]);
 
   return (
     <>
