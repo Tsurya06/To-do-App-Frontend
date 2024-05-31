@@ -42,7 +42,6 @@ export default function Login() {
       setIsLoading(false);
     }).catch((err)=>{
       setIsLoading(false);
-      message.error("Invalid email or password. Please try again.");
     });
   };
 
