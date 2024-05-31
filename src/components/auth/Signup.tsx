@@ -1,6 +1,5 @@
 // src/Signup.tsx
 import React, { useEffect, useState } from 'react';
-import { auth } from '../../firebase-config/firebase';
 import { Button, Card, Col, Form, Input, Row, Space, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { ExportOutlined } from '@ant-design/icons';
@@ -13,8 +12,6 @@ const Signup: React.FC = () => {
  const [email, setEmail] = useState('');
  const [password, setPassword] = useState('');
  const [isLoading,setIsLoading]= useState(false);
- const { loading, error } = useAppSelector((state) => state.authReducer);
-
  const dispatch= useAppDispatch();
 
  const handleSignup = (e: React.FormEvent) => {
@@ -37,23 +34,6 @@ const Signup: React.FC = () => {
     });
      
  };
- //for Firebase
-//  const handleSignup = async (e: React.FormEvent) => {
-//     setIsLoading(true);
-//     e.preventDefault();
-//     try {
-//       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-//       // Send verification email
-//       await userCredential.user?.sendEmailVerification().then(()=>{
-//         setIsLoading(false)
-//         message.success('Verification email sent. Please check your inbox.');
-//       });
-//     } catch (error:any) {
-//         setIsLoading(false)
-//         message.error("Invalid email or password. Please try again.");   
-//     }
-//  };
-
  return (
     <>
        <Row justify={"center"} style={{ width: "100%" }}>

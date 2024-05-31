@@ -1,6 +1,7 @@
 import { Button, Col, Row, Space } from "antd";
 import React from "react";
 import "./Navbar.css";
+import { LogoutOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../store/store";
 import { useNavigate } from "react-router-dom";
 import { logoutUserThunk } from "../../store/features/auth/authThunk";
@@ -99,9 +100,9 @@ export default function Navbar() {
               }
             })
           }}
-          >
-            logOut
-          </Button>
+          style={{backgroundColor:'white', color:'black'}}
+          icon={<LogoutOutlined />} type="primary"
+          />
         </Col>
         </Row>
       </Row>

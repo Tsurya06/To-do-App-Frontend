@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import './Sidebar.css';
 import Main from "../layout/Main";
 import Router from "../../routes/Router";
+import { useAppSelector } from "../../store/store";
+import PencilLoader from "../../util/PencilLoader";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -28,6 +30,7 @@ function getItem(
 export default function Sidebar (){
   const [currentKey, setCurrentKey] = useState<string>('');
   const navigate = useNavigate();
+  const userState = useAppSelector((state) => state.authReducer);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -59,7 +62,6 @@ export default function Sidebar (){
         Layout: {},
         Menu: {
           colorPrimary: 'black',
-          // itemBorderRadius: 2,
         },
       },
     }}
@@ -80,7 +82,7 @@ export default function Sidebar (){
             selectedKeys={[currentKey]}
             mode="inline"
             items={items}
-            style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black', border:'1 px solid red'}}
+            style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black',}}
             />
           <div
             className="custom-trigger"
@@ -95,13 +97,16 @@ export default function Sidebar (){
             </Row>
           </div>
         </Sider>
+        
         <div className="content-outer-div">
           <Content
             style={{
               margin: '1rem 1rem',
               boxShadow: ' 0px 2px 12px 0px rgba(0, 0, 0, 0.06)',
+              width: 'calc(100vw - 17vw - 2rem)',
             }}
           >
+            {userState.loading? (<PencilLoader/>) : (
             <div
               style={{
                 padding: '1rem 1rem',
@@ -113,6 +118,7 @@ export default function Sidebar (){
                 <Router/>
               </Main>
             </div>
+        )}
           </Content>
         </div>
       </Layout>

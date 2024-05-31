@@ -1,6 +1,5 @@
 // src/Login.tsx
 import React, { useState } from "react";
-import { auth } from "../../firebase-config/firebase";
 import { useNavigate } from "react-router-dom";
 import { ExportOutlined } from "@ant-design/icons";
 import {
@@ -48,23 +47,6 @@ export default function Login() {
       message.error("Invalid email or password. Please try again.");
     });
   };
-  // for firebase auth
-  // const handleLogin = async (e: React.FormEvent) => {
-  //   setIsLoading(true);
-  //   e.preventDefault();
-  //   try {
-  //     const userCred = await auth.signInWithEmailAndPassword(email, password);
-  //     if (userCred.user?.emailVerified) {
-  //       message.success("Login Success!!");
-  //       setIsLoading(false);
-  //     } else {
-  //       message.error("Invalid email or password. Please try again.");
-  //     }
-  //   } catch (e) {
-  //     message.error("Invalid email or password. Please try again.");
-  //     setIsLoading(false);
-  //   }
-  // };
 
   return (
     <>
@@ -162,7 +144,7 @@ export default function Login() {
                     ]}
                   >
                     <Input.Password 
-                      placeholder="*******"
+                      placeholder="***********"
                       onChange={(e)=>{
                         setPassword(e.target.value);
                       }}
