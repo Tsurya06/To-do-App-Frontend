@@ -2,17 +2,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { authSuccess, authFailure, authLoadingStart, logout } from './authSlice';
 import Cookies from 'js-cookie';
-import { login, signup } from '../../../services/auth/authApi';
+import { login, logoutUser, signup } from '../../../services/auth/authApi';
 import { ReqType } from '../../../types/apiResponseType';
 
-interface AuthRequest {
-  email: string;
-  password: string;
-}
-
-interface SignupRequest extends AuthRequest {
-  name: string;
-}
 
 export const loginThunk = createAsyncThunk(
   'auth/login',
@@ -20,7 +12,7 @@ export const loginThunk = createAsyncThunk(
     try {
       dispatch(authLoadingStart());
       const response = await login(req);
-      Cookies.set('user', JSON.stringify(response));
+      console.log('response', response);
       dispatch(authSuccess(response));
       return response;
     } catch (error: any) {
@@ -51,7 +43,7 @@ export const signupThunk = createAsyncThunk(
   }
 );
 
-export const logoutUser = createAsyncThunk(
+export const logoutUserThunk = createAsyncThunk(
     'auth/logoutUser',
     async (_, { dispatch, rejectWithValue }) => {
       try {

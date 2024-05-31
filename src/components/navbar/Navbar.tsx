@@ -2,8 +2,9 @@ import { Button, Col, Row, Space } from "antd";
 import React from "react";
 import "./Navbar.css";
 import { useAppDispatch } from "../../store/store";
-import { logoutUser } from "../../store/features/auth/authThunk";
 import { useNavigate } from "react-router-dom";
+import { logoutUserThunk } from "../../store/features/auth/authThunk";
+import Cookies from "js-cookie";
 
 export default function Navbar() {
   const dispatch=useAppDispatch();
@@ -91,8 +92,9 @@ export default function Navbar() {
         <Col>
           <Button
           onClick={()=>{
-            dispatch(logoutUser()).then((data)=>{
+            dispatch(logoutUserThunk()).then((data)=>{
               if(data.payload.success){
+                Cookies.remove('user');
                 navigate('/signup');
               }
             })

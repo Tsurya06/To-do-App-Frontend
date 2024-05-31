@@ -6,7 +6,7 @@ import Auth from "./components/layout/Auth";
 
 function App() {
   const userState = useAppSelector((state) => state.authReducer);
-
+  useEffect(() => {console.log("userState",userState)}, [userState]);
   // useEffect(() => {
   //   if (
   //     userState.user &&

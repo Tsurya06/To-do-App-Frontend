@@ -6,6 +6,7 @@ import { ReqType } from '../../types/apiResponseType';
 const devURL = import.meta.env.VITE_BASE_URL;
 const LOGIN_ENDPOINT = 'auth/login';
 const SIGNUP_ENDPOINT = 'auth/signup';
+const LOGOUT_ENDPOINT = 'auth/logout';
 
 
 export const login = async (req: ReqType) => {
@@ -14,7 +15,7 @@ export const login = async (req: ReqType) => {
     const url = `${devURL}${LOGIN_ENDPOINT}`;
     const resp = await axios.post(url, req.body ? req.body : {}, {
         headers: {
-            Authorization: `Bearer ${token ? JSON.parse(token).access : ''}`,
+            Authorization: `Bearer ${token}`,
         },
     });
     return resp.data;
@@ -41,10 +42,9 @@ export const signup = async (req: ReqType) => {
 export const logoutUser = async () => {
     try {
       const token = Cookies.get('user');
-  
+      const url = `${devURL}${LOGOUT_ENDPOINT}`;
       const resp = await axios.post(
-        'auth/logout/',
-        {},
+        url,
         {
           headers:{
             Authorization: `Bearer ${token ? JSON.parse(token).access : ''}`,

@@ -18,14 +18,23 @@ const Signup: React.FC = () => {
  const dispatch= useAppDispatch();
 
  const handleSignup = (e: React.FormEvent) => {
-    // setIsLoading(true);
+    setIsLoading(true);
     e.preventDefault();
     const body = {
       username: email.split('@')[0], 
       email: email,
       password: password,
     };
-    dispatch(signupThunk({body:body}));
+    dispatch(signupThunk({body:body})).then((res)=>{
+      if(res.payload.success){
+        navigate("/login");
+        message.success('Signup Success!! Please login to continue.');
+        setIsLoading(false);
+      }
+    }).catch(()=>{
+      setIsLoading(false);
+      message.error("Invalid email or password. Please try again.");
+    });
      
  };
  //for Firebase

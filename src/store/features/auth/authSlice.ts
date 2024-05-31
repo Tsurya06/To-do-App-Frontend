@@ -1,8 +1,7 @@
 // src/redux/auth/authSlice.ts
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
-import { loginThunk, signupThunk } from './authThunk';
-const user_data=Cookies.get('user');
+const userData=Cookies.get('user');
 
 export type LoginResponseType = {
   success: boolean;
@@ -24,7 +23,7 @@ export type AuthState= {
 }
 
 const initialState: AuthState = {
-  user: user_data?JSON.parse(user_data):null,
+  user: userData?JSON.parse(userData):null,
   loading: false,
   error: null,
   authenticated:false,
@@ -34,17 +33,19 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    authLoadingStart:(state)=> {
+      state.loading = true;
+    },
     authSuccess:(state, action: PayloadAction<LoginResponseType>)=> {
       state.user = action.payload;
       state.loading = false;
       state.error = null;
+      state.authenticated=true;
     },
     authFailure:(state, action: PayloadAction<string>)=> {
       state.error = action.payload;
       state.loading = false;
-    },
-    authLoadingStart:(state)=> {
-      state.loading = true;
+      state.authenticated=false;
     },
     logout:(state)=> {
       state.user = null;

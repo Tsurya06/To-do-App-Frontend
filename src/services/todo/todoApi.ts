@@ -34,19 +34,29 @@ export const editTodo = async (req:ReqType)=>{
         throw error;
     }
 }
-export const getTodoList = async (req:ReqType)=>{
-    try{
-        const url = `${devURL}${ADD_TODOS_END_POINT}/get-todos`
-        const resp = await axios.get(url);
+export const getTodoList = async (req: ReqType) => {
+    const token = Cookies.get('user');
+    try {
+        const url = `${devURL}${ADD_TODOS_END_POINT}/get-todos`;
+        const resp = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${token ? JSON.parse(token).access : ''}`,
+            },
+        });
         return resp.data;
-    }catch(error){
+    } catch (error) {
         throw error;
     }
 }
 export const deleteTodoById = async (req:ReqType)=>{
+    const token = Cookies.get('user');
     try{
         const url = `${devURL}${DELETE_TODOS_END_POINT}${req.id}`
-        const resp = await axios.delete(url);
+        const resp = await axios.delete(url,{
+            headers: {
+                Authorization: `Bearer ${token ? JSON.parse(token).access : ''}`,
+            },
+        });
         return resp;
     }catch(error){
         throw error;

@@ -15,9 +15,13 @@ import {
   message,
 } from "antd";
 import './Login.css'
-const { Title, Text } = Typography;
+import { loginThunk } from "../../store/features/auth/authThunk";
+import { useAppDispatch } from "../../store/store";
+import Cookies from "js-cookie";
+const { Text } = Typography;
 
 export default function Login() {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading,setIsLoading]= useState(false);
@@ -26,19 +30,41 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     setIsLoading(true);
     e.preventDefault();
-    try {
-      const userCred = await auth.signInWithEmailAndPassword(email, password);
-      if (userCred.user?.emailVerified) {
-        message.success("Login Success!!");
+    const body = {
+      email: email,
+      password: password,
+    };
+    dispatch(loginThunk({body:body})).then((res)=>{
+      console.log("res",res);
+      if(res.payload.success){
+        console.log("res",res.payload);
+        Cookies.set('user', JSON.stringify(res.payload));
+        message.success('Login Success!!');
         setIsLoading(false);
-      } else {
-        message.error("Invalid email or password. Please try again.");
+        navigate('/Todo');
       }
-    } catch (e) {
-      message.error("Invalid email or password. Please try again.");
+    }).catch((err)=>{
       setIsLoading(false);
-    }
+      message.error("Invalid email or password. Please try again.");
+    });
   };
+  // for firebase auth
+  // const handleLogin = async (e: React.FormEvent) => {
+  //   setIsLoading(true);
+  //   e.preventDefault();
+  //   try {
+  //     const userCred = await auth.signInWithEmailAndPassword(email, password);
+  //     if (userCred.user?.emailVerified) {
+  //       message.success("Login Success!!");
+  //       setIsLoading(false);
+  //     } else {
+  //       message.error("Invalid email or password. Please try again.");
+  //     }
+  //   } catch (e) {
+  //     message.error("Invalid email or password. Please try again.");
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <>

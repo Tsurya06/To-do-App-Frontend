@@ -49,7 +49,7 @@ export const GetTodoList = createAsyncThunk(
     try{
         dispatch(todoLoadingStart())
         const response = await getTodoList(req);
-        const todos: TodoType[]= response.data;
+        const todos: any= response.data;
         const total_count: number= response.data.total_count;
         dispatch(fetchTodoSuccess({todos:todos,total_count:total_count}))
         return response;
