@@ -1,42 +1,46 @@
 // src/Signup.tsx
-import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Form, Input, Row, Space, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { ExportOutlined } from '@ant-design/icons';
-import './Login.css';
-import { signupThunk } from '../../store/features/auth/authThunk';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import React, { useEffect, useState } from "react";
+import { Button, Card, Col, Form, Input, Row, Space, message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { ExportOutlined } from "@ant-design/icons";
+import { signupThunk } from "../../store/features/auth/authThunk";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import "./auth.css";
 
 const Signup: React.FC = () => {
- const navigate=useNavigate();
- const [email, setEmail] = useState('');
- const [password, setPassword] = useState('');
- const [isLoading,setIsLoading]= useState(false);
- const dispatch= useAppDispatch();
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
- const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = (e: React.FormEvent) => {
     setIsLoading(true);
     e.preventDefault();
     const body = {
-      username: email.split('@')[0], 
+      username: name,
       email: email,
       password: password,
     };
-    dispatch(signupThunk({body:body})).then((res)=>{
-      if(res.payload.success){
-        navigate("/login");
-        message.success('Signup Success!! Please login to continue.');
+    dispatch(signupThunk({ body: body }))
+      .then((res) => {
+        if (res.payload) {
+          // navigate("/login");
+          message.success(res.payload);
+        } else {
+          message.error(res.payload);
+        }
         setIsLoading(false);
-      }
-    }).catch(()=>{
-      setIsLoading(false);
-      message.error("Invalid email or password. Please try again.");
-    });
-     
- };
- return (
+      })
+      .catch(() => {
+        setIsLoading(false);
+        message.error("Invalid email or password. Please try again.");
+      });
+  };
+  return (
     <>
-       <Row justify={"center"} style={{ width: "100%" }}>
+      <Row justify={"center"} style={{ width: "100%" }}>
         <Row
           justify={"center"}
           align={"middle"}
@@ -44,7 +48,6 @@ const Signup: React.FC = () => {
           gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
         >
           <Col
-            span={8}
             className="gutter-row login-left-content"
             xs={24}
             sm={20}
@@ -73,7 +76,12 @@ const Signup: React.FC = () => {
               </p>
               <Row justify={"start"}>
                 <Col span={4} xs={24} sm={24} md={18} lg={6} xl={4}>
-                  <Button type="text" style={{boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)'}}>Get Started</Button>
+                  <Button
+                    type="text"
+                    style={{ boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)" }}
+                  >
+                    Get Started
+                  </Button>
                 </Col>
                 <Col span={1}></Col>
                 <Col span={3} xs={24} sm={24} md={18} lg={3} xl={3}>
@@ -91,20 +99,42 @@ const Signup: React.FC = () => {
             md={18}
             lg={12}
             xl={12}
-            style={{ height: "80%" }}
+            style={{height:'100%' }}
           >
-            <Row justify={"center"} align={"middle"} style={{ height: "100%" }}>
+            <Row justify={"center"} align={"middle"} style={{ height: "80%",marginTop:'3rem'}}>
               <Card
                 className="login-card"
-                style={{ borderRadius: "2rem", width: "60%", height: "70%" }}
+                style={{alignContent:'center', borderRadius: "2rem", width: "60%", height: "85%" }}
               >
-                <Row justify={"start"}>
-                  <Space>
-                    <h2>Sign in to your account</h2>
-                  </Space>
-                  <p style={{color:'gray'}}>Enter your email and password to access your Todo List.</p>
+                <Row justify={"center"}>
+                  <Row justify={"center"} style={{ width: "100%" }}>
+                    <Col style={{ alignContent: "center" }}>
+                      <h1>
+                        <b style={{ fontFamily: "cursive" }}>Sign Up</b>
+                      </h1>
+                    </Col>
+                  </Row>
+                  <Row justify={"center"} style={{ width: "100%" }}>
+                    <p style={{ color: "gray" }}>
+                      Create your account to get started.
+                    </p>
+                  </Row>
                 </Row>
                 <Form layout="vertical">
+                  <Form.Item
+                    name="name"
+                    label="Name"
+                    rules={[
+                      { required: true, message: "Please input your name!" },
+                    ]}
+                  >
+                    <Input
+                      placeholder="Alex"
+                      onChange={(e) => {
+                        setName(e.target.value);
+                      }}
+                    />
+                  </Form.Item>
                   <Form.Item
                     name="email"
                     label="Email"
@@ -112,11 +142,11 @@ const Signup: React.FC = () => {
                       { required: true, message: "Please input your email!" },
                     ]}
                   >
-                    <Input 
-                    placeholder="m@example.com" 
-                    onChange={(e)=>{
-                      setEmail(e.target.value);
-                    }}
+                    <Input
+                      placeholder="m@example.com"
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                      }}
                     />
                   </Form.Item>
                   <Form.Item
@@ -129,29 +159,42 @@ const Signup: React.FC = () => {
                       },
                     ]}
                   >
-                    <Input.Password 
+                    <Input.Password
                       placeholder="*******"
-                      onChange={(e)=>{
+                      onChange={(e) => {
                         setPassword(e.target.value);
                       }}
                     />
                   </Form.Item>
-                  <Form.Item >
-                      <Button
-                        loading={isLoading}
-                        style={{ backgroundColor: "black", color: "white",boxShadow:'0 4px 12px rgba(0, 0, 0, 0.1)' }}
-                        onClick={(e) => handleSignup(e)}
-                      >
-                        Sign Up
-                      </Button>
-                    <Row justify={'center'} style={{marginTop:'1rem'}}>
-                    <Col span={1}></Col>
-                    <Col style={{alignContent:'center'}}>
-                      <Space>Already a user? <a type="text" onClick={()=>{
-                        navigate('/login')
-                      }}>Sign in now</a></Space>
-                    </Col>
-                  </Row>
+                  <Form.Item>
+                    <Button
+                      loading={isLoading}
+                      style={{
+                        backgroundColor: "black",
+                        color: "white",
+                        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                      }}
+                      onClick={(e) => handleSignup(e)}
+                    >
+                      Sign Up
+                    </Button>
+                    <Row justify={"center"} style={{ marginTop: "1rem" }}>
+                      <Col span={1}></Col>
+                      <Col style={{ alignContent: "center" }}>
+                        <Space>
+                          Already a user?
+                          <a
+                            type="text"
+                            style={{color:'black',borderBottom:'1px solid black'}}
+                            onClick={() => {
+                              navigate("/login");
+                            }}
+                          >
+                            Sign in now
+                          </a>
+                        </Space>
+                      </Col>
+                    </Row>
                   </Form.Item>
                 </Form>
               </Card>
@@ -160,7 +203,7 @@ const Signup: React.FC = () => {
         </Row>
       </Row>
     </>
- );
+  );
 };
 
 export default Signup;

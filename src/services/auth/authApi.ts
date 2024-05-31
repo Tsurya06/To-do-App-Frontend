@@ -40,8 +40,8 @@ export const signup = async (req: ReqType) => {
 };
 
 export const logoutUser = async () => {
+    const token = Cookies.get('user');
     try {
-      const token = Cookies.get('user');
       const url = `${devURL}${LOGOUT_ENDPOINT}`;
       const resp = await axios.post(
         url,
@@ -51,6 +51,7 @@ export const logoutUser = async () => {
           }
         }
       );
+      console.log(resp)
       return resp;
     } catch (error) {
       throw error;

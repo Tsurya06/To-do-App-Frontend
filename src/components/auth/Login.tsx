@@ -13,7 +13,7 @@ import {
   Typography,
   message,
 } from "antd";
-import './Login.css'
+import './auth.css'
 import { loginThunk } from "../../store/features/auth/authThunk";
 import { useAppDispatch } from "../../store/store";
 import Cookies from "js-cookie";
@@ -40,7 +40,7 @@ export default function Login() {
         Cookies.set('user', JSON.stringify(res.payload));
         message.success('Login Success!!');
         setIsLoading(false);
-        navigate('/Todo');
+        // navigate('/Todo');
       }
     }).catch((err)=>{
       setIsLoading(false);
@@ -105,18 +105,26 @@ export default function Login() {
             md={18}
             lg={12}
             xl={12}
-            style={{ height: "80%" }}
+            style={{ height: "100%" }}
           >
             <Row justify={"center"} align={"middle"} style={{ height: "100%" }}>
               <Card
                 className="login-card"
-                style={{ borderRadius: "2rem", width: "60%", height: "70%" }}
+                style={{ borderRadius: "2rem", width: "60%", height: "55%" }}
               >
-                <Row justify={"start"}>
-                  <Space>
-                    <h2>Sign in to your account</h2>
-                  </Space>
-                  <p style={{color:'gray'}}>Enter your email and password to access your Todo List.</p>
+                <Row justify={"center"}>
+                  <Row justify={"center"} align={'bottom'} style={{ width: "100%" }}>
+                    <Col >
+                      <h1>
+                        <b style={{ fontFamily: "cursive" }}>Sign In</b>
+                      </h1>
+                    </Col>
+                  </Row>
+                  <Row justify={"center"} style={{ width: "100%" }}>
+                    <p style={{ color: "gray" }}>
+                      Sign in to access the todos.
+                    </p>
+                  </Row>
                 </Row>
                 <Form layout="vertical">
                   <Form.Item
@@ -160,8 +168,8 @@ export default function Login() {
                       </Button>
                     <Row justify={'center'} style={{marginTop:'1rem'}}>
                     <Col span={1}></Col>
-                    <Col style={{alignContent:'center'}}>
-                      <Space>New user? <a type="text" onClick={()=>{
+                    <Col style={{alignContent:'baseline'}}>
+                      <Space>New user? <a type="text" style={{color:'black',borderBottom:'1px solid black'}} onClick={()=>{
                         navigate("/Signup");
                       }}>Signup now</a></Space>
                     </Col>

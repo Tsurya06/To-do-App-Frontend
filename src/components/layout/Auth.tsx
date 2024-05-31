@@ -1,4 +1,3 @@
-import '../auth/Login.css';
 import { Col, ConfigProvider, Row } from "antd";
 import AuthRouter from "../../routes/AuthRouter";
 
