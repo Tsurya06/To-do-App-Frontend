@@ -34,14 +34,11 @@ export default function Login() {
       password: password,
     };
     dispatch(loginThunk({body:body})).then((res)=>{
-      console.log("res",res);
       if(res.payload.success){
-        console.log("res",res.payload);
         Cookies.set('user', JSON.stringify(res.payload));
-        message.success('Login Success!!');
-        setIsLoading(false);
-        // navigate('/Todo');
+        navigate('/dashboard');
       }
+      setIsLoading(false);
     }).catch((err)=>{
       setIsLoading(false);
       message.error("Invalid email or password. Please try again.");

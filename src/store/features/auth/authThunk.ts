@@ -1,7 +1,6 @@
 // src/redux/auth/authThunks.ts
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { authSuccess, authFailure, authLoadingStart, logout } from './authSlice';
-import Cookies from 'js-cookie';
+import {  authFailure, authLoadingStart, authLoginSuccess, authSignupSuccess, logout } from './authSlice';
 import { login, logoutUser, signup } from '../../../services/auth/authApi';
 import { ReqType } from '../../../types/apiResponseType';
 
@@ -13,7 +12,7 @@ export const loginThunk = createAsyncThunk(
       dispatch(authLoadingStart());
       const response = await login(req);
       console.log('response', response);
-      dispatch(authSuccess(response));
+      dispatch(authLoginSuccess(response));
       return response;
     } catch (error: any) {
       const errorMessage = error.response.data.message || 'Login failed';
@@ -31,7 +30,7 @@ export const signupThunk = createAsyncThunk(
     try {
       dispatch(authLoadingStart());
       const response = await signup(req);
-      dispatch(authSuccess(response));
+      dispatch(authSignupSuccess(response.message));
       return response;
     } catch (error: any) {
       const errorMessage = error.response.data.message || 'Signup failed';

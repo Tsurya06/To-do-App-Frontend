@@ -93,13 +93,12 @@ export default function Navbar() {
           <Button
           onClick={()=>{
             dispatch(logoutUserThunk()).then((data)=>{
-              if(data.payload.success){
-                Cookies.remove('user');
-                navigate('/signup');
+              if(data.payload){
+                navigate('/login');
               }
-            })
+            });
           }}
-          style={{backgroundColor:'white', color:'black',border:'1px solid black'}}
+          style={{backgroundColor:'white', color:'black',border:'1px solid gray'}}
           icon={<LogoutOutlined />} type="primary"
           />
         </Col>

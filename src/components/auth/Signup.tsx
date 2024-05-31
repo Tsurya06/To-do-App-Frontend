@@ -25,18 +25,11 @@ const Signup: React.FC = () => {
     };
     dispatch(signupThunk({ body: body }))
       .then((res) => {
-        if (res.payload) {
-          // navigate("/login");
-          message.success(res.payload);
-        } else {
-          message.error(res.payload);
+        if (res.payload.success) {
+          navigate('/login');
         }
         setIsLoading(false);
       })
-      .catch(() => {
-        setIsLoading(false);
-        message.error("Invalid email or password. Please try again.");
-      });
   };
   return (
     <>
