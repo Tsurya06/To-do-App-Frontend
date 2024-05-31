@@ -10,13 +10,13 @@ function App() {
   
   return (
     
-  <div className="App">
+  <>
     {userState.user?.success? (
         <Layout/>
        ) : (
         <Auth />
       )} 
-  </div>
+  </>
   )
 }
 

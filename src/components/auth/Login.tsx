@@ -17,6 +17,7 @@ import './auth.css'
 import { loginThunk } from "../../store/features/auth/authThunk";
 import { useAppDispatch } from "../../store/store";
 import Cookies from "js-cookie";
+import PencilLoader from "../../util/PencilLoader";
 const { Text } = Typography;
 
 export default function Login() {
@@ -46,7 +47,12 @@ export default function Login() {
   };
 
   return (
-    <>
+    <> {isLoading?
+    (
+      <Row justify={'center'} style={{width:'100%'}}>
+    <PencilLoader/>
+    </Row>
+  ):
       <Row justify={"center"} style={{ width: "100%" }}>
         <Row
           justify={"center"}
@@ -177,7 +183,7 @@ export default function Login() {
             </Row>
           </Col>
         </Row>
-      </Row>
+      </Row>}
     </>
   );
 }

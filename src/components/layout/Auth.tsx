@@ -9,7 +9,7 @@ export default function Auth() {
             <ConfigProvider
               theme={{
                 token: {
-                  colorPrimary: '#095C42',
+                  colorPrimary: 'white',
                 },
               }}
             >
