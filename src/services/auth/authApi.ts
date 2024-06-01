@@ -23,7 +23,6 @@ export const login = async (req: ReqType) => {
 };
 
 export const signup = async (req: ReqType) => {
-  const token = Cookies.get('user');
   try {
     const url = `${devURL}${SIGNUP_ENDPOINT}`;
     const resp = await axios.post(url, req.body ? req.body : {});
@@ -35,10 +34,12 @@ export const signup = async (req: ReqType) => {
 
 export const logoutUser = async () => {
     const token = Cookies.get('user');
+    console.log('token', token)
     try {
       const url = `${devURL}${LOGOUT_ENDPOINT}`;
       const resp = await axios.post(
         url,
+        {},
         {
           headers:{
             Authorization: `Bearer ${token ? JSON.parse(token).access : ''}`,
