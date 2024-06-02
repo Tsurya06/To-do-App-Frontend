@@ -15,6 +15,7 @@ export const createTodo = async (req:ReqType)=>{
                 Authorization: `Bearer ${token ? JSON.parse(token).access : ''}`,
             },
         });
+        console.log("resp",resp)
         return resp;
     }catch(error){
         throw error;

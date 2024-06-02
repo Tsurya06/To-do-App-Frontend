@@ -20,14 +20,12 @@ export type AuthState= {
   user: LoginResponseType | null;
   loading: boolean;
   error: string | null;
-  authenticated: boolean;
 }
 
 const initialState: AuthState = {
   user: userData?JSON.parse(userData):null,
   loading: false,
   error: null,
-  authenticated:false,
 };
 
 export const authSlice = createSlice({
@@ -41,7 +39,6 @@ export const authSlice = createSlice({
       state.user = action.payload;
       state.loading = false;
       state.error = null;
-      state.authenticated=true;
       message.success(state.user?.message)
     },
     authSignupSuccess:(state, action: PayloadAction<string>)=> {
@@ -52,7 +49,6 @@ export const authSlice = createSlice({
     authFailure:(state, action: PayloadAction<string>)=> {
       state.error = action.payload;
       state.loading = false;
-      state.authenticated=false;
       message.error(state.user?.message)
     },
     logout:(state)=> {
