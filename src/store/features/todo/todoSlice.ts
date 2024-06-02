@@ -41,27 +41,6 @@ export const todoSlice = createSlice({
       state.error = action.payload;
       message.error(state.error);
     },
-
-    // deleteTodoById: (state, action: PayloadAction<number>) => {
-    //   return state.filter(todo => todo.id !== action.payload);
-    // },
-    // toggleTodo(state, action: PayloadAction<number>) {
-    //   const todo = state.find((todo) => todo.id === action.payload);
-    //   if (todo) {
-    //     todo.completed = !todo.completed;
-    //   }
-    // },
-    // updateTodo(
-    //   state,
-    //   action: PayloadAction<{ id: number; title: string; text: string }>
-    // ) {
-    //   const { id, title, text } = action.payload;
-    //   const todoToUpdate = state.find((todo) => todo.id === id);
-    //   if (todoToUpdate) {
-    //     todoToUpdate.title = title;
-    //     todoToUpdate.text = text;
-    //   }
-    // },
   },
 });
 

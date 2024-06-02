@@ -1,4 +1,3 @@
-// src/services/auth/authApi.ts
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { ReqType } from '../../types/apiResponseType';

@@ -1,22 +1,17 @@
 import React, {
   useEffect,
-  //  useMemo,
   useState,
 } from "react";
 import {
   Button,
   Col,
-  //  Form, Image,
   Input,
   Row,
   Table,
   message,
 } from "antd";
 import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
-// import "./styles.css";
 import { TodoType } from "../../types/apiResponseType";
-// import ReactSignatureCanvas from "react-signature-canvas";
-// import Modal from "antd/es/modal/Modal";
 import {
   CreateTodoThunk,
   DeleteTodoByIdThunk,
@@ -32,21 +27,10 @@ export const TodoApp: React.FC = () => {
   const [description, setDescription] = useState<string>("");
   const [todoAdded, setTodoAdded] = useState(false);
   const [toggleTodoId, setToggleTodoId] = useState<string>();
-  // const [signatureUrl, setSignatureUrl] = useState<string | null>(null);
   const [editedTodos, setEditedTodo] = useState<TodoType[]>([]);
   const todos = useAppSelector((state: RootState) => state.todosReducer);
   const dispatch = useAppDispatch();
-  // const [sigCanvas, setSigCanvas] = useState<ReactSignatureCanvas | null>(null);
-
-  // const clearCanvas = () => {
-  //   if (sigCanvas) {
-  //     sigCanvas.clear();
-  //   }
-  // };
-
-  // const handleUpdateTodo = (id: number, newTitle: string, newdescription: string) => {
-  //   dispatch(updateTodo({ id, title: newTitle, description: newdescription }));
-  // };
+ 
 
   const handleAddTodo = () => {
     if (title.trim() !== "" && description.trim() !== "") {
@@ -210,25 +194,6 @@ export const TodoApp: React.FC = () => {
     setDarkMode(!darkMode);
   };
 
-  // const saveSignature = () => {
-  //   if (sigCanvas) {
-  //     const signatureData = sigCanvas.toDataURL();
-  //     setSignatureUrl(signatureData);
-  //   }
-  // };
-  // const renderSignaturePreview = () => {
-  //   if (signatureUrl) {
-  //     return (
-  //       <Image
-  //         src={signatureUrl}
-  //         width={200}
-  //         height={50}
-  //         alt="Signature Preview"
-  //       />
-  //     );
-  //   }
-  //   return null;
-  // };
 
   useEffect(() => {
     dispatch(GetTodoList({ body: {} }))
@@ -281,30 +246,8 @@ export const TodoApp: React.FC = () => {
           </Button>
         </Col>
       </Row>
-      {/* <div
-                className="signature-pad"
-                style={{ border: "1px  gray" }}
-              >
-                <ReactSignatureCanvas
-                  ref={(ref) => setSigCanvas(ref)}
-                  penColor="black"
-                  canvasProps={{
-                    width: 600,
-                    height: "150%",
-                    className: "sigCanvas",
-                  }}
-                />
-              </div> */}
-      {/* <Row style={{ marginTop: "0.5rem" }}>
-                <Col span={12}>
-                  <Button onClick={clearCanvas}>Clear</Button>
-                </Col>
-                <Col span={12}>
-                  <Button onClick={saveSignature}>Save</Button>
-                </Col>
-              </Row>
-              {renderSignaturePreview()} */}
-      <Row style={{marginTop:'2rem'}}>        
+
+      <Row style={{marginTop:'2rem', overflow:'auto'}}>        
       <Table
         loading={todos.isLoading}
         columns={columns}

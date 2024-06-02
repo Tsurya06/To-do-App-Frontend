@@ -1,4 +1,3 @@
-// src/redux/auth/authSlice.ts
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { message } from 'antd';
 import Cookies from 'js-cookie';

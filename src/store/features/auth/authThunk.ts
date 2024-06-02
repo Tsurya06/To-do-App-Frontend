@@ -1,4 +1,3 @@
-// src/redux/auth/authThunks.ts
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {  authFailure, authLoadingStart, authLoginSuccess, authSignupSuccess, logout } from './authSlice';
 import { login, logoutUser, signup } from '../../../services/auth/authApi';
