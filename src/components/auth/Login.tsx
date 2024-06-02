@@ -74,7 +74,7 @@ export default function Login() {
             >
               <h1>
                 <p className="sedan-sc-regular">
-                  Stay on top of your tasks with our Todo List app
+                  Stay on top of your tasks with our To-do List app
                 </p>
               </h1>
               <p
@@ -85,7 +85,7 @@ export default function Login() {
                 }}
               >
                 Organize your life, boost your productivity, and never forget a
-                task again with our intuitive and feature-rich Todo List app.
+                task again with our intuitive and feature-rich To-do List app.
               </p>
               <Row justify={"start"}>
                 <Col span={4} xs={24} sm={24} md={18} lg={6} xl={4}>
@@ -124,7 +124,7 @@ export default function Login() {
                   </Row>
                   <Row justify={"center"} style={{ width: "100%" }}>
                     <p style={{ color: "gray" }}>
-                      Sign in to access the todos.
+                      Sign in to access the to-dos.
                     </p>
                   </Row>
                 </Row>
