@@ -1,4 +1,3 @@
-import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { TodoApp } from '../pages/todo/Todo'
 import PencilLoader from '../util/PencilLoader'

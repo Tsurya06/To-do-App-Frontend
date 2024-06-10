@@ -205,6 +205,7 @@ export const TodoApp: React.FC = () => {
       .catch((error) => {
         message.error("Failed to fetch todo list:", error);
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [todoAdded]);
 
   return (

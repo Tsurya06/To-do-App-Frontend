@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import  { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ExportOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Form, Input, Row, Space, Typography } from "antd";
@@ -11,8 +11,6 @@ const { Text } = Typography;
 
 export default function Login() {
   const dispatch = useAppDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const signupRef = useRef<HTMLDivElement>(null);
