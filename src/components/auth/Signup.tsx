@@ -1,36 +1,39 @@
-// src/Signup.tsx
-import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Form, Input, Row, Space, message } from "antd";
+import React, { useState, useRef } from "react";
+import { Button, Card, Col, Form, Input, Row, Space } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ExportOutlined } from "@ant-design/icons";
 import { signupThunk } from "../../store/features/auth/authThunk";
-import { useAppDispatch, useAppSelector } from "../../store/store";
+import { useAppDispatch } from "../../store/store";
 import "./auth.css";
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const signupRef = useRef<HTMLDivElement>(null);
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = (values: { name: string; email: string; password: string }) => {
     setIsLoading(true);
-    e.preventDefault();
     const body = {
-      username: name,
-      email: email,
-      password: password,
+      username: values.name,
+      email: values.email,
+      password: values.password,
     };
-    dispatch(signupThunk({ body: body }))
+    dispatch(signupThunk({ body }))
       .then((res) => {
         if (res.payload.success) {
           navigate('/login');
         }
         setIsLoading(false);
-      })
+      });
   };
+
+  const handleGetStartedClick = () => {
+    if (signupRef.current) {
+      signupRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       <Row justify={"center"} style={{ width: "100%" }}>
@@ -72,13 +75,14 @@ const Signup: React.FC = () => {
                   <Button
                     type="text"
                     style={{ boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)" }}
+                    onClick={handleGetStartedClick}
                   >
                     Get Started
                   </Button>
                 </Col>
                 <Col span={1}></Col>
                 <Col span={3} xs={24} sm={24} md={18} lg={3} xl={3}>
-                  <Button type="text" style={{}}>
+                  <Button type="text" onClick={handleGetStartedClick}>
                     Learn More <ExportOutlined />
                   </Button>
                 </Col>
@@ -92,12 +96,13 @@ const Signup: React.FC = () => {
             md={18}
             lg={12}
             xl={12}
-            style={{height:'100%' }}
+            style={{ height: '100%' }}
+            ref={signupRef}
           >
-            <Row justify={"center"} align={"middle"} style={{ height: "80%",marginTop:'3rem'}}>
+            <Row justify={"center"} align={"middle"} style={{ height: "80%", marginTop: '3rem' }}>
               <Card
                 className="login-card"
-                style={{alignContent:'center', borderRadius: "2rem", width: "60%", height: "85%" }}
+                style={{ alignContent: 'center', borderRadius: "2rem", width: "60%", height: "85%" }}
               >
                 <Row justify={"center"}>
                   <Row justify={"center"} style={{ width: "100%" }}>
@@ -113,7 +118,7 @@ const Signup: React.FC = () => {
                     </p>
                   </Row>
                 </Row>
-                <Form layout="vertical">
+                <Form layout="vertical" onFinish={handleSignup}>
                   <Form.Item
                     name="name"
                     label="Name"
@@ -121,26 +126,17 @@ const Signup: React.FC = () => {
                       { required: true, message: "Please input your name!" },
                     ]}
                   >
-                    <Input
-                      placeholder="Alex"
-                      onChange={(e) => {
-                        setName(e.target.value);
-                      }}
-                    />
+                    <Input placeholder="Alex" />
                   </Form.Item>
                   <Form.Item
                     name="email"
                     label="Email"
                     rules={[
                       { required: true, message: "Please input your email!" },
+                      { type: 'email', message: 'The input is not a valid email!' },
                     ]}
                   >
-                    <Input
-                      placeholder="m@example.com"
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                      }}
-                    />
+                    <Input placeholder="m@example.com" />
                   </Form.Item>
                   <Form.Item
                     name="password"
@@ -152,12 +148,7 @@ const Signup: React.FC = () => {
                       },
                     ]}
                   >
-                    <Input.Password
-                      placeholder="*******"
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                      }}
-                    />
+                    <Input.Password placeholder="*******" />
                   </Form.Item>
                   <Form.Item>
                     <Button
@@ -167,7 +158,7 @@ const Signup: React.FC = () => {
                         color: "white",
                         boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
                       }}
-                      onClick={(e) => handleSignup(e)}
+                      htmlType="submit"
                     >
                       Sign Up
                     </Button>
@@ -176,15 +167,14 @@ const Signup: React.FC = () => {
                       <Col style={{ alignContent: "center" }}>
                         <Space>
                           Already a user?
-                          <a
-                            type="text"
-                            style={{color:'black',borderBottom:'1px solid black'}}
+                          <Col
+                            style={{ color: 'black', borderBottom: '1px solid black', cursor: 'pointer' }}
                             onClick={() => {
                               navigate("/login");
                             }}
                           >
                             Sign in now
-                          </a>
+                          </Col>
                         </Space>
                       </Col>
                     </Row>

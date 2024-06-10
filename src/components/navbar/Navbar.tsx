@@ -1,10 +1,9 @@
-import { Button, Col, Row, Space } from "antd";
+import { Button, Col, Row } from "antd";
 import "./Navbar.css";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../store/store";
 import { useNavigate } from "react-router-dom";
 import { logoutUserThunk } from "../../store/features/auth/authThunk";
-import Cookies from "js-cookie";
 
 export default function Navbar() {
   const dispatch=useAppDispatch();

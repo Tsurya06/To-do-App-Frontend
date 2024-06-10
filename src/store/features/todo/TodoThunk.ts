@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { todoSuccess, todoFailure, todoLoadingStart, fetchTodoSuccess } from "./todoSlice";
 import {createTodo, deleteTodoById, editTodo, getTodoList} from "../../../services/todo/todoApi"
-import { ReqType, TodoType } from "../../../types/apiResponseType";
+import { ReqType } from "../../../types/apiResponseType";
 
 
 

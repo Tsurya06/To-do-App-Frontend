@@ -1,21 +1,19 @@
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { ReqType } from '../../types/apiResponseType';
-import { message } from 'antd';
+import axios from "axios";
+import Cookies from "js-cookie";
+import { ReqType } from "../../types/apiResponseType";
+import { message } from "antd";
 
 const devURL = import.meta.env.VITE_BASE_URL;
-const LOGIN_ENDPOINT = 'auth/login';
-const SIGNUP_ENDPOINT = 'auth/signup';
-const LOGOUT_ENDPOINT = 'auth/logout';
-
+const LOGIN_ENDPOINT = "auth/login";
+const SIGNUP_ENDPOINT = "auth/signup";
+const LOGOUT_ENDPOINT = "auth/logout";
 
 export const login = async (req: ReqType) => {
-  const token = Cookies.get('user');
   try {
     const url = `${devURL}${LOGIN_ENDPOINT}`;
     const resp = await axios.post(url, req.body ? req.body : {});
     return resp.data;
-  } catch (error:any) {
+  } catch (error: any) {
     message.error(error.response.data.message);
     throw error;
   }
@@ -32,21 +30,66 @@ export const signup = async (req: ReqType) => {
 };
 
 export const logoutUser = async () => {
-    const token = Cookies.get('user');
-    console.log('token', token)
-    try {
-      const url = `${devURL}${LOGOUT_ENDPOINT}`;
-      const resp = await axios.post(
-        url,
-        {},
-        {
-          headers:{
-            Authorization: `Bearer ${token ? JSON.parse(token).access : ''}`,
-          }
-        }
-      );
-      return resp;
-    } catch (error) {
-      throw error;
-    }
+  const token = Cookies.get("user");
+  try {
+    const url = `${devURL}${LOGOUT_ENDPOINT}`;
+    const resp = await axios.post(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token ? JSON.parse(token).access : ""}`,
+        },
+      }
+    );
+    return resp;
+  } catch (error) {
+    throw error;
+  }
 };
+
+export const refreshToken = async () => {
+  // Get refresh token from cookies
+  const userData = JSON.parse(Cookies.get("user")!);
+
+  // Send request to refresh token endpoint
+  const url = `${devURL}auth/refresh`;
+  const response = await axios.post(url, {
+    refreshToken: userData.refresh,
+  });
+
+  // If successful, update JWT in cookies
+  if (response.status === 200) {
+    const token = response.data.access;
+    Cookies.set("user", JSON.stringify({ access: token }));
+    return token;
+  }
+
+  // If refresh fails, throw an error
+  throw new Error("Failed to refresh token");
+};
+
+// Axios response interceptor
+axios.interceptors.response.use(
+  (response) => response, // If response is successful, just return it
+  async (error) => {
+    const originalRequest = error.config;
+    // If response is a 401 and it's not a try to refresh token, try to refresh token
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true; // Mark this request as being retried
+
+      // Try to refresh token
+      const newToken = await refreshToken();
+
+      // If refresh is successful, retry original request with new token
+      originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+      return axios(originalRequest);
+    }
+
+    // If refresh fails, remove user cookie and reload page
+    // Cookies.remove('user');
+    // window.location.reload();
+
+    return Promise.reject(error);
+  }
+);

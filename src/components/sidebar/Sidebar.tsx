@@ -28,7 +28,7 @@ function getItem(
 }
 
 export default function Sidebar (){
-  const [currentKey, setCurrentKey] = useState<string>('dashboard');
+  const [currentKey, ] = useState<string>('dashboard');
   const navigate = useNavigate();
   const userState = useAppSelector((state) => state.authReducer);
   const [collapsed, setCollapsed] = useState(false);

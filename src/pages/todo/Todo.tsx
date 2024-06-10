@@ -20,6 +20,7 @@ import {
 } from "../../store/features/todo/TodoThunk";
 import { ColumnsType } from "antd/es/table";
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
+
 export const TodoApp: React.FC = () => {
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [toggleTodo, setToggleTodo] = useState<boolean>(false);
@@ -30,7 +31,6 @@ export const TodoApp: React.FC = () => {
   const [editedTodos, setEditedTodo] = useState<TodoType[]>([]);
   const todos = useAppSelector((state: RootState) => state.todosReducer);
   const dispatch = useAppDispatch();
- 
 
   const handleAddTodo = () => {
     if (title.trim() !== "" && description.trim() !== "") {
@@ -61,6 +61,7 @@ export const TodoApp: React.FC = () => {
         message.error("Failed to delete todo:", error);
       });
   };
+
   const handleEditTodo = (editedTodos: TodoType[], id: string) => {
     const todoItem = editedTodos.find((todo) => todo.id === id);
 
@@ -175,14 +176,14 @@ export const TodoApp: React.FC = () => {
                   <EditOutlined />
                 )
               }
-              style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black'}}
+              style={{ backgroundColor: darkMode ? '#333' : 'white', boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', color: darkMode ? 'white' : 'black' }}
             />
           </Col>
           <Col>
             <Button
               onClick={() => handleDeleteRow(record)}
               icon={<DeleteOutlined />}
-              style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black'}}
+              style={{ backgroundColor: darkMode ? '#333' : 'white', boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', color: darkMode ? 'white' : 'black' }}
             />
           </Col>
         </Row>
@@ -193,7 +194,6 @@ export const TodoApp: React.FC = () => {
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
-
 
   useEffect(() => {
     dispatch(GetTodoList({ body: {} }))
@@ -208,9 +208,9 @@ export const TodoApp: React.FC = () => {
   }, [todoAdded]);
 
   return (
-    <>
+    <div style={{ backgroundColor: darkMode ? '#121212' : 'white', color: darkMode ? 'white' : 'black', minHeight: '100vh', padding: '1rem' }}>
       <Row justify={"center"}>
-        <Button onClick={toggleDarkMode} style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black'}}>
+        <Button onClick={toggleDarkMode} style={{ backgroundColor: darkMode ? '#333' : 'white', boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', color: darkMode ? 'white' : 'black' }}>
           {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         </Button>
       </Row>
@@ -223,12 +223,13 @@ export const TodoApp: React.FC = () => {
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
+              style={{ backgroundColor: darkMode ? '#333' : 'white', color: darkMode ? 'white' : 'black' }}
             />
           </Col>
         </Col>
         <Col span={24}>
           <Input.TextArea
-            style={{ height: "200px", width: "100%" }}
+            style={{ height: "200px", width: "100%", backgroundColor: darkMode ? '#333' : 'white', color: darkMode ? 'white' : 'black' }}
             placeholder="Enter your task"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -240,26 +241,27 @@ export const TodoApp: React.FC = () => {
           <Button
             onClick={handleAddTodo}
             icon={<CheckOutlined />}
-            style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black'}}
+            style={{ backgroundColor: darkMode ? '#333' : 'white', boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', color: darkMode ? 'white' : 'black' }}
           >
             Add
           </Button>
         </Col>
       </Row>
 
-      <Row style={{marginTop:'2rem', overflow:'auto'}}>        
-      <Table
-        loading={todos.isLoading}
-        columns={columns}
-        dataSource={editedTodos ? editedTodos : []}
-        scroll={{ x: "100%" }}
-        rowKey="id"
-        bordered={true}
-        pagination={false}
-        size="middle"
-        sticky
-      />
+      <Row style={{ marginTop: '2rem', overflow: 'auto' }}>
+        <Table
+          loading={todos.isLoading}
+          columns={columns}
+          dataSource={editedTodos ? editedTodos : []}
+          scroll={{ x: "100%" }}
+          rowKey="id"
+          bordered={true}
+          pagination={false}
+          size="middle"
+          sticky
+          style={{ backgroundColor: darkMode ? '#333' : 'white', color: darkMode ? 'white' : 'black' }}
+        />
       </Row>
-    </>
+    </div>
   );
 };

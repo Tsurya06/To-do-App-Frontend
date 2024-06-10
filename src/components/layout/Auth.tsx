@@ -1,4 +1,4 @@
-import { Col, ConfigProvider, Row } from "antd";
+import {  ConfigProvider, Row } from "antd";
 import AuthRouter from "../../routes/AuthRouter";
 
 export default function Auth() {
