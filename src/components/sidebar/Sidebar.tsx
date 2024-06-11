@@ -102,7 +102,6 @@ export default function Sidebar (){
             style={{
               margin: '1rem 1rem',
               boxShadow: ' 0px 2px 12px 0px rgba(0, 0, 0, 0.06)',
-              width: 'calc(100vw - 17vw - 2rem)',
             }}
           >
             {userState.loading? (<PencilLoader/>) : (

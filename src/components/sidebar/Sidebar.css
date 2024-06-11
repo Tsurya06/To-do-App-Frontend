@@ -1,3 +1,6 @@
+.custom-sider {
+  height: calc(100vh - 3.5rem) !important; 
+}
 .custom-trigger {
     height: 48px;
     width: 100%;
@@ -13,4 +16,10 @@
 }
 .custome-side-menu {
   background-color: #eeeeee !important;
+}
+
+.content-outer-div {
+  height: calc(100vh - 3.5rem);
+  width: 100%;
+  overflow-y: scroll;
 }

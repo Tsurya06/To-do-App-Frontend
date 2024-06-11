@@ -249,7 +249,7 @@ export const TodoApp: React.FC = () => {
         </Col>
       </Row>
 
-      <Row style={{ marginTop: '2rem', overflow: 'auto' }}>
+      <Row className="global-table" style={{ marginTop: '2rem', overflow: 'auto' }}>
         <Table
           loading={todos.isLoading}
           columns={columns}

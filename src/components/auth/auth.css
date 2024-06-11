@@ -1,40 +1,39 @@
 .login-container > div {
-    min-height: 100vh;
-    /* border: 2px solid red; */
-  }
+  min-height: 100vh;
+  /* border: 2px solid red; */
+}
 
-  .custom-button:hover {
-    border-color: black !important;
-  }  
+.custom-button:hover {
+  border-color: black !important;
+}
 
 .sedan-sc-regular {
-    font-family: "Sedan SC", serif;
-    font-weight: 400;
-    font-style: normal;
-    margin-left: 0.5rem;
-    font-size: 3rem;
-    font-weight: bold;
+  font-family: "Sedan SC", serif;
+  font-weight: 400;
+  font-style: normal;
+  margin-left: 0.5rem;
+  font-size: 3rem;
+  font-weight: bold;
 }
-#card{
+#card {
   border-radius: 3rem;
   max-width: fit-content;
 }
-  .login-left-content{
-    height: 90%;
-    align-content: center;
-    /* border: 2px solid green; */
-   }  
-  .login-left-content-box{
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e8e8e8;
-    align-content: center;
-    border-radius: 2rem;
-    height: 90%;
-    /* border: 2px solid green; */
-   }  
+.login-left-content {
+  height: 90%;
+  align-content: center;
+  /* border: 2px solid green; */
+}
+.login-left-content-box {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8e8e8;
+  align-content: center;
+  border-radius: 2rem;
+  height: 90%;
+  /* border: 2px solid green; */
+}
 
-   .login-card{
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e8e8e8;
-   }
- 
+.login-card {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8e8e8;
+}
