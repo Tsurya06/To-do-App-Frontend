@@ -30,7 +30,7 @@ export const signup = async (req: ReqType) => {
 };
 
 export const logoutUser = async () => {
-  const token = Cookies.get("user");
+  const token = Cookies.get("userDetail");
   try {
     const url = `${devURL}${LOGOUT_ENDPOINT}`;
     const resp = await axios.post(
@@ -50,7 +50,7 @@ export const logoutUser = async () => {
 
 export const refreshToken = async () => {
   // Get refresh token from cookies
-  const userData = JSON.parse(Cookies.get("user")!);
+  const userData = JSON.parse(Cookies.get("userDetail")!);
 
   // Send request to refresh token endpoint
   const url = `${devURL}auth/refresh`;
@@ -61,7 +61,7 @@ export const refreshToken = async () => {
   // If successful, update JWT in cookies
   if (response.status === 200) {
     const token = response.data.access;
-    Cookies.set("user", JSON.stringify({ access: token }));
+    Cookies.set("userDetail", JSON.stringify({ access: token }));
     return token;
   }
 

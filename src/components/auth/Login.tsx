@@ -24,7 +24,7 @@ export default function Login() {
     dispatch(loginThunk({ body }))
       .then((res) => {
         if (res.payload.success) {
-          Cookies.set("user", JSON.stringify(res.payload));
+          Cookies.set("userDetail", JSON.stringify(res.payload));
           navigate("/dashboard");
         }
         setIsLoading(false);

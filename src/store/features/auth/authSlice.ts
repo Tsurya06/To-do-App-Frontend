@@ -53,7 +53,7 @@ export const authSlice = createSlice({
     logout:(state)=> {
       state.user = null;
       state.loading=false;
-      Cookies.remove('user');
+      Cookies.remove('userDetail');
       message.success('You have been logged out successfully!');
     },
   },

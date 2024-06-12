@@ -7,7 +7,7 @@ const ADD_TODOS_END_POINT='api/v1/todo'
 const DELETE_TODOS_END_POINT='api/v1/todo/delete/'
 
 export const createTodo = async (req:ReqType)=>{
-    const token = Cookies.get('user');
+    const token = Cookies.get('userDetail');
     try{
         const url = `${devURL}${ADD_TODOS_END_POINT}`
         const resp = await axios.post(url, req.body ? req.body : {}, {
@@ -15,14 +15,13 @@ export const createTodo = async (req:ReqType)=>{
                 Authorization: `Bearer ${token ? JSON.parse(token).access : ''}`,
             },
         });
-        console.log("resp",resp)
         return resp;
     }catch(error){
         throw error;
     }
 }
 export const editTodo = async (req:ReqType)=>{
-    const token = Cookies.get('user');
+    const token = Cookies.get('userDetail');
     try{
         const url = `${devURL}${ADD_TODOS_END_POINT}/edit/${req.id}`
         const resp = await axios.patch(url, req.body ? req.body : {}, {
@@ -35,8 +34,9 @@ export const editTodo = async (req:ReqType)=>{
         throw error;
     }
 }
-export const getTodoList = async () => {
-    const token = Cookies.get('user');
+export const getTodoList = async (req: ReqType) => {
+    const token = Cookies.get('userDetail');
+    console.log('token', token);    
     try {
         const url = `${devURL}${ADD_TODOS_END_POINT}/get-todos`;
         const resp = await axios.get(url, {
@@ -46,13 +46,13 @@ export const getTodoList = async () => {
         });
         return resp.data;
     } catch (error) {
-        Cookies.remove('user');
+        Cookies.remove('userDetail');
         window.location.reload();
         throw error;
     }
 }
 export const deleteTodoById = async (req:ReqType)=>{
-    const token = Cookies.get('user');
+    const token = Cookies.get('userDetail');
     try{
         const url = `${devURL}${DELETE_TODOS_END_POINT}${req.id}`
         const resp = await axios.delete(url,{
