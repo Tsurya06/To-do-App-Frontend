@@ -1,21 +1,16 @@
-# Todo Application with React and TypeScript
+# Getting Started with Create React App
 
-This is a modern, feature-rich Todo application built with React and TypeScript. The project was bootstrapped with Create React App and uses Vite for a faster and leaner development experience.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Available Scripts
 
-## Features
-<ul>
-  <li>Modular Structure: The application follows a modular structure with separate directories for components, pages, routes, services, types, and -    utilities.</li>
-<li>Environment Configurations: The application supports different environment configurations for development and production.</li>
-</ul>
+In the project directory, you can run:
 
-# Getting Started
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
-## Prerequisites
-<ul>
-  <li>Node.js</li> 
-<li>npm</li>
-</ul>
+### `npm start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 

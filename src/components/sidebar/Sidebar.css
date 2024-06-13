@@ -1,0 +1,25 @@
+.custom-sider {
+  height: calc(100vh - 3.5rem) !important; 
+}
+.custom-trigger {
+    height: 48px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.custome-side-menu {
+    background-color: rgb(236, 236, 236);
+    border-radius: 5px;
+}
+.custome-side-menu {
+  background-color: #eeeeee !important;
+}
+
+.content-outer-div {
+  height: calc(100vh - 3.5rem);
+  width: 100%;
+  overflow-y: scroll;
+}

@@ -1,15 +1,21 @@
-import React from "react";
-import {ToDo} from "./Todo"
-import {LoginForm} from "./LoginForm"
-import "./App.css";
+import { useAppSelector} from "./store/store";
+import Layout from "./components/layout/Layout";
+import Auth from "./components/layout/Auth";
+import { useEffect } from "react";
 
-function App() {
+export default function App() {
+  const userState = useAppSelector((state) => state.authReducer);  
+  useEffect(() => {
+    console.log(userState.user);
+  }, [userState]);
   return (
-  <div className="App">
-    <ToDo/>
-    {/* <LoginForm/> */}
-  </div>
+
+  <>
+    {userState.user!==null? (
+        <Layout/>
+       ) : (
+        <Auth />
+      )} 
+  </>
   )
 }
-
-export default App;
