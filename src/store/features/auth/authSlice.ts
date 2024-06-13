@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { message } from 'antd';
 import Cookies from 'js-cookie';
-const userData=Cookies.get('user');
+const userData=Cookies.get('userDetail');
 
 export type LoginResponseType = {
   success: boolean;
@@ -52,6 +52,7 @@ export const authSlice = createSlice({
     },
     logout:(state)=> {
       state.user = null;
+      state.error = null;
       state.loading=false;
       Cookies.remove('userDetail');
       message.success('You have been logged out successfully!');

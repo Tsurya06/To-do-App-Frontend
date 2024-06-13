@@ -34,7 +34,7 @@ export const editTodo = async (req:ReqType)=>{
         throw error;
     }
 }
-export const getTodoList = async (req: ReqType) => {
+export const getTodoList = async () => {
     const token = Cookies.get('userDetail');
     console.log('token', token);    
     try {

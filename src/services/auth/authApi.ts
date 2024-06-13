@@ -49,23 +49,20 @@ export const logoutUser = async () => {
 };
 
 export const refreshToken = async () => {
-  // Get refresh token from cookies
+
   const userData = JSON.parse(Cookies.get("userDetail")!);
 
-  // Send request to refresh token endpoint
   const url = `${devURL}auth/refresh`;
   const response = await axios.post(url, {
     refreshToken: userData.refresh,
   });
 
-  // If successful, update JWT in cookies
   if (response.status === 200) {
     const token = response.data.access;
     Cookies.set("userDetail", JSON.stringify({ access: token }));
     return token;
   }
 
-  // If refresh fails, throw an error
   throw new Error("Failed to refresh token");
 };
 
@@ -86,9 +83,9 @@ axios.interceptors.response.use(
       return axios(originalRequest);
     }
 
-    // If refresh fails, remove user cookie and reload page
-    // Cookies.remove('user');
-    // window.location.reload();
+    // If refresh fails, means if both refresh and access tokens expires then remove user cookie and reload page
+    Cookies.remove('userDetail');
+    window.location.reload();
 
     return Promise.reject(error);
   }
