@@ -1,0 +1,70 @@
+.dark-mode .card {
+  background-color:rgb(24, 26, 27);
+  color: #bfbdbd;
+  border: 1px solid #36353f;
+  height: 90vh;
+}
+.card {
+  height: 90vh;
+}
+.dark-mode .task-list {
+  color: #bfbdbd;
+}
+
+.dark-mode .ant-btn {
+  background-color: rgb(24, 26, 27);
+  border-color: #36353f;
+  border: 1px solid #36353f;
+  color: #bfbdbd;
+}
+
+.dark-mode .ant-btn:hover {
+  background-color: rgb(24, 26, 27);
+  border-color: #36353f;
+  color: #bfbdbd;
+}
+
+.dark-mode .ant-input {
+  background-color: rgb(24, 26, 27);
+  color: #bfbdbd;
+}
+
+.dark-mode .ant-input:hover,
+.dark-mode .ant-input:focus {
+  background-color: rgb(24, 26, 27);
+  color: #bfbdbd;
+}
+
+.dark-mode .anticon svg {
+  fill: #bfbdbd;
+}
+
+.dark-mode .ant-input::placeholder {
+  color: #999898;
+}
+
+
+ .dark-mode .ant-table-expanded-row-fixed {
+  background-color: rgb(24, 26, 27);
+ }
+ .dark-mode .ant-table-header.ant-table-sticky-holder {
+  background-color: rgb(24, 26, 27);
+ }
+ 
+ .dark-mode .ant-empty-description {
+  color: #bfbdbd; 
+ }
+
+
+ .dark-mode .ant-table-wrapper .ant-table-thead>tr>th {
+  background-color: rgb(24, 26, 27);
+  color: #bfbdbd; 
+}
+ .dark-mode .ant-table-wrapper table {
+  background-color:rgb(24, 26, 27);
+  color: #bfbdbd; 
+}
+
+.dark-mode .ant-table-wrapper .ant-table-tbody .ant-table-row>.ant-table-cell-row-hover {
+  background-color: rgb(37, 38, 39);
+}
