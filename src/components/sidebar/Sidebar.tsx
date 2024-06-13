@@ -81,7 +81,7 @@ export default function Sidebar (){
             selectedKeys={[currentKey]}
             mode="inline"
             items={items}
-            style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black'}}
+            style={{backgroundColor:'white', color:'black'}}
             />
           <div
             className="custom-trigger"

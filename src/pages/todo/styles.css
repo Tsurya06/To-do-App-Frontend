@@ -1,8 +1,8 @@
-.dark-mode .card {
+/* .dark-mode .card {
   background-color:rgb(24, 26, 27);
   color: #bfbdbd;
   border: 1px solid #36353f;
-  height: 90vh;
+  height: calc(100vh - 3.5rem) !important;
 }
 .card {
   height: 90vh;
@@ -67,4 +67,4 @@
 
 .dark-mode .ant-table-wrapper .ant-table-tbody .ant-table-row>.ant-table-cell-row-hover {
   background-color: rgb(37, 38, 39);
-}
+} */

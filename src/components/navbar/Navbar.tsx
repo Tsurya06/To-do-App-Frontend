@@ -17,9 +17,9 @@ export default function Navbar() {
             textAnchor="Todo Icon"
             xmlns="http://www.w3.org/2000/svg"
             width="100"
-            height="47"
+            height="35"
             fill="none"
-            viewBox="0 0 50 500"
+            viewBox="0 0 1200 500"
             id="to-do-list"
           >
             <path
@@ -97,8 +97,8 @@ export default function Navbar() {
               }
             });
           }}
-          style={{backgroundColor:'white', color:'black',border:'1px solid gray'}}
-          icon={<LogoutOutlined />} type="primary"
+          style={{backgroundColor:'white', color:'black',border:'1px solid gray', marginTop:'2px'}}
+          icon={<LogoutOutlined />} 
           />
         </Col>
         </Row>
