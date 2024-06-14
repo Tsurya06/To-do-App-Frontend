@@ -28,7 +28,7 @@ function getItem(
 }
 
 export default function Sidebar (){
-  const [currentKey, setCurrentKey] = useState<string>('dashboard');
+  const [currentKey, ] = useState<string>('dashboard');
   const navigate = useNavigate();
   const userState = useAppSelector((state) => state.authReducer);
   const [collapsed, setCollapsed] = useState(false);
@@ -36,16 +36,35 @@ export default function Sidebar (){
     token: { colorBgContainer },
   } = theme.useToken();
   const items: MenuItem[] = [
-    getItem('dashboard', 'dashboard', <CarryOutOutlined />,),
-    getItem('todos', 'todos', <OrderedListOutlined />),
+    getItem(<p
+      onClick={() => {
+        navigate('/dashboard');
+      }}
+    >
+      Dashboard
+    </p>,
+    'dashboard',
+    <p
+      onClick={() => {
+        navigate('/dashboard');
+      }}
+    >
+      <CarryOutOutlined />
+    </p>,
+    [
+      getItem('All Todos', 'dashboard',<OrderedListOutlined /> ),
+      getItem('Add Todos', 'add-todos', <CarryOutOutlined />),
+    ]  
+  ),
+    
   ];
   const handleMenuClick = (e: any) => {
     switch (e.key) {
       case 'dashboard':
         navigate('/dashboard');
         break;
-      case 'todos':
-        navigate('/todos');
+      case 'add-todos':
+        navigate('/add-todos');
         break;
       default:
         navigate('/notfound');
@@ -81,7 +100,7 @@ export default function Sidebar (){
             selectedKeys={[currentKey]}
             mode="inline"
             items={items}
-            style={{backgroundColor:'white', boxShadow:'0 4px 10px rgba(0, 0, 0, 0.1)', color:'black'}}
+            style={{backgroundColor:'white', color:'black'}}
             />
           <div
             className="custom-trigger"
@@ -102,7 +121,6 @@ export default function Sidebar (){
             style={{
               margin: '1rem 1rem',
               boxShadow: ' 0px 2px 12px 0px rgba(0, 0, 0, 0.06)',
-              width: 'calc(100vw - 17vw - 2rem)',
             }}
           >
             {userState.loading? (<PencilLoader/>) : (

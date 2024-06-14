@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { todoSuccess, todoFailure, todoLoadingStart, fetchTodoSuccess } from "./todoSlice";
 import {createTodo, deleteTodoById, editTodo, getTodoList} from "../../../services/todo/todoApi"
-import { ReqType, TodoType } from "../../../types/apiResponseType";
+import { ReqType } from "../../../types/apiResponseType";
 
 
 
@@ -45,12 +45,11 @@ export const EditTodoThunk = createAsyncThunk(
 
 export const GetTodoList = createAsyncThunk(
     "todo/GetTodoList",
-    async(req: ReqType ,{ dispatch, rejectWithValue } )=>{
+    async(_ ,{ dispatch, rejectWithValue } )=>{
     try{
         dispatch(todoLoadingStart())
-        const response = await getTodoList(req);
+        const response = await getTodoList();
         const todos: any= response.data;
-        console.log("response",response)
         const total_count: number= response.data.total_count;
         dispatch(fetchTodoSuccess({todos:todos,total_count:total_count}))
         return response;

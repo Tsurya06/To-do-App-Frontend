@@ -4,10 +4,11 @@ export type ReqType = {
   type?: string;
   id?: string;
 };
-export type TodoType ={
+export type TodoType = {
   id?: string;
   title?: string;
   description?: string;
-  completed?: boolean;
-  image_url?: string 
-}
+  date?: string;
+};
+
+export type loginSignupType = { name: string; email: string; password: string };

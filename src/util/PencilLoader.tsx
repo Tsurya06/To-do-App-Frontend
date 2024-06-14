@@ -1,17 +1,14 @@
-import { Col, Row, theme } from 'antd';
+import { Col, Row,} from 'antd';
 import './PencilLoader.css';
 
 export default function PencilLoader() {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
 
   return (
     <div
       style={{
         padding: '1rem 1rem',
         minHeight: 'calc(100vh - 3.5rem - 2rem)',
-        background: colorBgContainer,
+        background: "#ffffff",
       }}
     >
       <Row
@@ -44,7 +41,7 @@ export default function PencilLoader() {
               strokeDashoffset="439.82"
               strokeDasharray="439.82 439.82"
               strokeWidth="2"
-              stroke="currentColor"
+              stroke="gray"
               fill="none"
               r="70"
               className="pencil__stroke"
@@ -56,7 +53,7 @@ export default function PencilLoader() {
                   strokeDashoffset="402"
                   strokeDasharray="402.12 402.12"
                   strokeWidth="30"
-                  stroke="hsl(223,90%,50%)"
+                  // stroke=""
                   r="64"
                   className="pencil__body1"
                 ></circle>
@@ -65,7 +62,7 @@ export default function PencilLoader() {
                   strokeDashoffset="465"
                   strokeDasharray="464.96 464.96"
                   strokeWidth="10"
-                  stroke="hsl(223,90%,60%)"
+                  stroke="gray"
                   r="74"
                   className="pencil__body2"
                 ></circle>
@@ -74,7 +71,7 @@ export default function PencilLoader() {
                   strokeDashoffset="339"
                   strokeDasharray="339.29 339.29"
                   strokeWidth="10"
-                  stroke="hsl(223,90%,40%)"
+                  stroke="black"
                   r="54"
                   className="pencil__body3"
                 ></circle>
@@ -89,40 +86,40 @@ export default function PencilLoader() {
                     width="30"
                     ry="5"
                     rx="5"
-                    fill="hsl(223,90%,70%)"
+                    fill="#7b8f7e"
                   ></rect>
                   <rect
                     clipPath="url(#pencil-eraser)"
                     height="30"
                     width="5"
-                    fill="hsl(223,90%,60%)"
+                    fill="#7b8f7e"
                   ></rect>
                   <rect
                     height="20"
                     width="30"
-                    fill="hsl(223,10%,90%)"
+                    fill="#7b8f7e"
                   ></rect>
                   <rect
                     height="20"
                     width="15"
-                    fill="hsl(223,10%,70%)"
+                    fill="#7b8f7e"
                   ></rect>
                   <rect
                     height="20"
                     width="5"
-                    fill="hsl(223,10%,80%)"
+                    fill="#7b8f7e"
                   ></rect>
                   <rect
                     height="2"
                     width="30"
                     y="6"
-                    fill="hsla(223,10%,10%,0.2)"
+                    fill="#7b8f7e"
                   ></rect>
                   <rect
                     height="2"
                     width="30"
                     y="13"
-                    fill="hsla(223,10%,10%,0.2)"
+                    fill="#7b8f7e"
                   ></rect>
                 </g>
               </g>
@@ -132,15 +129,15 @@ export default function PencilLoader() {
               >
                 <polygon
                   points="15 0,30 30,0 30"
-                  fill="hsl(33,90%,70%)"
+                  fill="black"
                 ></polygon>
                 <polygon
                   points="15 0,6 30,0 30"
-                  fill="hsl(33,90%,50%)"
+                  fill="black"
                 ></polygon>
                 <polygon
                   points="15 0,20 10,10 10"
-                  fill="hsl(223,10%,10%)"
+                  fill="black"
                 ></polygon>
               </g>
             </g>

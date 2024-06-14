@@ -1,4 +1,14 @@
-body {
-  min-height: 100vh;
+body{
+    height: 100vh;
+    margin: 0;
 }
-
+.content {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 1;
+    height: calc(100vh - 3.5rem - 3rem);
+  }
+.table-content{
+    overflow:auto;
+    flex:1;
+}  
