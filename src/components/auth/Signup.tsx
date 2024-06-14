@@ -5,6 +5,7 @@ import { ExportOutlined } from "@ant-design/icons";
 import { signupThunk } from "../../store/features/auth/authThunk";
 import { useAppDispatch } from "../../store/store";
 import "./auth.css";
+import PencilLoader from "../../util/PencilLoader";
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
@@ -12,20 +13,23 @@ const Signup: React.FC = () => {
   const dispatch = useAppDispatch();
   const signupRef = useRef<HTMLDivElement>(null);
 
-  const handleSignup = (values: { name: string; email: string; password: string }) => {
+  const handleSignup = (values: {
+    name: string;
+    email: string;
+    password: string;
+  }) => {
     setIsLoading(true);
     const body = {
       username: values.name,
       email: values.email,
       password: values.password,
     };
-    dispatch(signupThunk({ body }))
-      .then((res) => {
-        if (res.payload.success) {
-          navigate('/login');
-        }
-        setIsLoading(false);
-      });
+    dispatch(signupThunk({ body })).then((res) => {
+      if (res.payload.success) {
+        navigate("/login");
+      }
+      setIsLoading(false);
+    });
   };
 
   const handleGetStartedClick = () => {
@@ -36,11 +40,15 @@ const Signup: React.FC = () => {
 
   return (
     <>
-      <Row justify={"center"} style={{ width: "100%" }}>
+      {isLoading ? (
+        <Row justify={"center"} style={{ width: "100%" }}>
+          <PencilLoader />
+        </Row>
+      ) : (
         <Row
           justify={"center"}
           align={"middle"}
-          style={{ margin: "2rem", width: "100%" }}
+          style={{ marginLeft: "0px", width: "100%" }}
           gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
         >
           <Col
@@ -96,13 +104,24 @@ const Signup: React.FC = () => {
             md={18}
             lg={12}
             xl={12}
-            style={{ height: '100%' }}
+            style={{ height: "90%" }}
             ref={signupRef}
           >
-            <Row justify={"center"} align={"middle"} style={{ height: "80%", marginTop: '3rem' }}>
+            <Row
+              justify={"center"}
+              align={"middle"}
+              style={{ height: "100%" }}
+            >
               <Card
                 className="login-card"
-                style={{ alignContent: 'center', borderRadius: "2rem", width: "60%", height: "85%" }}
+                style={{
+                  alignContent: "center",
+                  borderRadius: "2rem",
+                  width: "60%",
+                  height: "75%",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                }}
               >
                 <Row justify={"center"}>
                   <Row justify={"center"} style={{ width: "100%" }}>
@@ -133,7 +152,10 @@ const Signup: React.FC = () => {
                     label="Email"
                     rules={[
                       { required: true, message: "Please input your email!" },
-                      { type: 'email', message: 'The input is not a valid email!' },
+                      {
+                        type: "email",
+                        message: "The input is not a valid email!",
+                      },
                     ]}
                   >
                     <Input placeholder="m@example.com" />
@@ -162,13 +184,16 @@ const Signup: React.FC = () => {
                     >
                       Sign Up
                     </Button>
-                    <Row justify={"center"} style={{ marginTop: "1rem" }}>
-                      <Col span={1}></Col>
-                      <Col style={{ alignContent: "center" }}>
+                    <Row justify={"center"} style={{ marginTop: "2rem" }}>
+                      <Col>
                         <Space>
                           Already a user?
                           <Col
-                            style={{ color: 'black', borderBottom: '1px solid black', cursor: 'pointer' }}
+                            style={{
+                              color: "black",
+                              borderBottom: "1px solid black",
+                              cursor: "pointer",
+                            }}
                             onClick={() => {
                               navigate("/login");
                             }}
@@ -184,7 +209,7 @@ const Signup: React.FC = () => {
             </Row>
           </Col>
         </Row>
-      </Row>
+      )}
     </>
   );
 };
