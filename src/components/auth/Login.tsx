@@ -47,11 +47,11 @@ export default function Login() {
           <PencilLoader />
         </Row>
       ) : (
-        <Row justify={"center"} style={{ width: "100%" }}>
+        
           <Row
             justify={"center"}
             align={"middle"}
-            style={{ margin: "2rem", width: "100%" }}
+            style={{ width: "100%" ,marginLeft:'0px'}}
             gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
           >
             <Col
@@ -111,7 +111,7 @@ export default function Login() {
               md={18}
               lg={12}
               xl={12}
-              style={{ height: "100%" }}
+              style={{ height: "90%" }}
               ref={signupRef}
             >
               <Row
@@ -121,7 +121,7 @@ export default function Login() {
               >
                 <Card
                   className="login-card"
-                  style={{ borderRadius: "2rem", width: "60%", height: "55%" }}
+                  style={{ borderRadius: "2rem", width: "60%", height: "60%" }}
                 >
                   <Row justify={"center"}>
                     <Row
@@ -202,7 +202,7 @@ export default function Login() {
               </Row>
             </Col>
           </Row>
-        </Row>
+        
       )}
     </>
   );
