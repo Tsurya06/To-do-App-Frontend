@@ -42,7 +42,7 @@ export default function Login() {
 
   return (
     <>
-      {!isLoading ? (
+      {isLoading ? (
         <Row justify={"center"} style={{ width: "100%" }}>
           <PencilLoader />
         </Row>
