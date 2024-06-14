@@ -89,7 +89,7 @@ export const TodoApp: React.FC = () => {
             <DatePicker
               placeholder="Select Date"
               format={"DD-MM-YYYY"}
-              onChange={(_,dateString) => {
+              onChange={(_,dateString:any) => {
                 setTodoObject({ ...todoObject, date: dateString });
               }}
               style={{
