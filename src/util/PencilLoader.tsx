@@ -1,10 +1,7 @@
-import { Col, Row, theme } from 'antd';
+import { Col, Row,} from 'antd';
 import './PencilLoader.css';
 
 export default function PencilLoader() {
-  // const {
-  //   token: { colorBgContainer },
-  // } = theme.useToken();
 
   return (
     <div
