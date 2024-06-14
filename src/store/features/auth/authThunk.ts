@@ -10,7 +10,6 @@ export const loginThunk = createAsyncThunk(
     try {
       dispatch(authLoadingStart());
       const response = await login(req);
-      console.log('response', response);
       dispatch(authLoginSuccess(response));
       return response;
     } catch (error: any) {

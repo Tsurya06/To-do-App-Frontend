@@ -38,7 +38,6 @@ export const editTodo = async (req:ReqType)=>{
 }
 export const getTodoList = async () => {
     const token = Cookies.get('userDetail');
-    console.log('token', token);    
     try {
         const url = `${devURL}${ADD_TODOS_END_POINT}/get-todos`;
         const resp = await axios.get(url, {
