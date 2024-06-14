@@ -23,5 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-#environment file
-.env.development
+# uncomment environment file to ignore
+# .env.development

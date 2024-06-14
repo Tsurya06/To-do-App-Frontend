@@ -52,18 +52,19 @@ export default function Sidebar (){
       <CarryOutOutlined />
     </p>,
     [
-      getItem('Dashboard', 'dashboard', <CarryOutOutlined />),
+      getItem('All Todos', 'dashboard',<OrderedListOutlined /> ),
+      getItem('Add Todos', 'add-todos', <CarryOutOutlined />),
     ]  
   ),
-    getItem('todos', 'todos', <OrderedListOutlined />),
+    
   ];
   const handleMenuClick = (e: any) => {
     switch (e.key) {
       case 'dashboard':
         navigate('/dashboard');
         break;
-      case 'todos':
-        navigate('/todos');
+      case 'add-todos':
+        navigate('/add-todos');
         break;
       default:
         navigate('/notfound');
