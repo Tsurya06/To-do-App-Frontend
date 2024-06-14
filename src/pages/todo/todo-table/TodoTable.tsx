@@ -125,6 +125,35 @@ export default function TodoTable() {
       },
     },
     {
+      title: <div style={{ textAlign: "center" }}>Date</div>,
+      key: "date",
+      width: "10rem",
+      render: (record: TodoType) => {
+        return (
+          <>
+            {toggleTodo && toggleTodoId === record.id ? (
+              <>
+                <Input
+                  value={record.date}
+                  onChange={(e) => {
+                    setEditedTodo((prevObj) =>
+                      prevObj.map((todo) =>
+                        todo.id === toggleTodoId
+                          ? { ...todo, date: e.target.value }
+                          : todo
+                      )
+                    );
+                  }}
+                />
+              </>
+            ) : (
+              <>{record.date}</>
+            )}
+          </>
+        );
+      },
+    },
+    {
       title: <div style={{ textAlign: "center" }}>Action</div>,
       key: "action",
       width: "7rem",

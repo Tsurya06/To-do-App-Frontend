@@ -19,7 +19,7 @@ export const TodoApp: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleAddTodo = () => {
-    if (todoObject?.title!.trim() !== "" && todoObject?.description!.trim() !== "" && !todoObject?.date) {
+    if (todoObject?.title!.trim() !== "" && todoObject?.description!.trim() !== "" && todoObject?.date) {
       const body = todoObject;
       setLoading(true);
       dispatch(CreateTodoThunk({ body: body }))
