@@ -20,7 +20,7 @@ const Signup: React.FC = () => {
   }) => {
     setIsLoading(true);
     const body = {
-      username: values.name,
+      name: values.name,
       email: values.email,
       password: values.password,
     };
