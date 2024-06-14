@@ -36,7 +36,25 @@ export default function Sidebar (){
     token: { colorBgContainer },
   } = theme.useToken();
   const items: MenuItem[] = [
-    getItem('dashboard', 'dashboard', <CarryOutOutlined />,),
+    getItem(<p
+      onClick={() => {
+        navigate('/dashboard');
+      }}
+    >
+      Dashboard
+    </p>,
+    'dashboard',
+    <p
+      onClick={() => {
+        navigate('/dashboard');
+      }}
+    >
+      <CarryOutOutlined />
+    </p>,
+    [
+      getItem('Dashboard', 'dashboard', <CarryOutOutlined />),
+    ]  
+  ),
     getItem('todos', 'todos', <OrderedListOutlined />),
   ];
   const handleMenuClick = (e: any) => {
