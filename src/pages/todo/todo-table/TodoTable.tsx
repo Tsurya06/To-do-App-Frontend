@@ -1,4 +1,4 @@
-import { Row, Col, Table, Button, Input, message } from "antd";
+import { Row, Col, Table, Button, Input, message, Pagination } from "antd";
 import {
   RootState,
   useAppDispatch,
@@ -13,14 +13,29 @@ import {
 } from "../../../store/features/todo/TodoThunk";
 import { useEffect, useState } from "react";
 import { CheckOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { useSearchParams } from "react-router-dom";
 
+export type FilterTodosObjectType = {
+  pageSize: number;
+  currentPage: number;
+};
+type SearchParamsType = {
+  pageSize: string;
+  page: string;
+};
 export default function TodoTable() {
   const todos = useAppSelector((state: RootState) => state.todosReducer);
   const [toggleTodo, setToggleTodo] = useState<boolean>(false);
   const [toggleTodoId, setToggleTodoId] = useState<string>();
   const [editedTodos, setEditedTodo] = useState<TodoType[]>([]);
-
   const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [filterTodosObject, setFilterTodosObject] =
+    useState<FilterTodosObjectType>({
+      pageSize: parseInt(searchParams.get("pageSize") ?? "10", 10),
+      currentPage: parseInt(searchParams.get("pageNumber") ?? "1", 10),
+    });
+
   const handleDeleteRow = (record: TodoType) => {
     dispatch(DeleteTodoByIdThunk({ id: record.id }))
       .then((data) => {
@@ -179,7 +194,7 @@ export default function TodoTable() {
                 )
               }
               style={{
-                backgroundColor:  "white",
+                backgroundColor: "white",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
                 color: "black",
               }}
@@ -192,7 +207,7 @@ export default function TodoTable() {
               style={{
                 backgroundColor: "white",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-                color:  "black",
+                color: "black",
               }}
             />
           </Col>
@@ -200,8 +215,29 @@ export default function TodoTable() {
       ),
     },
   ];
-  useEffect(() => {
-    dispatch(GetTodoList())
+  const handlePageChange = (page: number, pageSize: number) => {
+    setFilterTodosObject({
+      ...filterTodosObject,
+      currentPage: page,
+      pageSize: pageSize || filterTodosObject.pageSize,
+    });
+  };
+  const filterTodos = () => {
+    let queryParam: SearchParamsType = {
+      pageSize: `${filterTodosObject.pageSize}`,
+      page: `${filterTodosObject.currentPage}`,
+    };
+    setSearchParams(queryParam, { replace: true });
+    const offset = (filterTodosObject.currentPage - 1) * filterTodosObject.pageSize;
+    dispatch(
+      GetTodoList({
+        params: {
+          offset,
+          pageSize: filterTodosObject.pageSize,
+          page: filterTodosObject.currentPage,
+        },
+      })
+    )
       .then((data) => {
         if (data.payload) {
           setEditedTodo(data.payload.data);
@@ -210,27 +246,46 @@ export default function TodoTable() {
       .catch((error) => {
         message.error("Failed to fetch todo list:", error);
       });
-  }, []);
+  };
+  useEffect(() => {
+    filterTodos();
+  }, [filterTodosObject]);
   return (
     <>
-    <div className="content">
-      <Row className="table-content">
-        <Col xs={{ span: 24 }}>
-          <Table
-            loading={todos.isLoading}
-            columns={columns}
-            dataSource={editedTodos}
-            scroll={{ x: "100%" }}
-            rowKey="id"
-            bordered={true}
-            pagination={false}
-            size="middle"
-            sticky
-            //   style={{ backgroundColor: darkMode ? '#333' : 'white', color: darkMode ? 'white' : 'black' }}
-          />
-        </Col>
-      </Row>
-    </div>
+      <div className="content">
+        <Row align={"middle"} className="global-content-container">
+          <Col xs={{ span: 8 }}>
+            <h3>Todos ({todos.total_count})</h3>
+          </Col>
+          <Col xs={{ span: 16 }}>
+            <Row justify={"end"} align={"middle"}>
+              <Pagination
+                showSizeChanger
+                current={filterTodosObject.currentPage}
+                onChange={handlePageChange}
+                total={todos.total_count}
+                pageSize={filterTodosObject.pageSize}
+              />
+            </Row>
+          </Col>
+        </Row>
+        <Row className="table-content">
+          <Col xs={{ span: 24 }}>
+            <Table
+              loading={todos.isLoading}
+              columns={columns}
+              dataSource={editedTodos}
+              scroll={{ x: "100%" }}
+              rowKey="id"
+              bordered={true}
+              pagination={false}
+              size="middle"
+              sticky
+              //   style={{ backgroundColor: darkMode ? '#333' : 'white', color: darkMode ? 'white' : 'black' }}
+            />
+          </Col>
+        </Row>
+      </div>
     </>
   );
 }

@@ -45,10 +45,10 @@ export const EditTodoThunk = createAsyncThunk(
 
 export const GetTodoList = createAsyncThunk(
     "todo/GetTodoList",
-    async(_ ,{ dispatch, rejectWithValue } )=>{
+    async(req:ReqType ,{ dispatch, rejectWithValue } )=>{
     try{
         dispatch(todoLoadingStart())
-        const response = await getTodoList();
+        const response = await getTodoList(req);
         const todos: any= response.data;
         const total_count: number= response.data.total_count;
         dispatch(fetchTodoSuccess({todos:todos,total_count:total_count}))
