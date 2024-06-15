@@ -84,11 +84,6 @@ axios.interceptors.response.use(
         return axios(originalRequest);
       }
     }
-
-    // // If refresh fails, means if both refresh and access tokens expires then remove user cookie and reload page
-    // Cookies.remove('userDetail');
-    // window.location.reload();
-
     return Promise.reject(error);
   }
 );
