@@ -96,9 +96,9 @@ export const TodoApp: React.FC = () => {
             <DatePicker
               placeholder="Select Date"
               format={"DD-MM-YYYY"}
-              value={todoObject.date ? dayjs(todoObject.date) : null}
-              onChange={(_,dateString:any) => {
-                setTodoObject({ ...todoObject, date: dateString ? dateString : ""});
+              value={todoObject.date}
+              onChange={(date) => {
+                setTodoObject({ ...todoObject, date: date });
               }}
               style={{
                 width: "100%",
