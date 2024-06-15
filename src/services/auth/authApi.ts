@@ -79,13 +79,15 @@ axios.interceptors.response.use(
       const newToken = await refreshToken();
 
       // If refresh is successful, retry original request with new token
-      originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-      return axios(originalRequest);
+      if (newToken) {
+        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+        return axios(originalRequest);
+      }
     }
 
-    // If refresh fails, means if both refresh and access tokens expires then remove user cookie and reload page
-    Cookies.remove('userDetail');
-    window.location.reload();
+    // // If refresh fails, means if both refresh and access tokens expires then remove user cookie and reload page
+    // Cookies.remove('userDetail');
+    // window.location.reload();
 
     return Promise.reject(error);
   }

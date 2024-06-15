@@ -6,6 +6,7 @@ import {
 } from "../../store/features/todo/TodoThunk";
 import { useAppDispatch } from "../../store/store";
 import { TodoType } from "../../types/apiResponseType";
+import dayjs from "dayjs";
 
 export const TodoApp: React.FC = () => {
   const [todoAdded, setTodoAdded] = useState(false);
@@ -20,12 +21,18 @@ export const TodoApp: React.FC = () => {
 
   const handleAddTodo = () => {
     if (todoObject?.title!.trim() !== "" && todoObject?.description!.trim() !== "" && todoObject?.date) {
-      const body = todoObject;
+      const body = {
+        title: todoObject.title,
+        description: todoObject.description,
+        date: dayjs(todoObject.date).format("DD-MM-YYYY"),
+      }
       setLoading(true);
       dispatch(CreateTodoThunk({ body: body }))
-        .then(() => {
-          setTodoObject({ title: "", description: "", date: "" });
+        .then((data) => {
+          if(data.payload.success){
+          setTodoObject(inititalTodoObject);
           setTodoAdded(!todoAdded);
+          }
           setLoading(false);
         })
         .catch(() => {
@@ -89,8 +96,9 @@ export const TodoApp: React.FC = () => {
             <DatePicker
               placeholder="Select Date"
               format={"DD-MM-YYYY"}
+              value={todoObject.date ? dayjs(todoObject.date) : null}
               onChange={(_,dateString:any) => {
-                setTodoObject({ ...todoObject, date: dateString });
+                setTodoObject({ ...todoObject, date: dateString ? dateString : ""});
               }}
               style={{
                 width: "100%",
