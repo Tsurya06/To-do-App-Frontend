@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
-import { TodoApp } from '../pages/todo/Todo'
+import { TodoApp } from '../pages/todo/AddTodo'
 import PencilLoader from '../util/PencilLoader'
 import TodoTable from '../pages/todo/todo-table/TodoTable'
 

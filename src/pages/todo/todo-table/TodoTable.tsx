@@ -1,4 +1,4 @@
-import { Row, Col, Table, Button, Input, message } from "antd";
+import { Row, Col, Table, Button, Input, message, Pagination } from "antd";
 import {
   RootState,
   useAppDispatch,
@@ -13,13 +13,26 @@ import {
 } from "../../../store/features/todo/TodoThunk";
 import { useEffect, useState } from "react";
 import { CheckOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-
+import { useSearchParams } from "react-router-dom";
+export type FilterTodoObjectType = {
+  pageSize: number;
+  currentPage: number;
+};
+export type SearchParamsType = {
+  pageSize: string;
+  currentPage: string;
+};
 export default function TodoTable() {
   const todos = useAppSelector((state: RootState) => state.todosReducer);
   const [toggleTodo, setToggleTodo] = useState<boolean>(false);
   const [toggleTodoId, setToggleTodoId] = useState<string>();
   const [editedTodos, setEditedTodo] = useState<TodoType[]>([]);
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [filteredTodosObject, setfilteredTodosObject] =
+    useState<FilterTodoObjectType>({
+      pageSize: parseInt(searchParams.get('pageSize') ?? "10"),
+      currentPage: parseInt(searchParams.get('currentPage') ?? "1"),
+    });
   const dispatch = useAppDispatch();
   const handleDeleteRow = (record: TodoType) => {
     dispatch(DeleteTodoByIdThunk({ id: record.id }))
@@ -28,6 +41,7 @@ export default function TodoTable() {
           const updatedData = editedTodos.filter(
             (todo) => todo.id !== record.id
           );
+          filterTodos();
           setEditedTodo(updatedData);
         }
       })
@@ -54,6 +68,7 @@ export default function TodoTable() {
         if (data.payload) {
           setToggleTodo(false);
           setToggleTodoId(undefined);
+          filterTodos();
         }
       })
       .catch((error) => {
@@ -65,7 +80,7 @@ export default function TodoTable() {
       title: "Task No.",
       key: "id",
       width: "5rem",
-      render: (_, __, index: number) => `${index + 1}.`,
+      render: (_, __, index: number) => filteredTodosObject.currentPage! * filteredTodosObject.pageSize! - filteredTodosObject.pageSize! + index + 1 ,
     },
     {
       title: <div style={{ textAlign: "center" }}>Title</div>,
@@ -179,7 +194,7 @@ export default function TodoTable() {
                 )
               }
               style={{
-                backgroundColor:  "white",
+                backgroundColor: "white",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
                 color: "black",
               }}
@@ -192,7 +207,7 @@ export default function TodoTable() {
               style={{
                 backgroundColor: "white",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-                color:  "black",
+                color: "black",
               }}
             />
           </Col>
@@ -200,8 +215,25 @@ export default function TodoTable() {
       ),
     },
   ];
-  useEffect(() => {
-    dispatch(GetTodoList())
+  const handlePageChange = (pageNumber: number, pageSize: number) => {
+    setfilteredTodosObject((prevObj) => ({
+      ...prevObj,
+      currentPage:  pageNumber,
+      pageSize,
+    }));
+  };
+  const filterTodos = () => {
+    let searchParams: SearchParamsType = {
+      pageSize: `${filteredTodosObject.pageSize}`,
+      currentPage: `${filteredTodosObject.currentPage}`,
+    };
+    setSearchParams(searchParams);
+    
+    dispatch(
+      GetTodoList({
+        params: { pageSize: filteredTodosObject.pageSize, pageNumber: filteredTodosObject.currentPage-1},
+      })
+    )
       .then((data) => {
         if (data.payload) {
           setEditedTodo(data.payload.data);
@@ -210,27 +242,52 @@ export default function TodoTable() {
       .catch((error) => {
         message.error("Failed to fetch todo list:", error);
       });
-  }, []);
+  };
+  useEffect(() => {
+    filterTodos();
+  }, [filteredTodosObject,todos.total_count]);
   return (
     <>
-    <div className="content">
-      <Row className="table-content">
-        <Col xs={{ span: 24 }}>
-          <Table
-            loading={todos.isLoading}
-            columns={columns}
-            dataSource={editedTodos}
-            scroll={{ x: "100%" }}
-            rowKey="id"
-            bordered={true}
-            pagination={false}
-            size="middle"
-            sticky
-            //   style={{ backgroundColor: darkMode ? '#333' : 'white', color: darkMode ? 'white' : 'black' }}
-          />
-        </Col>
-      </Row>
-    </div>
+      <div className="content">
+        <Row align={"middle"}>
+          <Col xs={{ span: 8 }}>
+            <h3>Todo List ({todos.total_count})</h3>
+          </Col>
+          <Col xs={{ span: 16 }}>
+            <Row justify={"end"} align={"middle"}>
+              <Pagination
+                showSizeChanger
+                current={filteredTodosObject.currentPage}
+                onChange={handlePageChange}
+                total={todos.total_count}
+                pageSize={filteredTodosObject.pageSize}
+                itemRender={(currentPage, type, originalElement) => {
+                  if (type === 'page') {
+                    return <a style={currentPage === filteredTodosObject.currentPage ? { backgroundColor: 'whiter', color: 'black', border:'1px solid black', borderRadius:'4px' } : {}}>{currentPage}</a>;
+                  }
+                  return originalElement;
+                }}
+              />
+            </Row>
+          </Col>
+        </Row>
+        <Row className="table-content" style={{marginTop:'1.5rem'}}>
+          <Col xs={{ span: 24 }}>
+            <Table
+              loading={todos.isLoading}
+              columns={columns}
+              dataSource={editedTodos}
+              scroll={{ x: "100%" }}
+              rowKey="id"
+              bordered={true}
+              pagination={false}
+              size="middle"
+              sticky
+              //   style={{ backgroundColor: darkMode ? '#333' : 'white', color: darkMode ? 'white' : 'black' }}
+            />
+          </Col>
+        </Row>
+      </div>
     </>
   );
 }

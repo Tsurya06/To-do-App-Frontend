@@ -6,7 +6,7 @@
     height: 30px;
     width: 100%;
     position: absolute;
-    bottom: 0;
+    bottom: 1rem;
     cursor: pointer;
     border-radius: 2px;
     align-content: end;

@@ -122,7 +122,7 @@ export const TodoApp: React.FC = () => {
             />
           </Col>
         </Row>
-        <Row justify={"center"} style={{ width: "100%", margin: "1rem", marginTop:'1rem' }}>
+        <Row justify={"center"} style={{ width: "100%", marginBottom: "1rem"}}>
           <Col>
             <Button
               loading={loading}
