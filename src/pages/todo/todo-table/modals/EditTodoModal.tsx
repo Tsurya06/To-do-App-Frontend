@@ -1,14 +1,14 @@
 import { Modal, Divider, Row, Col, Input, DatePicker, Button } from "antd";
 import { TodoType } from "../../../../types/apiResponseType";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
 export type EditTodoModalProps = {
     modalOpen: boolean;
     setModalOpen: (value: boolean) => void;
     loading: boolean;
     selectedTodo?: TodoType ;
-    editedTodos: TodoType[];
-    setEditedTodo?: (value: TodoType[]) => void;
-    handleEditTodo: (editedTodos: TodoType[], id: string) => void;
+    handleEditTodo: (editedTodos: TodoType, id: string) => void;
 };
 
 export default function EditTodoModal({
@@ -16,57 +16,68 @@ export default function EditTodoModal({
     setModalOpen,
     loading,
     selectedTodo,
-    editedTodos,
-    setEditedTodo,
     handleEditTodo,
 }: EditTodoModalProps) {
+  const [editTodo, setEditTodo] = useState<TodoType>();
+  useEffect(() => {
+    setEditTodo(selectedTodo);
+  }, [selectedTodo]);
   return (
     <>
       <Modal
           centered
           open={modalOpen}
           title="Edit Todo"
-          closable={loading}
-          maskClosable={loading}
+          closable={!loading}
+          maskClosable={!loading}
           confirmLoading={true}
           footer={false}
+          onCancel={() => setModalOpen(false)}
         >
           <Divider />
           <Row justify={"space-evenly"}>
             <Col span={6}>
               <Input
-                value={selectedTodo?.title}
+                value={editTodo?.title}
                 onChange={(e) => {
-                //   setEditedTodo((prevObj) =>
-                //     prevObj.map((todo) =>
-                //       todo.id === selectedTodo?.id
-                //         ? { ...todo, title: e.target.value }
-                //         : todo
-                //     )
-                //   );
+                  setEditTodo(prevTodo => {
+                    return {
+                      ...prevTodo,
+                      title: e.target.value
+                    };
+                  });
                 }}
                 placeholder="Title"
               />
             </Col>
             <Col span={6}>
-              <DatePicker placeholder="Date" />
+              <DatePicker 
+                allowClear={false}
+                value={dayjs(editTodo?.date,"DD-MM-YYYY")}
+                format={"DD-MM-YYYY"}
+                placeholder="Date"
+                onChange={(date) => {
+                  setEditTodo(prevTodo => {
+                    return {
+                      ...prevTodo,
+                      date: date.format("DD-MM-YYYY"),
+                    };
+                  });
+                }} />
             </Col>
           </Row>
           <Row justify={"start"} style={{ marginTop: "0.5rem" }}>
             <Col span={24}>
-              <Input
-                value={selectedTodo?.description}
+              <Input.TextArea
+                style={{height:'10rem'}}
+                value={editTodo?.description}
                 onChange={(e) => {
-                //   setEditedTodo((prevObj) => {
-                //     return prevObj.map((itr) => {
-                //       if (itr.id === selectedTodo?.id)
-                //         return {
-                //           ...itr,
-                //           description: e.target.value,
-                //         };
-                //       return itr;
-                //     });
-                //   });
+                setEditTodo(prevObj=>{
+                  return {
+                    ...prevObj,
+                    description:e.target.value,
+                  }
+                })
                 }}
                 placeholder="Description"
               />
@@ -78,7 +89,7 @@ export default function EditTodoModal({
               <Button
                 loading={loading}
                 onClick={() => {
-                  handleEditTodo(editedTodos, selectedTodo?.id!);
+                  handleEditTodo(editTodo!, editTodo?.id!);
                 }}
                 style={{
                   backgroundColor: "white",

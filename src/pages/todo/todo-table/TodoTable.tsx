@@ -44,64 +44,24 @@ export type SearchParamsType = {
 export default function TodoTable() {
   const todos = useAppSelector((state: RootState) => state.todosReducer);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [editLoading, setEditLoading] = useState<boolean>(false);
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const [editedTodos, setEditedTodo] = useState<TodoType[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedTodo, setSelectedTodo] = useState<TodoType>();
+  const dispatch = useAppDispatch();
+  
   const [filteredTodosObject, setfilteredTodosObject] =
     useState<FilterTodoObjectType>({
       pageSize: parseInt(searchParams.get("pageSize") ?? "10"),
       currentPage: parseInt(searchParams.get("currentPage") ?? "1"),
     });
-  const dispatch = useAppDispatch();
-  const handleDeleteRow = (record: TodoType) => {
-    setLoading(true);
-    dispatch(DeleteTodoByIdThunk({ id: record.id }))
-      .then((data) => {
-        if (data.payload) {
-          const updatedData = editedTodos.filter(
-            (todo) => todo.id !== record.id
-          );
-          filterTodos();
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        message.error("Failed to delete todo:", error);
-      });
-  };
+    const [deleteLoadingId, setDeleteLoadingId] = useState<null | string>(null);
 
-  const handleEditTodo = (editedTodos: TodoType[], id: string) => {
-    const todoItem = editedTodos.find((todo) => todo.id === id);
-
-    if (!todoItem) {
-      return message.error("Todo not found in the database!");
-    }
-
-    const payloadBody = {
-      id: todoItem.id,
-      title: todoItem.title,
-      description: todoItem.description,
-    };
-    setLoading(true);
-    dispatch(EditTodoThunk({ body: payloadBody, id: id }))
-      .then((data) => {
-        if (data.payload) {
-          filterTodos();
-          setEditedTodo([]);
-          setLoading(false);
-        }
-        setModalOpen(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        message.error("Failed to edit todo:", error);
-      });
-  };
   const columns: ColumnsType<TodoType> = [
     {
       title: "Task No.",
-      key: "id",
+      key: "task_no",
       width: "3rem",
       render: (_, __, index: number) =>
         filteredTodosObject.currentPage! * filteredTodosObject.pageSize! -
@@ -167,8 +127,8 @@ export default function TodoTable() {
           </Col>
           <Col>
             <Button
-              loading={loading}
-              onClick={() => handleDeleteRow(selectedTodo!)}
+              loading={deleteLoadingId===record.id }
+              onClick={() => handleDeleteRow(record.id!)}
               icon={<DeleteOutlined />}
               style={{
                 backgroundColor: "white",
@@ -181,6 +141,50 @@ export default function TodoTable() {
       ),
     },
   ];
+  const handleDeleteRow = (id: string) => {
+    setDeleteLoading(true);
+    setDeleteLoadingId(id);
+    dispatch(DeleteTodoByIdThunk({ id: id }))
+      .then((data) => {
+        if (data.payload) {
+          filterTodos();
+          setDeleteLoading(false);
+          setDeleteLoadingId(null);
+        }
+      })
+      .catch((error) => {
+        message.error("Failed to delete todo:", error);
+      })
+  };
+
+  const handleEditTodo = (editedTodos: TodoType, id: string) => {
+
+    if (!editedTodos) {
+      return message.error("Todo not found in the database!");
+    }
+
+    const payloadBody = {
+      id: editedTodos.id,
+      title: editedTodos.title,
+      description: editedTodos.description,
+      date: editedTodos?.date!,
+    };
+    setEditLoading(true);
+    dispatch(EditTodoThunk({ body: payloadBody, id: id }))
+      .then((data) => {
+        if (data.payload) {
+          filterTodos();
+          setEditedTodo([]);
+          setModalOpen(false);
+          setEditLoading(false);
+        }
+      })
+      .catch((error) => {
+        setEditLoading(false);
+        message.error("Failed to edit todo:", error);
+      });
+  };
+
   const handlePageChange = (pageNumber: number, pageSize: number) => {
     setfilteredTodosObject((prevObj) => ({
       ...prevObj,
@@ -214,21 +218,17 @@ export default function TodoTable() {
   };
   useEffect(() => {
     filterTodos();
-  }, [filteredTodosObject, todos.total_count]);
+  }, [filteredTodosObject]);
   return (
     <>
       <>
-        {/* <EditTodoModal
+        <EditTodoModal
           modalOpen={modalOpen}
           setModalOpen={setModalOpen}
           selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
-          editedTodos={editedTodos}
-          setEditedTodo={setEditedTodo}
-          loading={loading}
+          loading={editLoading}
           handleEditTodo={handleEditTodo}
-        
-        /> */}
+        />
       </>
       <div className="content">
         <Row align={"middle"}>

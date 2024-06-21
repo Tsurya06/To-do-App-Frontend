@@ -98,7 +98,12 @@ export const TodoApp: React.FC = () => {
               format={"DD-MM-YYYY"}
               value={todoObject.date}
               onChange={(date) => {
-                setTodoObject({ ...todoObject, date: date });
+                setTodoObject(prevObj=>{
+                  return {
+                    ...prevObj,
+                    date:date,
+                  }
+                });
               }}
               style={{
                 width: "100%",
