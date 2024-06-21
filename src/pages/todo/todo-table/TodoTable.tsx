@@ -68,7 +68,11 @@ export default function TodoTable() {
       render: (record: TodoType) => {
         return (
           <>
-            <Input value={record.title} readOnly />
+            <Row justify={"center"}>
+              <Col>
+                {record.title}
+              </Col>
+            </Row>
           </>
         );
       },
@@ -80,7 +84,11 @@ export default function TodoTable() {
       render: (record: TodoType) => {
         return (
           <>
-            <Input value={record.description} readOnly />
+            <Row justify={"center"}>
+              <Col>
+                {record.description}
+              </Col>
+            </Row>
           </>
         );
       },
@@ -92,7 +100,11 @@ export default function TodoTable() {
       render: (record: TodoType) => {
         return (
           <>
-            <Input value={record.date} readOnly />
+            <Row justify={"center"}>
+              <Col>
+                {record.date? record.date : "No date found"}
+              </Col>
+            </Row>
           </>
         );
       },
