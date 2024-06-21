@@ -6,11 +6,6 @@ import {
   Input,
   message,
   Pagination,
-  Dropdown,
-  MenuProps,
-  Modal,
-  Divider,
-  DatePicker,
 } from "antd";
 import {
   RootState,
@@ -26,10 +21,8 @@ import {
 } from "../../../store/features/todo/TodoThunk";
 import { useEffect, useState } from "react";
 import {
-  CheckOutlined,
   DeleteOutlined,
   EditOutlined,
-  CaretDownOutlined,
 } from "@ant-design/icons";
 import { useSearchParams } from "react-router-dom";
 import EditTodoModal from "./modals/EditTodoModal";
@@ -45,7 +38,6 @@ export default function TodoTable() {
   const todos = useAppSelector((state: RootState) => state.todosReducer);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [editLoading, setEditLoading] = useState<boolean>(false);
-  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const [editedTodos, setEditedTodo] = useState<TodoType[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedTodo, setSelectedTodo] = useState<TodoType>();
@@ -142,13 +134,11 @@ export default function TodoTable() {
     },
   ];
   const handleDeleteRow = (id: string) => {
-    setDeleteLoading(true);
     setDeleteLoadingId(id);
     dispatch(DeleteTodoByIdThunk({ id: id }))
       .then((data) => {
         if (data.payload) {
           filterTodos();
-          setDeleteLoading(false);
           setDeleteLoadingId(null);
         }
       })
