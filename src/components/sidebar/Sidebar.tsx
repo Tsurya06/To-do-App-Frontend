@@ -39,7 +39,7 @@ export default function Sidebar() {
     getItem(
       <p
         onClick={() => {
-          navigate("/dashboard");
+          navigate("/all-todos");
         }}
       >
         Dashboard
@@ -49,14 +49,14 @@ export default function Sidebar() {
       <CarryOutOutlined />,
       [
         getItem("Add Todos", "add-todos", <CarryOutOutlined />),
-        getItem("All Todos", "dashboard", <OrderedListOutlined />),
+        getItem("All Todos", "all-todos", <OrderedListOutlined />),
       ]
     ),
   ];
   const handleMenuClick = (e: any) => {
     switch (e.key) {
-      case "dashboard":
-        navigate("/dashboard");
+      case "all-todos":
+        navigate("/all-todos");
         break;
       case "add-todos":
         navigate("/add-todos");
@@ -87,7 +87,7 @@ export default function Sidebar() {
           width="15vw"
           collapsed={collapsed}
           trigger={null}
-          style={{ backgroundColor: "white" }}
+          style={{ backgroundColor: "ButtonHighlight" }}
         >
           <Menu
             theme="light"
@@ -104,12 +104,12 @@ export default function Sidebar() {
             <Row
               justify={"center"}
               align={"bottom"}
-              style={{ backgroundColor: "White" }}
+              style={{ backgroundColor: "ButtonHighlight" }}
             >
               {collapsed ? (
                 <MenuFoldOutlined style={{ fontSize: "20px" }} />
               ) : (
-                <MenuUnfoldOutlined style={{ fontSize: "20px" }} />
+                <MenuUnfoldOutlined style={{ fontSize: "30px" }} />
               )}
             </Row>
           </div>

@@ -8,7 +8,7 @@ import { useAppDispatch } from "../../store/store";
 import { TodoType } from "../../types/apiResponseType";
 import dayjs from "dayjs";
 
-export const TodoApp: React.FC = () => {
+export const AddTodo: React.FC = () => {
   const [todoAdded, setTodoAdded] = useState(false);
   const inititalTodoObject = {
     title: "",
