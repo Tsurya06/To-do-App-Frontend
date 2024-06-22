@@ -107,9 +107,9 @@ export default function Sidebar() {
               style={{ backgroundColor: "ButtonHighlight" }}
             >
               {collapsed ? (
-                <MenuFoldOutlined style={{ fontSize: "20px" }} />
+                <MenuFoldOutlined style={{ fontSize: "25px" }} />
               ) : (
-                <MenuUnfoldOutlined style={{ fontSize: "30px" }} />
+                <MenuUnfoldOutlined style={{ fontSize: "25px" }} />
               )}
             </Row>
           </div>
