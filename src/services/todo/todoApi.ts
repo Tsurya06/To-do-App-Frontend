@@ -8,7 +8,6 @@ const DELETE_TODOS_END_POINT='api/v1/todo/delete/'
 const API = axios.create({
     baseURL: devURL,
   });
-
 export const createTodo = async (req:ReqType)=>{
     const token = Cookies.get('userDetail');
     try{
@@ -44,16 +43,16 @@ export const getTodoList = async (req:ReqType) => {
     try {
         const url = `${ADD_TODOS_END_POINT}/get-todos`;
         const config = {
-            params: req.params,
             headers: {
                 Authorization: `Bearer ${token ? JSON.parse(token).access : ''}`,
             },
+            params: req.params ,
         };
         const resp = await API.get(url, config);
         return resp.data;
     } catch (error) {
-        Cookies.remove('userDetail');
-        window.location.reload();
+        // Cookies.remove('userDetail');
+        // window.location.reload();
         throw error;
     }
 }

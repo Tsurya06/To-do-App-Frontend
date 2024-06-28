@@ -8,7 +8,7 @@ import { useAppDispatch } from "../../store/store";
 import { TodoType } from "../../types/apiResponseType";
 import dayjs from "dayjs";
 
-export const TodoApp: React.FC = () => {
+export const AddTodo: React.FC = () => {
   const [todoAdded, setTodoAdded] = useState(false);
   const inititalTodoObject = {
     title: "",
@@ -98,7 +98,12 @@ export const TodoApp: React.FC = () => {
               format={"DD-MM-YYYY"}
               value={todoObject.date}
               onChange={(date) => {
-                setTodoObject({ ...todoObject, date: date });
+                setTodoObject(prevObj=>{
+                  return {
+                    ...prevObj,
+                    date:date,
+                  }
+                });
               }}
               style={{
                 width: "100%",
@@ -122,7 +127,7 @@ export const TodoApp: React.FC = () => {
             />
           </Col>
         </Row>
-        <Row justify={"center"} style={{ width: "100%", margin: "1rem", marginTop:'1rem' }}>
+        <Row justify={"center"} style={{ width: "100%", marginBottom: "1rem"}}>
           <Col>
             <Button
               loading={loading}
