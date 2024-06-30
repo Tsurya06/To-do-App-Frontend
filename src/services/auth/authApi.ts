@@ -83,6 +83,11 @@ axios.interceptors.response.use(
         originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         return axios(originalRequest);
       }
+    } else if (error.response.status === 401 && originalRequest._retry) {
+      // If response is a 401 and it's a retry, remove userDetail cookie and reload the page
+      Cookies.remove("userDetail");
+      window.location.reload();
+      
     }
     return Promise.reject(error);
   }

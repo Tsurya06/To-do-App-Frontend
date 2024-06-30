@@ -151,16 +151,16 @@ export default function TodoTable() {
   ];
   const handleDeleteRow = (id: string) => {
     setDeleteLoadingId(id);
+    setEditLoading(true);
     dispatch(DeleteTodoByIdThunk({ id: id }))
       .then((data) => {
-        if (data.payload) {
+        console.log(data);
+        if (data.payload.success) {
           filterTodos();
           setDeleteLoadingId(null);
           setDeletePromptModalOpen(false);
         }
-      })
-      .catch((error) => {
-        message.error("Failed to delete todo:", error);
+        setEditLoading(false);
       })
   };
 
@@ -179,12 +179,12 @@ export default function TodoTable() {
     setEditLoading(true);
     dispatch(EditTodoThunk({ body: payloadBody, id: id }))
       .then((data) => {
-        if (data.payload) {
+        if (data.payload.success) {
           filterTodos();
           setEditedTodo([]);
           setModalOpen(false);
-          setEditLoading(false);
         }
+        setEditLoading(false);
       })
       .catch((error) => {
         setEditLoading(false);
@@ -241,7 +241,8 @@ export default function TodoTable() {
           open={deletePromptModalOpen}
           footer={false}
           onCancel={() => setDeletePromptModalOpen(false)}
-          maskClosable={false}
+          closable={!editLoading}
+          maskClosable={!editLoading}
           confirmLoading={true}
           centered
           width={380}
@@ -251,8 +252,10 @@ export default function TodoTable() {
               <p>Are you sure you want to delete this todo?</p>
             </Col>
           </Row>
-          <Row justify="end" gutter={[36,36]}>
-            <Button style={{backgroundColor:'white', color:'black'}} onClick={() => setDeletePromptModalOpen(false)}>Cancel</Button>
+          <Row justify="end" gutter={[16,36]}>
+            <Col span={6}>
+              <Button style={{backgroundColor:'white', color:'black'}} onClick={() => setDeletePromptModalOpen(false)}>Cancel</Button>
+            </Col>
             <Button
               type="primary"
               danger
@@ -261,7 +264,7 @@ export default function TodoTable() {
                 color: "white",
               }}
               onClick={() => handleDeleteRow(selectedTodo?.id!)}
-              loading={deleteLoadingId === selectedTodo?.id}
+              loading={editLoading}
             >
               Delete
             </Button>
