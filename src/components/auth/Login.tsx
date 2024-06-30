@@ -88,13 +88,7 @@ export default function Login() {
                     style={{ boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)" }}
                     onClick={handleGetStartedClick}
                   >
-                    Get Started
-                  </Button>
-                </Col>
-                <Col span={1}></Col>
-                <Col span={3} xs={24} sm={24} md={18} lg={3} xl={3}>
-                  <Button type="text" onClick={handleGetStartedClick}>
-                    Learn More <ExportOutlined />
+                    Get Started <ExportOutlined />
                   </Button>
                 </Col>
               </Row>
@@ -115,10 +109,8 @@ export default function Login() {
                 className="login-card"
                 style={{
                   borderRadius: "2rem",
-                  width: "60%",
-                  height: "61%",
-                  overflowY: "auto",
-                  overflowX: "hidden",
+                  width: "50%",
+                  height: "440px",
                 }}
               >
                 <Row justify={"center"}>

@@ -63,7 +63,7 @@ export default function EditTodoModal({
             <Col>
             <DatePicker
               allowClear={false}
-              value={dayjs(editTodo?.date, "DD-MM-YYYY")}
+              value={dayjs(editTodo?.date, "DD-MM-YYYY").isValid() ? dayjs(editTodo?.date, "DD-MM-YYYY") : undefined}
               format={"DD-MM-YYYY"}
               placeholder="Date"
               onChange={(date) => {
