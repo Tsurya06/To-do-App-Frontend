@@ -49,7 +49,6 @@ export default function TodoTable() {
       pageSize: parseInt(searchParams.get("pageSize") ?? "10"),
       currentPage: parseInt(searchParams.get("currentPage") ?? "1"),
     });
-    const [deleteLoadingId, setDeleteLoadingId] = useState<null | string>(null);
 
   const columns: ColumnsType<TodoType> = [
     {
@@ -132,7 +131,6 @@ export default function TodoTable() {
           </Col>
           <Col>
             <Button
-              // loading={deleteLoadingId===record.id }
               onClick={() =>{
                 setSelectedTodo(record)
                 setDeletePromptModalOpen(true);
@@ -150,14 +148,12 @@ export default function TodoTable() {
     },
   ];
   const handleDeleteRow = (id: string) => {
-    setDeleteLoadingId(id);
     setEditLoading(true);
     dispatch(DeleteTodoByIdThunk({ id: id }))
       .then((data) => {
         console.log(data);
         if (data.payload.success) {
           filterTodos();
-          setDeleteLoadingId(null);
           setDeletePromptModalOpen(false);
         }
         setEditLoading(false);
@@ -319,7 +315,6 @@ export default function TodoTable() {
               rowKey="id"
               bordered={true}
               pagination={false}
-              // size="middle"
               sticky
               //   style={{ backgroundColor: darkMode ? '#333' : 'white', color: darkMode ? 'white' : 'black' }}
             />
