@@ -51,8 +51,8 @@ export const getTodoList = async (req:ReqType) => {
         const resp = await API.get(url, config);
         return resp.data;
     } catch (error) {
-        // Cookies.remove('userDetail');
-        // window.location.reload();
+        Cookies.remove('userDetail');
+        window.location.reload();
         throw error;
     }
 }

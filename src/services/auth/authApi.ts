@@ -7,6 +7,7 @@ const devURL = import.meta.env.VITE_BASE_URL;
 const LOGIN_ENDPOINT = "auth/login";
 const SIGNUP_ENDPOINT = "auth/signup";
 const LOGOUT_ENDPOINT = "auth/logout";
+const REFRESH_TOKEN_ENDPOINT = "auth/refresh";
 
 export const login = async (req: ReqType) => {
   try {
@@ -52,7 +53,7 @@ export const refreshToken = async () => {
 
   const userData = JSON.parse(Cookies.get("userDetail")!);
 
-  const url = `${devURL}auth/refresh`;
+  const url = `${devURL}${REFRESH_TOKEN_ENDPOINT}`;
   const response = await axios.post(url, {
     refreshToken: userData.refresh,
   });
@@ -84,7 +85,6 @@ axios.interceptors.response.use(
         return axios(originalRequest);
       }
     } else if (error.response.status === 401 && originalRequest._retry) {
-      // If response is a 401 and it's a retry, remove userDetail cookie and reload the page
       Cookies.remove("userDetail");
       window.location.reload();
       
