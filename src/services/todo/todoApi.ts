@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import axios from "axios";
 import { ReqType } from "../../types/apiResponseType";
+import { message } from "antd";
 
 const devURL = import.meta.env.VITE_BASE_URL;
 const ADD_TODOS_END_POINT='api/v1/todo'
@@ -50,9 +51,10 @@ export const getTodoList = async (req:ReqType) => {
         };
         const resp = await API.get(url, config);
         return resp.data;
-    } catch (error) {
+    } catch (error:any) {
         Cookies.remove('userDetail');
         window.location.reload();
+        message.error(error.message);
         throw error;
     }
 }
@@ -66,8 +68,8 @@ export const deleteTodoById = async (req:ReqType)=>{
             },
         });
         return resp;
-    }catch(error){
-        console.error(error);
+    }catch(error: any){
+        message.error(error.message);
         throw error;
     }
 }

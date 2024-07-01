@@ -151,13 +151,13 @@ export default function TodoTable() {
     setEditLoading(true);
     dispatch(DeleteTodoByIdThunk({ id: id }))
       .then((data) => {
-        console.log(data);
         if (data.payload.success) {
           filterTodos();
           setDeletePromptModalOpen(false);
         }
+      }).finally(() => {
         setEditLoading(false);
-      })
+      });
   };
 
   const handleEditTodo = (editedTodos: TodoType, id: string) => {

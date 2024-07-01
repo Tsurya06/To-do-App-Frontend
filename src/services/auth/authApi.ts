@@ -100,14 +100,10 @@ export function setupInterceptors(store: Store<RootState>) {
         } catch (refreshError) {
           // If token refresh fails, dispatch logout action
           store.dispatch(logout());
-          Cookies.remove("userDetail");
-          window.location.reload();
         }
       } else if (error.response.status === 401 && originalRequest._retry) {
         // If a retried request fails with 401, dispatch logout action
         store.dispatch(logout());
-        Cookies.remove("userDetail");
-        window.location.reload();
       }
       return Promise.reject(error);
     }
