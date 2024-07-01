@@ -86,7 +86,7 @@ export default function TodoTable() {
           <>
             <Row justify={"center"}>
               <Col>
-                {record.description}
+                {record?.description!.length > 50 ? record.description?.slice(0, 50) + "..." : record.description}
               </Col>
             </Row>
           </>
