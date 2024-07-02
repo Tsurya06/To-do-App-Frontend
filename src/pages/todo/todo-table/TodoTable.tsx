@@ -5,6 +5,7 @@ import {
   Button,
   message,
   Pagination,
+  Modal,
 } from "antd";
 import {
   RootState,
@@ -36,6 +37,7 @@ export type SearchParamsType = {
 export default function TodoTable() {
   const todos = useAppSelector((state: RootState) => state.todosReducer);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [deletePromptModalOpen, setDeletePromptModalOpen] = useState<boolean>(false);
   const [editLoading, setEditLoading] = useState<boolean>(false);
   const [editedTodos, setEditedTodo] = useState<TodoType[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -47,7 +49,6 @@ export default function TodoTable() {
       pageSize: parseInt(searchParams.get("pageSize") ?? "10"),
       currentPage: parseInt(searchParams.get("currentPage") ?? "1"),
     });
-    const [deleteLoadingId, setDeleteLoadingId] = useState<null | string>(null);
 
   const columns: ColumnsType<TodoType> = [
     {
@@ -85,7 +86,7 @@ export default function TodoTable() {
           <>
             <Row justify={"center"}>
               <Col>
-                {record.description}
+                {record?.description!.length > 50 ? record.description?.slice(0, 50) + "..." : record.description}
               </Col>
             </Row>
           </>
@@ -130,8 +131,10 @@ export default function TodoTable() {
           </Col>
           <Col>
             <Button
-              loading={deleteLoadingId===record.id }
-              onClick={() => handleDeleteRow(record.id!)}
+              onClick={() =>{
+                setSelectedTodo(record)
+                setDeletePromptModalOpen(true);
+              }}
               icon={<DeleteOutlined />}
               style={{
                 backgroundColor: "white",
@@ -145,17 +148,16 @@ export default function TodoTable() {
     },
   ];
   const handleDeleteRow = (id: string) => {
-    setDeleteLoadingId(id);
+    setEditLoading(true);
     dispatch(DeleteTodoByIdThunk({ id: id }))
       .then((data) => {
-        if (data.payload) {
+        if (data.payload.success) {
           filterTodos();
-          setDeleteLoadingId(null);
+          setDeletePromptModalOpen(false);
         }
-      })
-      .catch((error) => {
-        message.error("Failed to delete todo:", error);
-      })
+      }).finally(() => {
+        setEditLoading(false);
+      });
   };
 
   const handleEditTodo = (editedTodos: TodoType, id: string) => {
@@ -173,12 +175,12 @@ export default function TodoTable() {
     setEditLoading(true);
     dispatch(EditTodoThunk({ body: payloadBody, id: id }))
       .then((data) => {
-        if (data.payload) {
+        if (data.payload.success) {
           filterTodos();
           setEditedTodo([]);
           setModalOpen(false);
-          setEditLoading(false);
         }
+        setEditLoading(false);
       })
       .catch((error) => {
         setEditLoading(false);
@@ -230,14 +232,48 @@ export default function TodoTable() {
           loading={editLoading}
           handleEditTodo={handleEditTodo}
         />
+        <Modal
+          title="Delete Todo"
+          open={deletePromptModalOpen}
+          footer={false}
+          onCancel={() => setDeletePromptModalOpen(false)}
+          closable={!editLoading}
+          maskClosable={!editLoading}
+          confirmLoading={true}
+          centered
+          width={380}
+        >
+          <Row>
+            <Col>
+              <p>Are you sure you want to delete this todo?</p>
+            </Col>
+          </Row>
+          <Row justify="end" gutter={[16,36]}>
+            <Col span={6}>
+              <Button style={{backgroundColor:'white', color:'black'}} onClick={() => setDeletePromptModalOpen(false)}>Cancel</Button>
+            </Col>
+            <Button
+              type="primary"
+              danger
+              style={{
+                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+                color: "white",
+              }}
+              onClick={() => handleDeleteRow(selectedTodo?.id!)}
+              loading={editLoading}
+            >
+              Delete
+            </Button>
+          </Row>
+        </Modal>
       </>
       <div className="content">
-        <Row align={"middle"}>
+        <Row align="middle">
           <Col xs={{ span: 8 }}>
             <h3>Todo List ({todos.total_count})</h3>
           </Col>
           <Col xs={{ span: 16 }}>
-            <Row justify={"end"} align={"middle"}>
+            <Row justify="end" align="middle">
               <Pagination
                 showSizeChanger
                 current={filteredTodosObject.currentPage}
@@ -279,7 +315,6 @@ export default function TodoTable() {
               rowKey="id"
               bordered={true}
               pagination={false}
-              // size="middle"
               sticky
               //   style={{ backgroundColor: darkMode ? '#333' : 'white', color: darkMode ? 'white' : 'black' }}
             />

@@ -55,6 +55,7 @@ export const authSlice = createSlice({
       state.error = null;
       state.loading=false;
       Cookies.remove('userDetail');
+      window.location.reload();
       message.success('You have been logged out successfully!');
     },
   },

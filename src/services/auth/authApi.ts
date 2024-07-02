@@ -2,12 +2,18 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { ReqType } from "../../types/apiResponseType";
 import { message } from "antd";
+import { RootState, store } from "../../store/store";
+import { logout } from "../../store/features/auth/authSlice";
+import { Store } from "@reduxjs/toolkit";
 
 const devURL = import.meta.env.VITE_BASE_URL;
 const LOGIN_ENDPOINT = "auth/login";
 const SIGNUP_ENDPOINT = "auth/signup";
 const LOGOUT_ENDPOINT = "auth/logout";
-
+const REFRESH_TOKEN_ENDPOINT = "auth/refresh";
+const API = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL,
+});
 export const login = async (req: ReqType) => {
   try {
     const url = `${devURL}${LOGIN_ENDPOINT}`;
@@ -52,7 +58,7 @@ export const refreshToken = async () => {
 
   const userData = JSON.parse(Cookies.get("userDetail")!);
 
-  const url = `${devURL}auth/refresh`;
+  const url = `${devURL}${REFRESH_TOKEN_ENDPOINT}`;
   const response = await axios.post(url, {
     refreshToken: userData.refresh,
   });
@@ -66,24 +72,43 @@ export const refreshToken = async () => {
   throw new Error("Failed to refresh token");
 };
 
-// Axios response interceptor
-axios.interceptors.response.use(
-  (response) => response, // If response is successful, just return it
-  async (error) => {
-    const originalRequest = error.config;
-    // If response is a 401 and it's not a try to refresh token, try to refresh token
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // Mark this request as being retried
-
-      // Try to refresh token
-      const newToken = await refreshToken();
-
-      // If refresh is successful, retry original request with new token
-      if (newToken) {
-        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-        return axios(originalRequest);
+// Function to initialize interceptors with access to the store
+export function setupInterceptors(store: Store<RootState>) {
+  API.interceptors.request.use(
+    (config) => {
+      const token = Cookies.get("userDetail");
+      if (token) {
+        config.headers.Authorization = `Bearer ${JSON.parse(token).access}`;
       }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
+
+  API.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      if (error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        try {
+          const newToken = await refreshToken();
+          if (newToken) {
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            return API(originalRequest);
+          }
+        } catch (refreshError) {
+          // If token refresh fails, dispatch logout action
+          store.dispatch(logout());
+        }
+      } else if (error.response.status === 401 && originalRequest._retry) {
+        // If a retried request fails with 401, dispatch logout action
+        store.dispatch(logout());
+      }
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
-);
+  );
+}
+
+// Call setupInterceptors in your application's entry point, e.g., main.tsx
+setupInterceptors(store);
