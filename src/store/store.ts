@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { todoSlice } from './features/todo/todoSlice';
 import { authSlice } from './features/auth/authSlice';
+import { jwtMiddleware } from './middleware/jwtMiddleware';
 
 export const store = configureStore({
     reducer: {
         todosReducer:todoSlice.reducer,
         authReducer: authSlice.reducer,
-    }
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(jwtMiddleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -1,12 +1,4 @@
-import {
-  Row,
-  Col,
-  Table,
-  Button,
-  message,
-  Pagination,
-  Modal,
-} from "antd";
+import { Row, Col, Table, Button, message, Pagination, Modal } from "antd";
 import {
   RootState,
   useAppDispatch,
@@ -20,10 +12,7 @@ import {
   GetTodoList,
 } from "../../../store/features/todo/TodoThunk";
 import { useEffect, useState } from "react";
-import {
-  DeleteOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useSearchParams } from "react-router-dom";
 import EditTodoModal from "./modals/EditTodoModal";
 export type FilterTodoObjectType = {
@@ -37,13 +26,14 @@ export type SearchParamsType = {
 export default function TodoTable() {
   const todos = useAppSelector((state: RootState) => state.todosReducer);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [deletePromptModalOpen, setDeletePromptModalOpen] = useState<boolean>(false);
+  const [deletePromptModalOpen, setDeletePromptModalOpen] =
+    useState<boolean>(false);
   const [editLoading, setEditLoading] = useState<boolean>(false);
   const [editedTodos, setEditedTodo] = useState<TodoType[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedTodo, setSelectedTodo] = useState<TodoType>();
   const dispatch = useAppDispatch();
-  
+
   const [filteredTodosObject, setfilteredTodosObject] =
     useState<FilterTodoObjectType>({
       pageSize: parseInt(searchParams.get("pageSize") ?? "10"),
@@ -69,9 +59,7 @@ export default function TodoTable() {
         return (
           <>
             <Row justify={"center"}>
-              <Col>
-                {record.title}
-              </Col>
+              <Col>{record.title}</Col>
             </Row>
           </>
         );
@@ -85,9 +73,7 @@ export default function TodoTable() {
         return (
           <>
             <Row justify={"center"}>
-              <Col>
-                {record.description}
-              </Col>
+              <Col>{record.description}</Col>
             </Row>
           </>
         );
@@ -101,9 +87,7 @@ export default function TodoTable() {
         return (
           <>
             <Row justify={"center"}>
-              <Col>
-                {record.date? record.date : "No date found"}
-              </Col>
+              <Col>{record.date ? record.date : "No date found"}</Col>
             </Row>
           </>
         );
@@ -131,8 +115,8 @@ export default function TodoTable() {
           </Col>
           <Col>
             <Button
-              onClick={() =>{
-                setSelectedTodo(record)
+              onClick={() => {
+                setSelectedTodo(record);
                 setDeletePromptModalOpen(true);
               }}
               icon={<DeleteOutlined />}
@@ -149,19 +133,17 @@ export default function TodoTable() {
   ];
   const handleDeleteRow = (id: string) => {
     setEditLoading(true);
-    dispatch(DeleteTodoByIdThunk({ id: id }))
-      .then((data) => {
-        console.log(data);
-        if (data.payload.success) {
-          filterTodos();
-          setDeletePromptModalOpen(false);
-        }
-        setEditLoading(false);
-      })
+    dispatch(DeleteTodoByIdThunk({ id: id })).then((data) => {
+      console.log(data);
+      if (data.payload.success) {
+        filterTodos();
+        setDeletePromptModalOpen(false);
+      }
+      setEditLoading(false);
+    });
   };
 
   const handleEditTodo = (editedTodos: TodoType, id: string) => {
-
     if (!editedTodos) {
       return message.error("Todo not found in the database!");
     }
@@ -195,6 +177,7 @@ export default function TodoTable() {
       pageSize,
     }));
   };
+  
   const filterTodos = () => {
     let searchParams: SearchParamsType = {
       pageSize: `${filteredTodosObject.pageSize}`,
@@ -210,18 +193,14 @@ export default function TodoTable() {
         },
       })
     )
-      .then((data) => {
-        if (data.payload) {
-          setEditedTodo(data.payload.data);
-        }
-      })
-      .catch((error) => {
-        message.error("Failed to fetch todo list:", error);
-      });
   };
+
   useEffect(() => {
     filterTodos();
   }, [filteredTodosObject]);
+  useEffect(() => {
+      setEditedTodo(todos.todos);
+  }, [todos.todos]);
   return (
     <>
       <>
@@ -248,9 +227,14 @@ export default function TodoTable() {
               <p>Are you sure you want to delete this todo?</p>
             </Col>
           </Row>
-          <Row justify="end" gutter={[16,36]}>
+          <Row justify="end" gutter={[16, 36]}>
             <Col span={6}>
-              <Button style={{backgroundColor:'white', color:'black'}} onClick={() => setDeletePromptModalOpen(false)}>Cancel</Button>
+              <Button
+                style={{ backgroundColor: "white", color: "black" }}
+                onClick={() => setDeletePromptModalOpen(false)}
+              >
+                Cancel
+              </Button>
             </Col>
             <Button
               type="primary"
