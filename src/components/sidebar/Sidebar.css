@@ -1,29 +1,23 @@
 .custom-sider {
   height: calc(100vh - 2.5rem) !important; 
-  /* border: 2px solid green; */
+  background-color: #f7f7f7;
+  padding: 10px;
+  /* border: 1px solid red; */
+
 }
 .custom-trigger {
     height: 30px;
-    width: 100%;
+    width: 85%;
     position: absolute;
     bottom: 1rem;
     cursor: pointer;
-    border-radius: 2px;
     align-content: end;
-}
-
-.custome-side-menu {
-    background-color: rgb(236, 236, 236);
-    border-radius: 5px;
-}
-.custome-side-menu {
-  background-color: #eeeeee !important;
 }
 
 .content-outer-div {
   height: calc(100vh - 2.5rem);
   width: 100%;
   overflow-y: scroll;
-  /* border: 2px solid red; */
+  /* border: 1px solid red; */
 
 }

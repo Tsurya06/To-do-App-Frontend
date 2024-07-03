@@ -7,6 +7,7 @@ import {
   MenuUnfoldOutlined,
   CarryOutOutlined,
   OrderedListOutlined,
+  ScheduleOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
@@ -46,7 +47,7 @@ export default function Sidebar() {
       </p>,
       "dashboard",
 
-      <CarryOutOutlined />,
+      <ScheduleOutlined />,
       [
         getItem("Add Todos", "add-todos", <CarryOutOutlined />),
         getItem("All Todos", "all-todos", <OrderedListOutlined />),
@@ -95,7 +96,7 @@ export default function Sidebar() {
             selectedKeys={[currentKey]}
             mode="inline"
             items={items}
-            style={{ backgroundColor: "white", color: "black" }}
+            style={{ backgroundColor: "white", color: "black" ,borderRadius:'5px' , height: 'calc(100vh - 3.5rem - 2rem)'}}
           />
           <div
             className="custom-trigger"
@@ -120,6 +121,7 @@ export default function Sidebar() {
             style={{
               margin: "1rem 1rem",
               boxShadow: " 0px 2px 12px 0px rgba(0, 0, 0, 0.06)",
+              borderRadius:'5px'
             }}
           >
             {userState.loading ? (
@@ -130,6 +132,7 @@ export default function Sidebar() {
                   padding: "1rem 1rem",
                   minHeight: "calc(100vh - 3.5rem - 2rem)",
                   background: colorBgContainer,
+                  borderRadius: "5px",
                 }}
               >
                 <Main>
