@@ -1,4 +1,4 @@
-import { ConfigProvider, Layout, Menu, MenuProps, Row, theme } from "antd";
+import { Button, ConfigProvider, Layout, Menu, MenuProps, Row, Tooltip, theme } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import React, { useState } from "react";
@@ -7,8 +7,9 @@ import {
   MenuUnfoldOutlined,
   CarryOutOutlined,
   OrderedListOutlined,
+  PlusOutlined,
 } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 import Main from "../layout/Main";
 import Router from "../../routes/Router";
@@ -30,6 +31,7 @@ function getItem(
 export default function Sidebar() {
   const [currentKey] = useState<string>("dashboard");
   const navigate = useNavigate();
+  const location = useLocation();
   const userState = useAppSelector((state) => state.authReducer);
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -135,6 +137,22 @@ export default function Sidebar() {
                 <Main>
                   <Router />
                 </Main>
+                
+                {location.pathname !== '/add-todos' && (
+                  <Tooltip title="Add Todos" placement="topLeft">
+                    <Button
+                      type="primary"
+                      shape="circle"
+                      icon={<PlusOutlined />}
+                      size="large"
+                      className="fab"
+                      style={{ width: "50px", height: "50px" ,color:'inherit'}}
+                      onClick={() => {
+                        navigate("/add-todos");
+                      }}
+                    />
+                  </Tooltip>
+                )}
               </div>
             )}
           </Content>
