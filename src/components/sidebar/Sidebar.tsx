@@ -97,17 +97,18 @@ export default function Sidebar() {
             onClick={handleMenuClick}
             selectedKeys={[currentKey]}
             mode="inline"
+            className="custom-menu"
             items={items}
-            style={{ backgroundColor: "white", color: "black" ,borderRadius:'5px' , height: 'calc(100vh - 3.5rem - 2rem)'}}
           />
-          <div
+          <Row
+            justify={"center"}
             className="custom-trigger"
             onClick={() => setCollapsed(!collapsed)}
           >
             <Row
               justify={"center"}
               align={"bottom"}
-              style={{ backgroundColor: "ButtonHighlight" }}
+              style={{backgroundColor: "white", height: "100%"}}
             >
               {collapsed ? (
                 <MenuFoldOutlined style={{ fontSize: "25px" }} />
@@ -115,7 +116,7 @@ export default function Sidebar() {
                 <MenuUnfoldOutlined style={{ fontSize: "25px" }} />
               )}
             </Row>
-          </div>
+          </Row>
         </Sider>
 
         <div className="content-outer-div">
