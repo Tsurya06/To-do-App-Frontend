@@ -55,7 +55,7 @@ export default function Navbar() {
         <Row justify={"start"} style={{ width: "100%" }}>
           <Col xs={13} style={{ textAlign: "end" }}>
             <img
-              src="public/to-do-list-svgrepo-com.svg"
+              src="/to-do-list-svgrepo-com.svg"
               style={{ height: "36px", width: "100" }}
             />
           </Col>
