@@ -4,7 +4,6 @@ import {createTodo, deleteTodoById, editTodo, getTodoList} from "../../../servic
 import { ReqType } from "../../../types/apiResponseType";
 
 
-
 export const CreateTodoThunk = createAsyncThunk(
     "todo/AddTodo",
     async(req: ReqType ,{ dispatch, rejectWithValue } )=>{

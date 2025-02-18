@@ -6,6 +6,7 @@ import {
   message,
   Pagination,
   Modal,
+  DatePicker,
 } from "antd";
 import {
   RootState,
@@ -29,10 +30,12 @@ import EditTodoModal from "./modals/EditTodoModal";
 export type FilterTodoObjectType = {
   pageSize: number;
   currentPage: number;
+  date?: string | undefined;
 };
 export type SearchParamsType = {
   pageSize: string;
   currentPage: string;
+  date?: string | undefined;
 };
 export default function TodoTable() {
   const todos = useAppSelector((state: RootState) => state.todosReducer);
@@ -48,6 +51,7 @@ export default function TodoTable() {
     useState<FilterTodoObjectType>({
       pageSize: parseInt(searchParams.get("pageSize") ?? "10"),
       currentPage: parseInt(searchParams.get("currentPage") ?? "1"),
+      date: searchParams.get("date") ?? undefined,
     });
 
   const columns: ColumnsType<TodoType> = [
@@ -200,13 +204,17 @@ export default function TodoTable() {
       pageSize: `${filteredTodosObject.pageSize}`,
       currentPage: `${filteredTodosObject.currentPage}`,
     };
+    if (filteredTodosObject.date) {
+      searchParams.date = filteredTodosObject.date;
+    }
     setSearchParams(searchParams);
 
     dispatch(
       GetTodoList({
         params: {
           pageSize: filteredTodosObject.pageSize,
-          pageNumber: filteredTodosObject.currentPage - 1,
+          pageNumber: filteredTodosObject.currentPage ,
+          date: filteredTodosObject.date,
         },
       })
     )
@@ -304,6 +312,18 @@ export default function TodoTable() {
               />
             </Row>
           </Col>
+        </Row>
+        <Row justify="end">
+          <DatePicker
+            onChange={(date) => {
+              setfilteredTodosObject((prevObj) => ({
+                ...prevObj,
+                date: date?.format("DD-MM-YYYY"),
+              }));
+            }}
+            placeholder="Select Date"
+            format="DD-MM-YYYY"
+          />
         </Row>
         <Row className="table-content" style={{ marginTop: "1.5rem" }}>
           <Col xs={{ span: 24 }}>
