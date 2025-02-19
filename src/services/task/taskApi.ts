@@ -2,8 +2,8 @@ import { API } from '../api/axiosInstance';
 import { ReqType } from "../../types/apiResponseType";
 import { message } from "antd";
 
-const ADD_TASKS_END_POINT='api/v1/todo'
-const DELETE_TASKS_END_POINT='api/v1/todo/delete/'
+const ADD_TASKS_END_POINT='api/v1/task'
+const DELETE_TASKS_END_POINT='api/v1/task/delete/'
 
 export const createTask = async (req:ReqType)=>{
     try{
@@ -27,7 +27,7 @@ export const editTask = async (req:ReqType)=>{
 }
 export const getTaskList = async (req:ReqType) => {
     try {
-        const url = `${ADD_TASKS_END_POINT}/get-todos`;
+        const url = `${ADD_TASKS_END_POINT}/get-tasks`;
         const resp = await API.get(url, {
             params: req.params
         });
