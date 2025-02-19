@@ -37,29 +37,73 @@ export default function Sidebar() {
   } = theme.useToken();
   const items: MenuItem[] = [
     getItem(
-      <p
-        onClick={() => {
-          navigate("/all-todos");
-        }}
-      >
-        Dashboard
-      </p>,
-      "dashboard",
-
+      "Tasks",
+      "tasks",
       <CarryOutOutlined />,
       [
-        getItem("Add Todos", "add-todos", <CarryOutOutlined />),
-        getItem("All Todos", "all-todos", <OrderedListOutlined />),
+        getItem(
+          "Add Task",
+          "add-task",
+          <CarryOutOutlined />
+        ),
+        getItem(
+          "All Tasks",
+          "all-tasks",
+          <OrderedListOutlined />
+        ),
       ]
+    ),
+    getItem(
+      "Projects",
+      "projects",
+      <CarryOutOutlined />,
+      [
+        getItem(
+          "Add Project",
+          "add-project",
+          <CarryOutOutlined />
+        ),
+        getItem(
+          "All Projects",
+          "all-projects",
+          <OrderedListOutlined />
+        ),
+      ]
+    ),
+    getItem(
+      "Users",
+      "users",
+      <OrderedListOutlined />,
+      [
+        getItem("All Users", "all-users", <OrderedListOutlined />),
+      ]
+    ),
+    getItem(
+      "Notifications",
+      "notifications",
+      <OrderedListOutlined />,
+      []
     ),
   ];
   const handleMenuClick = (e: any) => {
     switch (e.key) {
-      case "all-todos":
-        navigate("/all-todos");
+      case "add-task":
+        navigate("/tasks/add");
         break;
-      case "add-todos":
-        navigate("/add-todos");
+      case "all-tasks":
+        navigate("/tasks/all");
+        break;
+      case "add-project":
+        navigate("/projects/add");
+        break;
+      case "all-projects":
+        navigate("/projects/all");
+        break;
+      case "all-users":
+        navigate("/users/all");
+        break;
+      case "notifications":
+        navigate("/notifications");
         break;
       default:
         navigate("/notfound");
