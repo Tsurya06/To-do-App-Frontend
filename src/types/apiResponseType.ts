@@ -4,13 +4,6 @@ export type ReqType = {
   id?: string | undefined;
 };
 
-// export type TodoType = {
-//   id?: string;
-//   title?: string;
-//   description?: string;
-//   date?: string;
-// };
-
 export type TaskType = {
   id?: string;
   title?: string;

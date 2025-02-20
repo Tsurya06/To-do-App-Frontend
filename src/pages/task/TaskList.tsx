@@ -6,6 +6,7 @@ import { TaskType } from "../../types/apiResponseType";
 import { DeleteTaskByIdThunk, GetTaskList } from "../../store/features/task/TaskThunk";
 import EditTaskModal from "./modals/EditTaskModal";
 import { useSearchParams } from "react-router-dom";
+import { ColumnsType } from "antd/es/table";
 
 const { Option } = Select;
 type FilterTaskObjectType = {
@@ -39,7 +40,7 @@ export default function TaskList() {
   const tasks = useAppSelector((state) => state.taskReducer);
   const users = useAppSelector((state) => state.userReducer.users);
 
-  const columns = [
+  const columns: ColumnsType<TaskType> = [
     {
       title: "Title",
       dataIndex: "title",
@@ -83,8 +84,8 @@ export default function TaskList() {
     },
     {
       title: "Due Date",
-      dataIndex: "dueDate",
-      key: "dueDate",
+      dataIndex: "date",
+      key: "date",
     },
     {
       title: "Actions",

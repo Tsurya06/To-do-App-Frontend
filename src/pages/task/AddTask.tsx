@@ -6,7 +6,7 @@ import { TaskType, UserType } from "../../types/apiResponseType";
 import { CreateTaskThunk } from "../../store/features/task/TaskThunk";
 import { GetUserList } from "../../store/features/user/userThunk";
 import { GetProjectList } from "../../store/features/project/projectThunk";
-
+import dayjs from "dayjs";
 const { Option } = Select;
 
 export const AddTask: React.FC = () => {
@@ -20,7 +20,7 @@ export const AddTask: React.FC = () => {
     description: "",
     status: "To Do",
     priority: "Medium",
-    dueDate: "",
+    date: undefined,
     assigneeId: "",
     projectId: "",
     tags: [],
@@ -42,9 +42,17 @@ export const AddTask: React.FC = () => {
     if (!taskObject.title || !taskObject.description) {
       return message.error("Please fill all required fields!");
     }
-
+    const body = {
+      title: taskObject.title,
+      description: taskObject.description,
+      status: taskObject.status,
+      priority: taskObject.priority,
+      date: taskObject.date,
+      assigneeId: taskObject.assigneeId,
+      projectId: taskObject.projectId,
+    }
     setLoading(true);
-    dispatch(CreateTaskThunk({ body: taskObject }))
+    dispatch(CreateTaskThunk({ body: body }))
       .then((data) => {
         if (data.payload.success) {
           setTaskObject(initialTaskObject);
@@ -72,9 +80,11 @@ export const AddTask: React.FC = () => {
             <Form.Item label="Due Date">
               <DatePicker
                 style={{ width: "100%" }}
+                format={"DD-MM-YYYY"}
+                value={taskObject.date? dayjs(taskObject.date, "DD-MM-YYYY") : null}
                 onChange={(date) => setTaskObject({
                   ...taskObject,
-                  dueDate: date?.format("YYYY-MM-DD"),
+                  date: date?.format("DD-MM-YYYY"),
                 })}
               />
             </Form.Item>

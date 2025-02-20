@@ -24,7 +24,7 @@ export default function EditTaskModal({ open, onClose, task, filterTasks }: Edit
     if (task) {
       form.setFieldsValue({
         ...task,
-        dueDate: task.dueDate ? dayjs(task.dueDate) : null,
+        date: task.date ? dayjs(task.date) : null,
       });
     }
   }, [task, form]);
@@ -33,22 +33,22 @@ export default function EditTaskModal({ open, onClose, task, filterTasks }: Edit
     if (!task?.id) return;
     
     setLoading(true);
-   dispatch(EditTaskThunk({ 
-        id: task.id,
-        body: {
-          ...values,
-          dueDate: values.dueDate ? dayjs(values.dueDate).format("YYYY-MM-DD") : undefined,
-        }
-      }))
-      .then((data) => {
-        if (data.payload.success) {
-          onClose();
-          filterTasks();
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    dispatch(EditTaskThunk({ 
+      id: task.id,
+      body: {
+        ...values,
+        date: values.date ? dayjs(values.date).format("DD-MM-YYYY") : undefined,
+      }
+    }))
+    .then((data) => {
+      if (data.payload.success) {
+        onClose();
+        filterTasks();
+      }
+    })
+    .finally(() => {
+      setLoading(false);
+    });
   };
 
   return (
@@ -111,10 +111,13 @@ export default function EditTaskModal({ open, onClose, task, filterTasks }: Edit
           </Form.Item>
 
           <Form.Item
-            name="dueDate"
+            name="date"
             label="Due Date"
           >
-            <DatePicker style={{ width: "100%" }} />
+            <DatePicker 
+              style={{ width: "100%" }} 
+              format={"DD-MM-YYYY"} 
+            />
           </Form.Item>
 
           <Form.Item

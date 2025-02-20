@@ -48,7 +48,8 @@ export const GetTaskList = createAsyncThunk(
     try{
         dispatch(taskLoadingStart())
         const response = await getTaskList(req);
-        const tasks = response.data;
+        console.log(response);
+        const tasks = response.data.tasks;
         const total_count = response.total_count;
         dispatch(fetchTaskSuccess({tasks: tasks, total_count: total_count}))
         return response;
