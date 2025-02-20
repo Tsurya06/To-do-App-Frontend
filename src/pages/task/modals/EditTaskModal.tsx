@@ -24,7 +24,7 @@ export default function EditTaskModal({ open, onClose, task, filterTasks }: Edit
     if (task) {
       form.setFieldsValue({
         ...task,
-        date: task.date ? dayjs(task.date) : null,
+        dueDate: task.dueDate ? dayjs(task.dueDate,'DD-MM-YYYY') : null,
       });
     }
   }, [task, form]);
@@ -37,7 +37,7 @@ export default function EditTaskModal({ open, onClose, task, filterTasks }: Edit
       id: task.id,
       body: {
         ...values,
-        date: values.date ? dayjs(values.date).format("DD-MM-YYYY") : undefined,
+        dueDate: values.dueDate ? dayjs(values.dueDate).format("DD-MM-YYYY") : undefined,
       }
     }))
     .then((data) => {
@@ -111,7 +111,7 @@ export default function EditTaskModal({ open, onClose, task, filterTasks }: Edit
           </Form.Item>
 
           <Form.Item
-            name="date"
+            name="dueDate"
             label="Due Date"
           >
             <DatePicker 

@@ -84,8 +84,8 @@ export default function TaskList() {
     },
     {
       title: "Due Date",
-      dataIndex: "date",
-      key: "date",
+      dataIndex: "dueDate",
+      key: "dueDate",
     },
     {
       title: "Actions",

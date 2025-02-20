@@ -8,7 +8,6 @@ export type TaskType = {
   id?: string;
   title?: string;
   description?: string;
-  date?: string;
   status?: 'To Do' | 'In Progress' | 'Completed' | 'On Hold';
   priority?: 'High' | 'Medium' | 'Low';
   assigneeId?: string;

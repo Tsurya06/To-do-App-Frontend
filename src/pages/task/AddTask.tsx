@@ -20,7 +20,7 @@ export const AddTask: React.FC = () => {
     description: "",
     status: "To Do",
     priority: "Medium",
-    date: undefined,
+    dueDate: undefined,
     assigneeId: "",
     projectId: "",
     tags: [],
@@ -47,7 +47,7 @@ export const AddTask: React.FC = () => {
       description: taskObject.description,
       status: taskObject.status,
       priority: taskObject.priority,
-      date: taskObject.date,
+      dueDate: taskObject.dueDate,
       assigneeId: taskObject.assigneeId,
       projectId: taskObject.projectId,
     }
@@ -81,10 +81,10 @@ export const AddTask: React.FC = () => {
               <DatePicker
                 style={{ width: "100%" }}
                 format={"DD-MM-YYYY"}
-                value={taskObject.date? dayjs(taskObject.date, "DD-MM-YYYY") : null}
-                onChange={(date) => setTaskObject({
+                value={taskObject.dueDate? dayjs(taskObject.dueDate, "DD-MM-YYYY") : null}
+                onChange={(dueDate) => setTaskObject({
                   ...taskObject,
-                  date: date?.format("DD-MM-YYYY"),
+                  dueDate: dueDate?.format("DD-MM-YYYY"),
                 })}
               />
             </Form.Item>
@@ -95,10 +95,10 @@ export const AddTask: React.FC = () => {
                 value={taskObject.status}
                 onChange={(value) => setTaskObject({ ...taskObject, status: value })}
               >
-                <Option value="To Do">To Do</Option>
-                <Option value="In Progress">In Progress</Option>
-                <Option value="Completed">Completed</Option>
-                <Option value="On Hold">On Hold</Option>
+                <Option value="TO_DO">To Do</Option>
+                <Option value="IN_PROGRESS">In Progress</Option>
+                <Option value="COMPLETED">Completed</Option>
+                <Option value="ON_HOLD">On Hold</Option>
               </Select>
             </Form.Item>
           </Col>
@@ -108,9 +108,9 @@ export const AddTask: React.FC = () => {
                 value={taskObject.priority}
                 onChange={(value) => setTaskObject({ ...taskObject, priority: value })}
               >
-                <Option value="High">High</Option>
-                <Option value="Medium">Medium</Option>
-                <Option value="Low">Low</Option>
+                <Option value="HIGH">High</Option>
+                <Option value="MEDIUM">Medium</Option>
+                <Option value="LOW">Low</Option>
               </Select>
             </Form.Item>
           </Col>
