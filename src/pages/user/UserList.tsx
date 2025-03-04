@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../store/store";
 import { UserType } from "../../types/apiResponseType";
 import { GetUserList, DeleteUserThunk } from "../../store/features/user/userThunk";
 import EditUserModal from "./modal/EditUserModal";
+import { useNavigate } from "react-router-dom";
 
 const { Search } = Input;
 
@@ -15,12 +16,16 @@ export default function UserList() {
 
   const dispatch = useAppDispatch();
   const { users, isLoading } = useAppSelector((state) => state.userReducer);
+  const navigate = useNavigate();
 
   const columns = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      render: (name: string, record: UserType) => (
+        <a onClick={() => navigate(`/users/${record.id}`)}>{name}</a>
+      ),
     },
     {
       title: "Email",

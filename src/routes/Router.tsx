@@ -7,6 +7,8 @@ import ProjectList from '../pages/project/ProjectList'
 import UserList from '../pages/user/UserList'
 import NotificationList from '../pages/notification/NotificationList'
 import TaskDetails from '../pages/task/TaskDetails'
+import { AddUser } from '../pages/user/AddUser'
+import UserDetails from '../pages/user/UserDetails'
 
 export default function Router() {
   return (
@@ -15,7 +17,9 @@ export default function Router() {
       <Route path="/tasks/all" element={<TaskList />} />
       <Route path="/projects/add" element={<AddProject />} />
       <Route path="/projects/all" element={<ProjectList />} />
+      <Route path="/users/add" element={<AddUser />} />
       <Route path="/users/all" element={<UserList />} />
+      <Route path="/users/:id" element={<UserDetails />} />
       <Route path="/notifications" element={<NotificationList />} />
       <Route path="/tasks/:id" element={<TaskDetails />} />
       <Route path="*" element={<PencilLoader/>} />

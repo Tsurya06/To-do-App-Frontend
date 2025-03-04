@@ -75,6 +75,7 @@ export default function Sidebar() {
       "users",
       <OrderedListOutlined />,
       [
+        getItem("Add User", "add-user", <CarryOutOutlined />),
         getItem("All Users", "all-users", <OrderedListOutlined />),
       ]
     ),
@@ -98,6 +99,9 @@ export default function Sidebar() {
         break;
       case "all-projects":
         navigate("/projects/all");
+        break;
+      case "add-user":
+        navigate("/users/add");
         break;
       case "all-users":
         navigate("/users/all");
