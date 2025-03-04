@@ -1,11 +1,11 @@
 import { API } from "../api/axiosInstance";
 import { ReqType } from "../../types/apiResponseType";
 
-const USER_ENDPOINT = "api/v1/users"; // Define your user API endpoint
+const USER_ENDPOINT = "auth"; // Define your user API endpoint
 
 export const createUser = async (req: ReqType) => {
     try {
-        const response = await API.post(`${USER_ENDPOINT}/create`, req.body);
+        const response = await API.post(`${USER_ENDPOINT}/admin/users`, req.body);
         return response;
     } catch (error) {
         throw error;
@@ -14,7 +14,7 @@ export const createUser = async (req: ReqType) => {
 
 export const getUserList = async (req: ReqType) => {
     try {
-        const response = await API.get(`${USER_ENDPOINT}/list`, {
+        const response = await API.get(`${USER_ENDPOINT}/admin/users`, {
             params: req.params
         });
         return response;

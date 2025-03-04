@@ -25,7 +25,6 @@ export const AddUser: React.FC = () => {
     try {
       const result = await dispatch(CreateUserThunk({ body: values })).unwrap();
       if (result.success) {
-        message.success('User created successfully');
         form.resetFields();
       }
     } catch (error) {
