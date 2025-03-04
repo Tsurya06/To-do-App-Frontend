@@ -22,9 +22,8 @@ body{
 .ant-input-password,
 .ant-select-selector,
 .ant-picker {
-    border: 1px solid gray !important;
-    background-color: white !important;
-    color: black !important;
+    border-color: gray !important;
+    box-shadow: none !important;
 }
 
 .ant-input:focus,
