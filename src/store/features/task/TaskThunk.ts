@@ -34,9 +34,7 @@ export const EditTaskThunk = createAsyncThunk(
         return response.data;
     }catch (error: any) {
         const errorMessage = error.response.data.message || 'Failed to edit task';
-        if (error.response.status !== 401) {
-          dispatch(taskFailure(errorMessage));
-        }
+        dispatch(taskFailure(errorMessage));
         return rejectWithValue(errorMessage);
       }
   }  
@@ -55,9 +53,7 @@ export const GetTaskList = createAsyncThunk(
         return response;
     }catch (error: any) {
         const errorMessage = error.response.data.message || 'Failed to fetch task list';
-        if (error.response.status !== 401) {
-          dispatch(taskFailure(errorMessage));
-        }
+        dispatch(taskFailure(errorMessage));
         return rejectWithValue(errorMessage);
       }
   }  
@@ -74,9 +70,7 @@ export const DeleteTaskByIdThunk = createAsyncThunk(
         return response.data;
     }catch (error: any) {
         const errorMessage = error.response.data.message || 'Failed to delete task';
-        if (error.response.status !== 401) {
-          dispatch(taskFailure(errorMessage));
-        }
+        dispatch(taskFailure(errorMessage));
         return rejectWithValue(errorMessage);
       }
   }  
@@ -93,9 +87,7 @@ export const GetTaskByIdThunk = createAsyncThunk(
             return response.data;
         } catch (error: any) {
             const errorMessage = error.response?.data?.message || 'Failed to fetch task';
-            if (error.response?.status !== 401) {
-                dispatch(taskFailure(errorMessage));
-            }
+            dispatch(taskFailure(errorMessage));
             return rejectWithValue(errorMessage);
         }
     }
@@ -111,9 +103,7 @@ export const AddCommentThunk = createAsyncThunk(
             return response.data;
         } catch (error: any) {
             const errorMessage = error.response?.data?.message || 'Failed to add comment';
-            if (error.response?.status !== 401) {
-                dispatch(taskFailure(errorMessage));
-            }
+            dispatch(taskFailure(errorMessage));
             return rejectWithValue(errorMessage);
         }
     }

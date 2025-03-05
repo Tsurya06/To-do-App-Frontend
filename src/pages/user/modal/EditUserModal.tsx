@@ -34,7 +34,6 @@ export default function EditUserModal({ open, onClose, user }: EditUserModalProp
       })).unwrap();
 
       if (result.success) {
-        message.success('User updated successfully');
         onClose();
       }
     } catch (error) {

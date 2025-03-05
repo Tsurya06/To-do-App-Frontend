@@ -33,9 +33,7 @@ export const GetProjectList = createAsyncThunk(
             return response.data;
         } catch (error: any) {
             const errorMessage = error.response.data.message || 'Failed to fetch projects';
-            if (error.response.status !== 401) {
-                dispatch(projectFailure(errorMessage));
-            }
+            dispatch(projectFailure(errorMessage));
             return rejectWithValue(errorMessage);
         }
     }
@@ -54,9 +52,7 @@ export const EditProjectThunk = createAsyncThunk(
             return response.data;
         } catch (error: any) {
             const errorMessage = error.response.data.message || 'Failed to update project';
-            if (error.response.status !== 401) {
-                dispatch(projectFailure(errorMessage));
-            }
+            dispatch(projectFailure(errorMessage));
             return rejectWithValue(errorMessage);
         }
     }
@@ -73,9 +69,7 @@ export const DeleteProjectThunk = createAsyncThunk(
             return response.data;
         } catch (error: any) {
             const errorMessage = error.response.data.message || 'Failed to delete project';
-            if (error.response.status !== 401) {
-                dispatch(projectFailure(errorMessage));
-            }
+            dispatch(projectFailure(errorMessage));
             return rejectWithValue(errorMessage);
         }
     }
@@ -93,9 +87,7 @@ export const GetProjectByIdThunk = createAsyncThunk(
             return response.data;
         } catch (error: any) {
             const errorMessage = error.response.data.message || 'Failed to fetch project';
-            if (error.response.status !== 401) {
-                dispatch(projectFailure(errorMessage));
-            }
+            dispatch(projectFailure(errorMessage));
             return rejectWithValue(errorMessage);
         }
     }

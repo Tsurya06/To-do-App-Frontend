@@ -24,7 +24,7 @@ export const userSlice = createSlice({
             state.isLoading = true;
             state.error = null;
         },
-        fetchUsersSuccess: (state, action: PayloadAction<UserType[]>) => {
+        fetchUsersSuccess: (state, action: PayloadAction<UserType[]> ) => {
             state.users = action.payload;
             state.isLoading = false;
             state.error = null;
@@ -42,6 +42,7 @@ export const userSlice = createSlice({
         userFailure: (state, action: PayloadAction<string>) => {
             state.isLoading = false;
             state.error = action.payload;
+            message.error(state.error);
         },
     },
 });
@@ -50,6 +51,7 @@ export const {
     userLoadingStart,
     fetchUsersSuccess,
     userOperationSuccess,
+    fetchUserByIdSuccess,
     userFailure,
 } = userSlice.actions;
 

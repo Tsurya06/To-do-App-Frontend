@@ -42,15 +42,16 @@ export default function Sidebar() {
       <CarryOutOutlined />,
       [
         getItem(
-          "Add Task",
-          "add-task",
-          <CarryOutOutlined />
-        ),
-        getItem(
           "All Tasks",
           "all-tasks",
           <OrderedListOutlined />
         ),
+        getItem(
+          "Add Task",
+          "add-task",
+          <CarryOutOutlined />
+        ),
+        
       ]
     ),
     getItem(

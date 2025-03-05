@@ -12,7 +12,7 @@ export default function Navbar() {
     <>
       <Row className="navbar-laybout" justify={"center"}>
         <Row justify={"space-between"} style={{ width: "100%" }}>
-          <Col >
+          <Col onClick={() => navigate("/tasks/all")}>
             <svg
               textAnchor="Todo Icon"
               xmlns="http://www.w3.org/2000/svg"

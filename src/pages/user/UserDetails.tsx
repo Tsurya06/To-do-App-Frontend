@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Card, Row, Col, Tag, Space, Typography, Button } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../store/store";
@@ -12,6 +12,7 @@ export default function UserDetails() {
   const { id } = useParams<{ id: string }>();
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.userReducer.user);
 
@@ -21,7 +22,7 @@ export default function UserDetails() {
     dispatch(DeleteUserThunk({ id }))
       .then((data) => {
         if (data.payload.success) {
-          window.history.back();
+          navigate(-1);
         }
       })
       .finally(() => {

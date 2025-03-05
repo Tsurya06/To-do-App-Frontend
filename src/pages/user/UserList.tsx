@@ -38,7 +38,7 @@ export default function UserList() {
       key: "role",
       render: (role: string) => (
         <Tag color={role === "admin" ? "red" : "blue"}>
-          {role.toUpperCase()}
+          { role === "admin" ? "ADMIN" : "USER"}
         </Tag>
       ),
     },
@@ -75,7 +75,6 @@ export default function UserList() {
         try {
           const result = await dispatch(DeleteUserThunk({ id })).unwrap();
           if (result.success) {
-            message.success('User deleted successfully');
             dispatch(GetUserList({}));
           }
         } catch (error) {
@@ -97,7 +96,7 @@ export default function UserList() {
             placeholder="Search users"
             allowClear
             onSearch={setSearchText}
-            style={{ width: 300 }}
+            style={{ width: '100%' }}
           />
         </Col>
         <Col span={24}>

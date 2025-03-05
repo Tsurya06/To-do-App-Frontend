@@ -25,7 +25,7 @@ export default function Login() {
       .then((res) => {
         if (res.payload.success) {
           Cookies.set("userDetail", JSON.stringify(res.payload));
-          navigate("/all-todos");
+          navigate("/tasks/all");
         }
         setIsLoading(false);
       })

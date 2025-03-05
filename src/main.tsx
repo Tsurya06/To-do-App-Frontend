@@ -4,8 +4,8 @@ import App from './App.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from './store/store.ts';
-import { setupInterceptors } from './services/auth/authApi';
+import { store } from './store/store';
+import { setupInterceptors } from './services/api/axiosInstance';
 
 const router = createBrowserRouter([
   {
