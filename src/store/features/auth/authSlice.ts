@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { message } from 'antd';
 import Cookies from 'js-cookie';
+import { store } from '../../store';
 const userData=Cookies.get('userDetail');
 
 export type LoginResponseType = {
@@ -48,15 +49,17 @@ export const authSlice = createSlice({
     authFailure:(state, action: PayloadAction<string>)=> {
       state.error = action.payload;
       state.loading = false;
-      message.error(state.user?.message)
+      message.error(action.payload)
     },
     logout:(state)=> {
       state.user = null;
       state.error = null;
-      state.loading=false;
+      state.loading = false;
+      
+      // Clear all auth-related storage
       Cookies.remove('userDetail');
-      window.location.reload();
-      message.success('You have been logged out successfully!');
+      localStorage.removeItem('lastPath');
+      sessionStorage.clear(); // Clear any session storage if used
     },
   },
 });

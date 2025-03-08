@@ -22,9 +22,9 @@ export default function Login() {
       password: values.password,
     };
     dispatch(loginThunk({ body }))
-      .then((res) => {
-        if (res.payload.success) {
-          Cookies.set("userDetail", JSON.stringify(res.payload));
+      .then((res: any) => {
+        if (res?.payload?.data?.success) {
+          Cookies.set("userDetail", JSON.stringify(res.payload.data));
           navigate("/tasks/all");
         }
         setIsLoading(false);

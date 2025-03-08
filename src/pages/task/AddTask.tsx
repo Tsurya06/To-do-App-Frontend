@@ -134,7 +134,7 @@ export const AddTask: React.FC = () => {
                 value={taskObject.projectId}
                 onChange={(value) => setTaskObject({ ...taskObject, projectId: value })}
               >
-                {projects?.map((project) => (
+                {projects && projects?.map((project) => (
                   <Option key={project.id} value={project.id}>
                     {project.title}
                   </Option>

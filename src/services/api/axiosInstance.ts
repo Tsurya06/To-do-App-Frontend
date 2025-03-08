@@ -5,36 +5,42 @@ import { RootState } from "../../store/store";
 import { logout } from "../../store/features/auth/authSlice";
 
 const devURL = import.meta.env.VITE_BASE_URL;
-
 // Create API instance
 export const API = axios.create({
   baseURL: devURL,
 });
 
 // Function to refresh token
-const refreshToken = async () => {
-  const userData = Cookies.get("userDetail");
-  if (!userData) {
-    throw new Error("No refresh token found");
+async function refreshToken() {
+  const userDetail = Cookies.get("userDetail");
+  if (!userDetail) {
+    throw new Error("No refresh token available");
   }
 
   try {
-    const { refresh } = JSON.parse(userData);
-    const response = await API.post(`auth/refresh`, { refreshToken: refresh });
+    const parsedToken = JSON.parse(userDetail);
+    const refreshUrl = `/auth/refresh/`;
     
-    if (response.status === 200) {
-      const newToken = response.data.access;
-      // Keep the refresh token when updating
-      Cookies.set("userDetail", JSON.stringify({ 
-        access: newToken,
-        refresh 
-      }));
-      return newToken;
+    const response = await axios.post(
+      `${devURL}${refreshUrl}`,
+      {
+        refresh_token: parsedToken.refresh
+      }
+    );
+    
+    // Update the cookie with the new access token
+    if (response.data && response.data.access) {
+      parsedToken.access = response.data.access;
+      Cookies.set("userDetail", JSON.stringify(parsedToken), { expires: 7 });
+      return response.data.access;
+    } else {
+      throw new Error("Invalid refresh token response");
     }
   } catch (error) {
+    console.error("Token refresh failed:", error);
     throw error;
   }
-};
+}
 
 // Setup interceptors with store access
 export function setupInterceptors(store: Store<RootState>) {
@@ -43,7 +49,14 @@ export function setupInterceptors(store: Store<RootState>) {
     (config) => {
       const token = Cookies.get("userDetail");
       if (token) {
-        config.headers.Authorization = `Bearer ${JSON.parse(token).access}`;
+        try {
+          const parsedToken = JSON.parse(token);
+          if (parsedToken.access) {
+            config.headers.Authorization = `Bearer ${parsedToken.access}`;
+          }
+        } catch (error) {
+          console.error('Invalid token format:', error);
+        }
       }
       return config;
     },
@@ -54,48 +67,54 @@ export function setupInterceptors(store: Store<RootState>) {
   API.interceptors.response.use(
     (response) => response,
     async (error) => {
-      if (!error.response) {
+      const originalRequest = error.config;
+      
+      // If there's no response or the request has already been retried, reject
+      if (!error.response || originalRequest._retry) {
         return Promise.reject(error);
       }
 
-      const originalRequest = error.config;
-
-      // Only handle 401 errors
+      // Handle 401 errors (Unauthorized)
       if (error.response.status === 401) {
-        // Check if this is specifically an auth operation endpoint
-        const isAuthOperationEndpoint = originalRequest.url?.includes('auth/login') || 
-                                      originalRequest.url?.includes('auth/signup') ||
-                                      originalRequest.url?.includes('auth/logout') 
-        
-        // Logout immediately if no refresh token exists
-        // For non-auth operation endpoints, try token refresh first
-        if (!isAuthOperationEndpoint && !originalRequest._retry && Cookies.get("userDetail")) {
-          originalRequest._retry = true;
+        // Don't refresh for auth endpoints
+        const isAuthEndpoint = originalRequest.url?.includes('auth/login') ||
+                             originalRequest.url?.includes('auth/signup') ||
+                             originalRequest.url?.includes('auth/logout');
+
+        if (isAuthEndpoint) {
+          return Promise.reject(error);
+        }
+
+        // Mark the request as retried to prevent infinite loops
+        originalRequest._retry = true;
+
+        try {
+          // Attempt to refresh the token
+          const newToken = await refreshToken();
           
-          try {
-            const newToken = await refreshToken();
-            if (newToken) {
-              originalRequest.headers.Authorization = `Bearer ${newToken}`;
-              return API(originalRequest);
-            }
-          } catch (refreshError: any) {
-            // Only logout if refresh token is invalid
-            if (refreshError?.response?.status === 401) {
-              store.dispatch(logout());
-            }
-            return Promise.reject(refreshError);
-          }
-        } 
-        // For auth operation endpoints or failed retries, logout
-        else if (isAuthOperationEndpoint) {
+          // Update the request header with new token
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          
+          // Retry the original request with the new token
+          return API(originalRequest);
+        } catch (refreshError) {
+          // If token refresh fails, log the user out
+          console.error("Token refresh failed, logging out:", refreshError);
           store.dispatch(logout());
+          
+          // Clear cookies and local storage
+          Cookies.remove("userDetail");
+          localStorage.removeItem("permissions");
+          
+          return Promise.reject(refreshError);
         }
       }
 
+      // For all other errors, just reject
       return Promise.reject(error);
     }
   );
 }
 
 // Export base URL for direct use if needed
-export const BASE_URL = devURL; 
+export const BASE_URL = devURL;

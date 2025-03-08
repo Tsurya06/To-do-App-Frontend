@@ -1,7 +1,7 @@
 import { API } from "../api/axiosInstance";
 import { ReqType } from "../../types/apiResponseType";
 
-const PROJECT_ENDPOINT = "api/v1/projects"; // Define your project API endpoint
+const PROJECT_ENDPOINT = "api/v1/project"; // Define your project API endpoint
 
 export const createProject = async (req: ReqType) => {
     try {
@@ -14,7 +14,7 @@ export const createProject = async (req: ReqType) => {
 
 export const getProjectList = async (req: ReqType) => {
     try {
-        const response = await API.get(`${PROJECT_ENDPOINT}/list`, {
+        const response = await API.get(`${PROJECT_ENDPOINT}/all`, {
             params: req.params
         });
         return response;

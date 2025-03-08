@@ -1,7 +1,7 @@
 import { Middleware } from '@reduxjs/toolkit';
 import { logout } from '../features/auth/authSlice';
-import { refreshToken } from '../../services/auth/authApi';
 import Cookies from 'js-cookie';
+import { refreshToken } from '../../services/auth/authApi';
 
 export const authMiddleware: Middleware = (store) => (next) => async (action:any) => {
   // First pass the action through

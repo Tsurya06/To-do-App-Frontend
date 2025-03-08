@@ -1,7 +1,6 @@
 import { API, BASE_URL } from "../api/axiosInstance";
 import Cookies from "js-cookie";
 import { ReqType } from "../../types/apiResponseType";
-import { message } from "antd";
 // import { RootState } from "../../store/store";
 // import { logout } from "../../store/features/auth/authSlice";
 // import { Store } from "@reduxjs/toolkit";
@@ -15,9 +14,8 @@ export const login = async (req: ReqType) => {
   try {
     const url = `${BASE_URL}${LOGIN_ENDPOINT}`;
     const resp = await API.post(url, req.body ? req.body : {});
-    return resp.data;
+    return resp;
   } catch (error: any) {
-    message.error(error.response.data.message);
     throw error;
   }
 };
@@ -34,10 +32,29 @@ export const signup = async (req: ReqType) => {
 
 export const logoutUser = async () => {
   try {
+    const userDetail = Cookies.get("userDetail");
+    if (!userDetail) {
+      throw new Error("No active session");
+    }
+
+    const { access } = JSON.parse(userDetail);
     const url = `${BASE_URL}${LOGOUT_ENDPOINT}`;
-    const resp = await API.post(url, {});
-    return resp;
+    
+    // Send the access token in Authorization header
+    const resp = await API.post(url, {}, {
+      headers: {
+        Authorization: `Bearer ${access}`
+      }
+    });
+
+    // Clear cookies after successful server logout
+    if (resp.data.success) {
+      Cookies.remove("userDetail");
+    }
+    return resp.data;
   } catch (error) {
+    // Still clear local session on error
+    Cookies.remove("userDetail");
     throw error;
   }
 };
@@ -50,9 +67,8 @@ export const refreshToken = async () => {
 
   try {
     const { refresh } = JSON.parse(userData);
-    const url = `${BASE_URL}${REFRESH_TOKEN_ENDPOINT}`;
-    const response = await API.post(url, { refreshToken: refresh });
-
+    const response = await API.post(`${REFRESH_TOKEN_ENDPOINT}`, { refreshToken: refresh });
+    
     if (response.status === 200) {
       const newToken = response.data.access;
       // Keep the refresh token when updating
