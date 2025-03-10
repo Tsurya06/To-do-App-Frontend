@@ -14,7 +14,7 @@ export const AddUser: React.FC = () => {
   const initialUserObject: UserType = {
     name: "",
     email: "",
-    role: "user",
+    role: "Employee",
     password: "",
   };
 
@@ -83,8 +83,8 @@ export const AddUser: React.FC = () => {
               rules={[{ required: true, message: "Please select role" }]}
             >
               <Select>
-                <Option value="user">User</Option>
-                <Option value="admin">Admin</Option>
+                <Option value="Employee">Employee</Option>
+                <Option value="Project Manager">Project Manager</Option>
               </Select>
             </Form.Item>
           </Col>

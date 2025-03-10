@@ -79,8 +79,8 @@ export default function EditUserModal({ open, onClose, user }: EditUserModalProp
           label="Role"
         >
           <Select>
-            <Option value="user">User</Option>
-            <Option value="admin">Admin</Option>
+            <Option value="Employee">Employee</Option>
+            <Option value="Project Manager">Project Manager</Option>
           </Select>
         </Form.Item>
 

@@ -24,7 +24,7 @@ export default function UserList() {
       dataIndex: "name",
       key: "name",
       render: (name: string, record: UserType) => (
-        <a onClick={() => navigate(`/users/${record.id}`)}>{name}</a>
+        <a style={{color:'gray'}} onClick={() => navigate(`/users/${record.id}`)}>{name}</a>
       ),
     },
     {
@@ -37,8 +37,8 @@ export default function UserList() {
       dataIndex: "role",
       key: "role",
       render: (role: string) => (
-        <Tag color={role === "admin" ? "red" : "blue"}>
-          { role === "admin" ? "ADMIN" : "USER"}
+        <Tag color={role !== "Employee" ? "red" : "green"}>
+          { role && role.toUpperCase()}
         </Tag>
       ),
     },

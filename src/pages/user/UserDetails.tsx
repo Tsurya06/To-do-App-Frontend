@@ -31,10 +31,10 @@ export default function UserDetails() {
   };
 
   useEffect(() => {
-    if (id) {
+    if (id && !modalOpen) {
       dispatch(GetUserById({ id }));
     }
-  }, [dispatch, id]);
+  }, [dispatch, id,modalOpen]);
 
   if (!user) {
     return <div>Loading...</div>;
@@ -60,13 +60,13 @@ export default function UserDetails() {
             <Title level={2}>{user.name}</Title>
           </Col>
           <Col span={24}>
-            <Space direction="vertical">
+            <Space direction="horizontal">
               <Text strong>Email:</Text>
               <Text>{user.email}</Text>
             </Space>
           </Col>
           <Col span={24}>
-            <Space direction="vertical">
+            <Space direction="horizontal">
               <Text strong>Role:</Text>
               <Tag color={user.role === "admin" ? "red" : "blue"}>
                 {user.role?.toUpperCase()}
